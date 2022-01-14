@@ -21,7 +21,7 @@ public class ItemController {
     }
 
     // 상품 등록 (POST)
-    @PostMapping("/admin/item/new")
+    @PostMapping("/admin/item/save")
     public String itemSave(Item item, Model model) {
         try {
             itemService.saveItem(item);
