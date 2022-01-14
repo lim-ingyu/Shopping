@@ -1,4 +1,4 @@
-package com.example.weblogin.web.dto;
+package com.example.weblogin.controller;
 
 import com.example.weblogin.domain.User;
 import com.example.weblogin.service.AuthService;
