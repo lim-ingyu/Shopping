@@ -1,6 +1,6 @@
 package com.example.weblogin.config.auth;
 
-import com.example.weblogin.domain.user.User;
+import com.example.weblogin.domain.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

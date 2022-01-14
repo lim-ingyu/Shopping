@@ -1,6 +1,6 @@
 package com.example.weblogin.web.dto;
 
-import com.example.weblogin.domain.user.User;
+import com.example.weblogin.domain.User;
 import com.example.weblogin.service.AuthService;
 import com.example.weblogin.web.dto.auth.SignupDto;
 import lombok.RequiredArgsConstructor;

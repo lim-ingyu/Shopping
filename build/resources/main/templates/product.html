@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>product</title>
+</head>
+<body>
+<p th:text="${product.id}"></p>
+<p th:text="${product.seller}"></p>
+<p th:text="${product.productname}"></p>
+<p th:text="${product.producttext}"></p>
+<p th:text="${product.price}"></p>
+<p th:text="${product.createDate}"></p>
+<a th:href="@{/main/}">go Main</a>
+<a th:href="@{/main/update/{id}/(id=${product.id})}">수정</a>
+<a th:href="@{/main/delete(id=${product.id})}">삭제</a>
+</body>
+</html>

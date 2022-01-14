@@ -1,7 +1,7 @@
 package com.example.weblogin.service;
 
-import com.example.weblogin.domain.user.User;
-import com.example.weblogin.domain.user.UserRepository;
+import com.example.weblogin.domain.User;
+import com.example.weblogin.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

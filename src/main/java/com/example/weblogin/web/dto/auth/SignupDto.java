@@ -1,6 +1,6 @@
 package com.example.weblogin.web.dto.auth;
 
-import com.example.weblogin.domain.user.User;
+import com.example.weblogin.domain.User;
 import lombok.Data;
 
 @Data
