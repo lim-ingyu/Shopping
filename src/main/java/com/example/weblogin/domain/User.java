@@ -30,8 +30,8 @@ public class User {
     private String phone;
     private String grade; // 회원 등급
 
-    // @Enumerated(EnumType.STRING)
-    private String role; // 권한 (회원 / 관리자)
+    @Enumerated(EnumType.STRING)
+    private Role role; // 권한 (회원 / 관리자)
 
     private LocalDateTime createDate; // 날짜
 

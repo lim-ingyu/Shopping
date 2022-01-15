@@ -15,4 +15,10 @@ public class ItemService {
     public void saveItem(Item item) {
         itemRepository.save(item);
     }
+
+    // 상품 불러오기
+    public Item itemView(Integer id) {
+        Item item = itemRepository.findById(id).get();
+        return item;
+    }
 }

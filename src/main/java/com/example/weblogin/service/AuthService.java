@@ -1,5 +1,6 @@
 package com.example.weblogin.service;
 
+import com.example.weblogin.constant.Role;
 import com.example.weblogin.domain.User;
 import com.example.weblogin.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class AuthService {
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
-        user.setRole("ROLE_USER");;
+        user.setRole(Role.ADMIN);
 
         User userEntity = userRepository.save(user);
         return userEntity;

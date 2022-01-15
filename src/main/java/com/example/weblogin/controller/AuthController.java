@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping("/member")
 @RequiredArgsConstructor
 @Controller
 public class AuthController {
@@ -33,6 +35,6 @@ public class AuthController {
         User userEntity = authService.signup(user);
         System.out.println(userEntity);
 
-        return "signin"; //
+        return "signin";
     }
 }
