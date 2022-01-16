@@ -1,6 +1,6 @@
 package com.example.weblogin.web.dto.auth;
 
-import com.example.weblogin.domain.User;
+import com.example.weblogin.domain.user.User;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +15,7 @@ public class SignupDto {
     private String name;
     private String address;
     private String phone;
+    private String role;
 
     public User toEntity() {
         return User.builder()
@@ -24,6 +25,7 @@ public class SignupDto {
                 .name(name)
                 .address(address)
                 .phone(phone)
+                .role(role)
                 .build();
     }
 }

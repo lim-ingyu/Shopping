@@ -1,7 +1,6 @@
 package com.example.weblogin.config.auth;
 
-import com.example.weblogin.domain.User;
-import lombok.Data;
+import com.example.weblogin.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +17,6 @@ public class PrincipalDetails implements UserDetails {
 
     private User user;
 
-    // PrincipalDetailsService에서 온 User userEntity
     public PrincipalDetails(User user) {
         this.user = user;
     }
@@ -27,7 +25,7 @@ public class PrincipalDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         Collection<GrantedAuthority> collector = new ArrayList<>();
-        collector.add(() -> { return user.getRole().toString();}); // 람다식
+        collector.add(() -> { return user.getRole();}); // 람다식
 
         return collector;
     }

@@ -1,10 +1,14 @@
-package com.example.weblogin.domain;
+package com.example.weblogin.domain.user;
 
-import com.example.weblogin.constant.Role;
+import com.example.weblogin.domain.cart.Cart;
+import com.example.weblogin.domain.item.Item;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 // @RequiredArgsConstructor final이나 @NonNull인 필드 값만 파라미터로 받는 생성자를 만들어줌
 @Builder
@@ -29,14 +33,19 @@ public class User {
     private String address;
     private String phone;
     private String grade; // 회원 등급
+    private String role; // 권한 (회원 / 관리자)
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // 권한 (회원 / 관리자)
+    @OneToMany(mappedBy = "user")
+    private List<Item> items = new ArrayList<>();
 
-    private LocalDateTime createDate; // 날짜
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
+
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private LocalDate createDate; // 날짜
 
     @PrePersist // DB에 INSERT 되기 직전에 실행. 즉 DB에 값을 넣으면 자동으로 실행됨
     public void createDate() {
-        this.createDate = LocalDateTime.now();
+        this.createDate = LocalDate.now();
     }
 }

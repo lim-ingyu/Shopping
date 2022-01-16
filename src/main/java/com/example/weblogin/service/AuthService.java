@@ -1,8 +1,7 @@
 package com.example.weblogin.service;
 
-import com.example.weblogin.constant.Role;
-import com.example.weblogin.domain.User;
-import com.example.weblogin.domain.UserRepository;
+import com.example.weblogin.domain.user.User;
+import com.example.weblogin.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class AuthService {
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
-        user.setRole(Role.ADMIN);
+        user.setRole("ROLE_SELLER");
 
         User userEntity = userRepository.save(user);
         return userEntity;

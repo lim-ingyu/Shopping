@@ -1,15 +1,13 @@
 package com.example.weblogin.controller;
 
-import com.example.weblogin.domain.User;
+import com.example.weblogin.domain.user.User;
 import com.example.weblogin.service.AuthService;
 import com.example.weblogin.web.dto.auth.SignupDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/member")
 @RequiredArgsConstructor
 @Controller
 public class AuthController {
