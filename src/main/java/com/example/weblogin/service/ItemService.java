@@ -3,6 +3,8 @@ package com.example.weblogin.service;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,19 +25,36 @@ public class ItemService {
         return itemRepository.findById(id).get();
     }
 
-    // 아이템 리스트 불러오기
+    // 상품 리스트 불러오기
     public List<Item> allItemView() {
         return itemRepository.findAll();
     }
 
-    // 아이템 수정
-    public void itemModify(Item item, Integer id) {
-        Item before = itemRepository.findItemById(id);
-        before.setName(item.getName());
-        before.setText(item.getText());
-        before.setPrice(item.getPrice());
-        before.setStock(item.getStock());
-        itemRepository.save(before);
+    // 상품 리스트 페이지용 불러오기
+    public Page<Item> allItemViewPage(Pageable pageable) {
+        return itemRepository.findAll(pageable);
+    }
 
+    // 상품 수정
+    public void itemModify(Item item, Integer id) {
+        Item update = itemRepository.findItemById(id);
+        update.setName(item.getName());
+        update.setText(item.getText());
+        update.setPrice(item.getPrice());
+        update.setStock(item.getStock());
+        itemRepository.save(update);
+
+    }
+
+    // 상품 삭제
+    public void itemDelete(Integer id) {
+
+        itemRepository.deleteById(id);
+    }
+
+    // 상품 검색
+    public Page<Item> itemSearchList(String searchKeyword, Pageable pageable) {
+
+        return itemRepository.findByNameContaining(searchKeyword, pageable);
     }
 }
