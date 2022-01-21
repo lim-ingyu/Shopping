@@ -18,7 +18,7 @@
         </div>
         <hr/>
 
-            <div class="col-md-7 col-lg-8">
+            <div class="col-md-7 col-lg-8 container">
                 <form th:action="@{/item/new/pro}" method="post">
                     <div class="row g-3">
                         <hr/>
@@ -36,8 +36,8 @@
 
 
                         <div class="col-12">
-                            <label for="itemName" class="form-label">상품 이름</label>
-                            <input type="text" class="form-control" id="itemName" name="itemName" placeholder="상품 이름을 입력하세요.">
+                            <label for="name" class="form-label">상품 이름</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="상품 이름을 입력하세요.">
                             <div class="invalid-feedback">
                                 Your name is required.
                             </div>
@@ -45,16 +45,16 @@
 
 
                         <div class="col-12">
-                            <label for="itemText" class="form-label">상품 설명</label>
-                            <input type="text" class="form-control" name="itemText" id="itemText" placeholder="상품 설명을 입력하세요.">
+                            <label for="text" class="form-label">상품 설명</label>
+                            <input type="text" class="form-control" name="text" id="text" placeholder="상품 설명을 입력하세요.">
                             <div class="invalid-feedback">
                                 Input is empty.
                             </div>
                         </div>
 
                         <div class="col-12">
-                            <label for="itemPrice" class="form-label">상품 가격</label>
-                            <input type="text" class="form-control" id="itemPrice" name="itemPrice" placeholder="상품 가격을 입력하세요.">
+                            <label for="price" class="form-label">상품 가격</label>
+                            <input type="text" class="form-control" id="price" name="price" placeholder="상품 가격을 입력하세요.">
                             <div class="invalid-feedback">
                                 Input is empty.
                             </div>
@@ -70,8 +70,8 @@
                         </div>
 
                         <div class="col-12">
-                            <label for="itemImage" class="form-label">상품 이미지 업로드</label>
-                            <input type="file" class="form-control" id="itemImage" name="itemImage"
+                            <label for="photo" class="form-label">상품 이미지 업로드</label>
+                            <input type="file" class="form-control" id="photo" name="photo"
                                    placeholder="상품 재고를 입력하세요.">
                             <div class="invalid-feedback">
                                 Input is empty.

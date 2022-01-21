@@ -32,7 +32,7 @@ public class Item {
 
     private boolean isSoldout; // 상품 상태 (판매중 / 품절)
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     private User user; // 판매자 아이디
 
