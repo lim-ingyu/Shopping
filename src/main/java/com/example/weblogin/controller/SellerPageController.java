@@ -30,7 +30,7 @@ public class SellerPageController {
 
             model.addAttribute("user", userPageService.findUser(id));
 
-            return "/user/userPage";
+            return "/seller/sellerPage";
         } else {
 
             return "redirect:/main";
@@ -39,7 +39,7 @@ public class SellerPageController {
     }
 
     // 판매 관리 페이지 -> 판매자/관리자만 가능
-    @GetMapping("/seller/manage/{id}")
+    @GetMapping("/seller/manage")
     public String itemManage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         // SELLER 와 ADMIN 만 접속 가능

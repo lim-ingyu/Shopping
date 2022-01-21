@@ -80,11 +80,11 @@
                         <div class="d-flex flex-column align-items-center text-center">
                             <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                             <div class="mt-3">
-                                <h4>John Doe</h4>
-                                <p class="text-secondary mb-1">Full Stack Developer</p>
-                                <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+                                <h4 th:text="${user.getUsername()}">John Doe</h4>
+                                <!--<p class="text-secondary mb-1">Full Stack Developer</p>
+                                <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>-->
                                 <button class="btn btn-primary" th:href="@{/item/new}">상품등록</button>
-                                <button class="btn btn-outline-primary" th:href="@{/#}">상품관리</button>
+                                <button class="btn btn-outline-primary" th:href="@{/seller/manage}">상품관리</button>
                             </div>
                         </div>
                     </div>
@@ -95,10 +95,19 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">판매자 이름</h6>
+                                <h6 class="mb-0">판매자이름</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                Kenneth Valdez
+                            <div class="col-sm-9 text-secondary" th:text="${user.getName()}">
+                                판매자이름
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">닉네임</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="${user.getUsername()}">
+                                판매자 닉네임
                             </div>
                         </div>
                         <hr>
@@ -106,17 +115,8 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">이메일</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div class="col-sm-9 text-secondary" th:text="${user.getEmail()}">
                                 fip@jukmuh.al
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">사업장 주소</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                (239) 816-9029
                             </div>
                         </div>
                         <hr>
@@ -124,23 +124,23 @@
                             <div class="col-sm-3">
                                 <h6 class="mb-0">전화번호</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
-                                (320) 380-4539
+                            <div class="col-sm-9 text-secondary" th:text="${user.getPhone()}">
+                                (239) 816-9029
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-3">
-                                <h6 class="mb-0">Address</h6>
+                                <h6 class="mb-0">사업장 주소</h6>
                             </div>
-                            <div class="col-sm-9 text-secondary">
+                            <div class="col-sm-9 text-secondary" th:text="${user.getAddress()}">
                                 Bay Area, San Francisco, CA
                             </div>
                         </div>
                         <hr>
                         <div class="row">
                             <div class="col-sm-12">
-                                <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                <a class="btn btn-info " href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills" th:href="@{#}">판매자 정보 수정</a>
                             </div>
                         </div>
                     </div>
