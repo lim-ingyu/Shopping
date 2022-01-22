@@ -26,4 +26,10 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cart_items = new ArrayList<>();
+
+    public static Cart createCart(User user) {
+        Cart cart = new Cart();
+        cart.setUser(user);
+        return cart;
+    }
 }
