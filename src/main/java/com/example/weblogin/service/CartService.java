@@ -24,8 +24,11 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
 
     // 장바구니 담기
-    public void addCart(User user, Item newitem) {
+    public void addCart(User user, Item newitem, int amount) {
+
+        // 유저 id로 장바구니가 있는지 없는지 찾기
         Cart cart = cartRepository.findByUserId(user.getId());
+
 
         // 장바구니가 존재하지 않는다면
         if (cart == null) {
@@ -36,14 +39,15 @@ public class CartService {
         Item item = itemRepository.findItemById(newitem.getId());
         CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId());
 
+
         // 상품이 장바구니에 존재하지 않는다면 카트상품 생성 후 추가
         if (cartItem == null) {
-            cartItem = CartItem.createCartItem(cart, item, newitem.getCount());
+            cartItem = CartItem.createCartItem(cart, item, amount);
             cartItemRepository.save(cartItem);
         }
         // 상품이 장바구니에 이미 존재한다면 수량만 증가
         else {
-            cartItem.addCount(newitem.getCount());
+            cartItem.addCount(amount);
         }
     }
 
@@ -68,6 +72,11 @@ public class CartService {
         }
 
         return UserCartItems;
+    }
+
+    // 장바구니 상품 삭제 -> cartItem을 삭제하는 것
+    public void deleteCartItem(int id) {
+        cartItemRepository.deleteById(id);
     }
 
 }

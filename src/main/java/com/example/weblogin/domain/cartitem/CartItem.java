@@ -26,13 +26,13 @@ public class CartItem {
     @JoinColumn(name="item_id")
     private Item item;
 
-    private int count; // 상품 개수
+    private int count=0; // 상품 개수
 
-    public static CartItem createCartItem(Cart cart, Item item, int count) {
+    public static CartItem createCartItem(Cart cart, Item item, int amount) {
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setItem(item);
-        cartItem.setCount(count);
+        cartItem.setCount(amount);
         return cartItem;
     }
 
@@ -41,9 +41,5 @@ public class CartItem {
         this.count += count;
     }
 
-    //
-    public void updateCount(int count) {
-        this.count = count;
-    }
 
 }

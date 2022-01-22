@@ -48,6 +48,9 @@ public class UserPageController {
     // 장바구니 페이지
     @GetMapping("/user/cart/{id}")
     public String userCartPage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        System.out.println("장바구니 페이지에 들어온 유저 id == " + id);
+
         // 로그인이 되어있는 유저의 id와 장바구니에 접속하는 id가 같아야 한다.
         if (principalDetails.getUser().getId() == id) {
 
@@ -76,9 +79,6 @@ public class UserPageController {
 
                 return "/user/userCart";
             }
-
-
-            return "/user/userCart";
         }
         // 로그인 id와 장바구니 접속 id가 같지 않는 경우
         else {
@@ -90,36 +90,16 @@ public class UserPageController {
 
     // 장바구니에 물건 넣기
     @PostMapping("/user/cart/{id}/{itemId}")
-    public String addCartItem(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId) {
+    public String addCartItem(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId, int amount) {
+
+        System.out.println("유저 id == " + id + "  카트에 넣을 상품 itemId == " + itemId + "  수량 amount == " + amount);
 
         User loginUser = userPageService.findUser(id);
         Item item = itemService.itemView(itemId);
 
-        cartService.addCart(loginUser, item);
+        cartService.addCart(loginUser, item, amount);
 
-        return "redirect:/item/{itemId}";
+        return "redirect:/user/cart/{id}";
     }
 
-
-    // 장바구니 삭제
-    @GetMapping("/user/{id}/cart/{cart_itemId}/delete")
-    public String deleteCartItem(@PathVariable("id") Integer id, @PathVariable("cart_itemId") Integer cart_itemId, Model model) {
-
-        cartService.deleteCart_item(cart_itemId);
-
-        Cart userCart = cartFinderService.findCart(id); // 유저의 카트
-        // 카트가 있는 경우
-        List<Cart_item> userCart_items = cartFinderService.findUserCart_items(userCart); // 유저의 카트ID가 들어간 모든 Cart_item 반환
-        // 물품의 가격 총 합
-        int totalPrice = 0;
-        for (Cart_item item : userCart_items) {
-            totalPrice += item.getCount() * item.getItem().getPrice();
-        }
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("cartItems", userCart_items);
-        model.addAttribute("user", userPageService.findUser(id));
-
-        return "/user/userCart";
-
-    }
 }
