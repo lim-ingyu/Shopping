@@ -117,14 +117,12 @@
                 </form>
                 <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
                     <div class="d-flex">
-                        <!--<a th:href="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}">-->
+                    <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
+                               style="max-width: 3rem"/>
                         <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             장바구니
                         </button>
-                        <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
-                               style="max-width: 3rem"/>
-                        <!--</a>-->
                     </div>
                 </form>
 

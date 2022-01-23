@@ -45,7 +45,7 @@ public class UserPageController {
 
     }
 
-    // 장바구니 페이지
+    // 장바구니 페이지 접속
     @GetMapping("/user/cart/{id}")
     public String userCartPage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -69,8 +69,8 @@ public class UserPageController {
 
                 // 총 가격 += 수량 * 가격
                 int totalPrice = 0;
-                for (CartItem item : cartItemList) {
-                    totalPrice += item.getCount() * item.getItem().getPrice();
+                for (CartItem cartitem : cartItemList) {
+                    totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
                 }
 
                 model.addAttribute("totalPrice", totalPrice);

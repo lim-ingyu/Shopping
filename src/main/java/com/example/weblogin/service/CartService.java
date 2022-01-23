@@ -59,7 +59,7 @@ public class CartService {
     // 카트 상품 리스트 중 해당하는 유저가 담은 상품만 반환
     // 유저의 카트 id와 카트상품의 id가 같아야 함
     public List<CartItem> findUserCartItems(Cart userCart) {
-        //
+
         int userCartId = userCart.getId(); // 유저의 카트 id를 꺼냄
         List<CartItem> UserCartItems = new ArrayList<>(); // id에 해당하는 유저가 담은 상품들 넣어둘 곳
 
