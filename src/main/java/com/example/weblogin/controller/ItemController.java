@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class ItemController {
 
     private final ItemService itemService;
 
+    // 메인 페이지 html 하나로 통일
     // 메인 페이지 (로그인 안 한 유저) /localhost:8080
     @GetMapping("/")
     public String mainPageNoneLogin(Model model) {
@@ -48,22 +50,25 @@ public class ItemController {
             model.addAttribute("items", items);
             model.addAttribute("user", principalDetails.getUser());
 
-            return "/seller/mainSeller";
+            return "/main";
         } else {
-            // 일반 유저일 경우
+            // 구매자
             List<Item> items = itemService.allItemView();
             model.addAttribute("items", items);
             model.addAttribute("user", principalDetails.getUser());
 
-            return "user/mainUser";
+            return "/main";
         }
     }
 
+
     // 상품 등록 페이지 - 어드민/판매자만 가능
     @GetMapping("/item/new")
-    public String itemSaveForm(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public String itemSaveForm(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
             // 어드민, 판매자
+            model.addAttribute("user", principalDetails.getUser());
+
             return "/seller/itemForm";
         } else {
             // 일반 회원이면 거절 당해서 main으로 되돌아감
@@ -73,11 +78,11 @@ public class ItemController {
 
     // 상품 등록 (POST) - 어드민/판매자만 가능
     @PostMapping("/item/new/pro")
-    public String itemSave(Item item, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public String itemSave(Item item, @AuthenticationPrincipal PrincipalDetails principalDetails, MultipartFile imgFile) throws Exception {
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
             // 어드민, 판매자
             item.setUser(principalDetails.getUser());
-            itemService.saveItem(item);
+            itemService.saveItem(item, imgFile);
 
             return "redirect:/main";
         } else {
@@ -109,7 +114,7 @@ public class ItemController {
 
     // 상품 수정 (POST) - 어드민/판매자만 가능
     @PostMapping("/item/modify/pro/{id}")
-    public String itemModify(Item item, @PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public String itemModify(Item item, @PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, MultipartFile imgFile) throws Exception{
 
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || (principalDetails.getUser().getRole().equals("ROLE_SELLER"))) {
             // 어드민, 판매자
@@ -117,7 +122,7 @@ public class ItemController {
 
             if(user.getId() == principalDetails.getUser().getId()) {
                 // 아이템 등록자와, 로그인 유저가 같으면 수정 진행
-                itemService.itemModify(item, id);
+                itemService.itemModify(item, id, imgFile);
 
                 return "redirect:/main";
             } else {

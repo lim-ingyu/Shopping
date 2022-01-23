@@ -6,8 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -16,7 +19,28 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     // 상품 등록
-    public void saveItem(Item item) {
+    public void saveItem(Item item, MultipartFile imgFile) throws Exception {
+
+        String oriImgName = imgFile.getOriginalFilename();
+        String imgName = "";
+        String imgPath = "";
+
+        // UUID 를 이용하여 파일명 새로 생성
+        // UUID - 서로 다른 객체들을 구별하기 위한 클래스
+        UUID uuid = UUID.randomUUID();
+        String extension = oriImgName.substring(oriImgName.lastIndexOf("."));
+        String savedFileName = uuid.toString() + extension; // 파일명 -> imgName
+
+        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
+
+        imgName = savedFileName;
+
+        File saveFile = new File(projectPath, imgName);
+        imgFile.transferTo(saveFile);
+
+        item.setImgName(imgName);
+        item.setImgPath("/files/" + imgName);
+
         itemRepository.save(item);
     }
 
@@ -36,12 +60,24 @@ public class ItemService {
     }
 
     // 상품 수정
-    public void itemModify(Item item, Integer id) {
+    public void itemModify(Item item, Integer id, MultipartFile imgFile) throws Exception {
+        String oriImgName = imgFile.getOriginalFilename();
+        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
+        UUID uuid = UUID.randomUUID();
+        String extension = oriImgName.substring(oriImgName.lastIndexOf("."));
+        String savedFileName = uuid.toString() + extension; // 파일명 -> imgName
+
+
+        File saveFile = new File(projectPath, savedFileName);
+        imgFile.transferTo(saveFile);
+
         Item update = itemRepository.findItemById(id);
         update.setName(item.getName());
         update.setText(item.getText());
         update.setPrice(item.getPrice());
         update.setStock(item.getStock());
+        update.setImgName(savedFileName);
+        update.setImgPath("/files/"+savedFileName);
         itemRepository.save(update);
 
     }

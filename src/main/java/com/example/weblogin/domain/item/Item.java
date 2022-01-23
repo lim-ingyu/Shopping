@@ -33,13 +33,16 @@ public class Item {
     private boolean isSoldout; // 상품 상태 (판매중 / 품절)
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user; // 판매자 아이디
 
     @OneToMany(mappedBy = "item")
     private List<CartItem> cart_items = new ArrayList<>();
 
-    private String photo; // 상품 사진
+    private String imgName; // 이미지 파일명
 
-
+    private String imgPath; // 이미지 조회 경로
 }
+
+
+
