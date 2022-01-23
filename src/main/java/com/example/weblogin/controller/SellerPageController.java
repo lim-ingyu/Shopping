@@ -21,7 +21,7 @@ public class SellerPageController {
     private final UserPageService userPageService;
     private final ItemService itemService;
 
-    // 판매자 페이지 접속
+    // 판매자 프로필 페이지 접속
     @GetMapping("/seller/{id}")
     public String sellerPage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
@@ -38,7 +38,7 @@ public class SellerPageController {
 
     }
 
-    // 판매 관리 페이지 -> 판매자/관리자만 가능
+    // 판매 관리 페이지
     @GetMapping("/seller/manage")
     public String itemManage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 

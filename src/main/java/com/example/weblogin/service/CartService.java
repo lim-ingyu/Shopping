@@ -28,7 +28,7 @@ public class CartService {
 
         // 유저 id로 장바구니가 있는지 없는지 찾기
         Cart cart = cartRepository.findByUserId(user.getId());
-
+        System.out.println("*********************user = " + user.getId() + " item = " + newitem.getId() + " amount = " + amount);
 
         // 장바구니가 존재하지 않는다면
         if (cart == null) {
@@ -47,7 +47,13 @@ public class CartService {
         }
         // 상품이 장바구니에 이미 존재한다면 수량만 증가
         else {
-            cartItem.addCount(amount);
+            CartItem update = cartItem;
+            update.setCart(cartItem.getCart());
+            update.setItem(cartItem.getItem());
+            update.addCount(amount);
+            update.setCount(update.getCount());
+            cartItemRepository.save(update);
+
         }
     }
 
@@ -74,8 +80,9 @@ public class CartService {
         return UserCartItems;
     }
 
-    // 장바구니 상품 삭제 -> cartItem을 삭제하는 것
+    // 장바구니 상품 삭제 -> cartItemId 받아서 삭제
     public void deleteCartItem(int id) {
+
         cartItemRepository.deleteById(id);
     }
 

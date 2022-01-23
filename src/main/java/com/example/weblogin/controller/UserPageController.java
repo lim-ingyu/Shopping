@@ -92,12 +92,19 @@ public class UserPageController {
     @PostMapping("/user/cart/{id}/{itemId}")
     public String addCartItem(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId, int amount) {
 
-        System.out.println("유저 id == " + id + "  카트에 넣을 상품 itemId == " + itemId + "  수량 amount == " + amount);
 
         User loginUser = userPageService.findUser(id);
         Item item = itemService.itemView(itemId);
 
         cartService.addCart(loginUser, item, amount);
+
+        return "redirect:/user/cart/{id}";
+    }
+
+    // 장바구니에서 물건 삭제
+    @GetMapping("/user/cart/{id}/{cartItemId}/delete")
+    public String myCartDelete(@PathVariable("id") Integer id, @PathVariable("cartItemId") Integer itemId){
+        cartService.deleteCartItem(itemId);
 
         return "redirect:/user/cart/{id}";
     }
