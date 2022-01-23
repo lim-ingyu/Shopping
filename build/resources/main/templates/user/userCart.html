@@ -160,7 +160,7 @@
                         <td th:text="${cartItem.getItem().getName()}">상품명</td>
                         <td th:text="${cartItem.getCount()}">수량</td>
                         <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">가격</td>
-                        <td class="btn btn-outline-dark"><a th:href="@{/#}" style="text-decoration: none">삭제</a></td>
+                        <td class="btn btn-outline-dark"><a th:href="@{/user/cart/{id}/{cartItemId}/delete(id=${cartItem.getCart().getUser().id}, cartItemId=${cartItem.getId()})}" style="text-decoration: none">삭제</a></td>
                     </tr>
                     </tbody>
                 </table>

@@ -60,7 +60,8 @@ public class UserPageController {
             if (userCart == null) {
                 // 장바구니가 존재하지 않다면
                 // 즉, 장바구니에 물건을 담은 적이 없다면
-                return "redirect:/main";
+                model.addAttribute("user", userPageService.findUser(id));
+                return "/user/emptyCart";
             } else {
                 // 장바구니가 존재한다면
                 // 장바구니에 담은 상품 리스트 보여주기
@@ -101,12 +102,47 @@ public class UserPageController {
         return "redirect:/user/cart/{id}";
     }
 
-    // 장바구니에서 물건 삭제
+    // 장바구니에서 물건 삭제 --> 삭제하고 남은 총액 다시 계산해서 모델로 보내기 = 장바구니 등록 로직이랑 같음!!
     @GetMapping("/user/cart/{id}/{cartItemId}/delete")
-    public String myCartDelete(@PathVariable("id") Integer id, @PathVariable("cartItemId") Integer itemId){
+    public String deleteCartItem(@PathVariable("id") Integer id, @PathVariable("cartItemId") Integer itemId, Model model) {
         cartService.deleteCartItem(itemId);
 
-        return "redirect:/user/cart/{id}";
+        // 해당 유저의 카트가 있는지 없는지 찾기
+        Cart userCart = cartService.findCart(id);
+
+        if (userCart == null) {
+            // 장바구니가 존재하지 않다면
+            // 즉, 장바구니에 물건을 담은 적이 없다면
+            model.addAttribute("user", userPageService.findUser(id));
+            return "/user/emptyCart";
+        } else {
+            // 장바구니가 존재한다면
+            // 장바구니에 담은 상품 리스트 보여주기
+            // cartItem 중 유저의 카트 id가 있는 상품들만 반환해야 함
+            List<CartItem> cartItemList = cartService.findUserCartItems(userCart);
+
+            // 총 가격 += 수량 * 가격
+            int totalPrice = 0;
+            for (CartItem cartitem : cartItemList) {
+                totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
+            }
+
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("cartItems", cartItemList);
+            model.addAttribute("user", userPageService.findUser(id));
+
+            return "/user/userCart";
+        }
+
     }
+
+    // 구매 내역 조회 페이지
+    @GetMapping("/user/orderHist/{id}")
+    public String orderHist(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+        return "/user/userOrderHist";
+    }
+
+    // 상품 주문
+
 
 }
