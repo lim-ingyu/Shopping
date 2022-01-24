@@ -71,7 +71,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">마이페이지</a></lt>
                         <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">장바구니</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">구매내역</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">주문내역</a></lt>
                     </ul>
                 </div>
             </form>
@@ -85,7 +85,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매자페이지</a></lt>
                         <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">상품관리</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">매출보기</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매내역</a></lt>
                     </ul>
                 </div>
             </form>
@@ -104,6 +104,12 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">
                             <span data-feather="home"></span>
+                            마이페이지
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">
+                            <span data-feather="home"></span>
                             장바구니
                         </a>
                     </li>
@@ -111,18 +117,6 @@
                         <a class="nav-link" href="#">
                             <span data-feather="file"></span>
                             주문내역
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            분석
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            유저설정
                         </a>
                     </li>
                 </ul>
@@ -166,9 +160,19 @@
                 </table>
             </div>
             <hr>
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-3">
+                <div class="col">
+                    <div class="card mb-4 rounded-3 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0 fw-normal">총 수량</h4>
+                        </div>
+                        <form class="card-body" method="post">
+                            <h1 class="card-title pricing-card-title" th:text="|${totalCount} 개|">$0</h1>
 
-
-
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-3">
                 <div class="col">
                     <div class="card mb-4 rounded-3 shadow-sm">
@@ -185,11 +189,5 @@
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
-</div>
-
-
-
 </body>
 </html>

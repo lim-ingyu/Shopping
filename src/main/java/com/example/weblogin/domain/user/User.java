@@ -34,7 +34,7 @@ public class User {
     private String grade; // 회원 등급
     private String role; // 권한 (회원 / 관리자)
 
-    private int coin; // 충전한 돈 - 코인
+    private int coin; // 구매자 - 충전한 돈 / 판매자 - 수익
 
     @OneToMany(mappedBy = "user")
     private List<Item> items = new ArrayList<>();

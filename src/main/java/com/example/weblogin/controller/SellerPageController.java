@@ -2,6 +2,7 @@ package com.example.weblogin.controller;
 
 import com.example.weblogin.config.auth.PrincipalDetails;
 import com.example.weblogin.domain.item.Item;
+import com.example.weblogin.domain.user.User;
 import com.example.weblogin.service.ItemService;
 import com.example.weblogin.service.UserPageService;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +39,15 @@ public class SellerPageController {
 
     }
 
-    // 판매 관리 페이지
-    @GetMapping("/seller/manage")
+    // 상품 관리 페이지
+    @GetMapping("/seller/manage/{id}")
     public String itemManage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if(principalDetails.getUser().getId() != id) {
 
-        // SELLER 와 ADMIN 만 접속 가능
-        if(principalDetails.getUser().getRole().equals("ROLE_SELLER") || principalDetails.getUser().getRole().equals("ROLE_ADMIN")) {
+            return "redirect:/main";
 
+        } else {
+            // 자신이 올린 상품만 가져오기
             List<Item> allItem = itemService.allItemView();
             List<Item> userItem = new ArrayList<>();
 
@@ -59,11 +62,13 @@ public class SellerPageController {
             model.addAttribute("userItem", userItem);
             return "seller/itemManage";
 
-        } else {
-
-            // 일반 유저가 판매관리 페이지로 올 경우 main으로 리턴
-            return "redirect:/main";
-
         }
     }
+
+    // 판매 내역 페이지
+    @GetMapping("/seller/salelist/{id}")
+    public String saleList(@PathVariable("id")Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        return "seller/saleList";
+    }
+
 }

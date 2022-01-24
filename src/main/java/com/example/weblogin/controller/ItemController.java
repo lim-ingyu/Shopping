@@ -182,7 +182,7 @@ public class ItemController {
 
     // 상품 리스트 페이지
     @GetMapping("/item/list")
-    public String itemList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+    public String itemList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
                            String searchKeyword) {
 
         Page<Item> items = null;

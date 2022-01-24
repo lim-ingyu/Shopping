@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
 // 유저(회원)에 해당하는 페이지 관리
-// 마이페이지, 장바구니
+// 마이페이지, 장바구니, 구매내역
 
 @RequiredArgsConstructor
 @Controller
@@ -48,80 +48,16 @@ public class UserPageController {
     // 장바구니 페이지 접속
     @GetMapping("/user/cart/{id}")
     public String userCartPage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-        System.out.println("장바구니 페이지에 들어온 유저 id == " + id);
-
         // 로그인이 되어있는 유저의 id와 장바구니에 접속하는 id가 같아야 한다.
         if (principalDetails.getUser().getId() == id) {
 
-            // 해당 유저의 카트가 있는지 없는지 찾기
-            Cart userCart = cartService.findCart(id);
+            // 로그인 되어 있는 유저에 해당하는 장바구니 가져오기
+            Cart userCart = principalDetails.getUser().getCart();
 
-            if (userCart == null) {
-                // 장바구니가 존재하지 않다면
-                // 즉, 장바구니에 물건을 담은 적이 없다면
-                model.addAttribute("user", userPageService.findUser(id));
-                return "/user/emptyCart";
-            } else {
-                // 장바구니가 존재한다면
-                // 장바구니에 담은 상품 리스트 보여주기
-                // cartItem 중 유저의 카트 id가 있는 상품들만 반환해야 함
-                List<CartItem> cartItemList = cartService.findUserCartItems(userCart);
+            // 장바구니에 들어있는 아이템 모두 가져오기
+           List<CartItem> cartItemList = cartService.allUserCartView(userCart);
 
-                // 총 가격 += 수량 * 가격
-                int totalPrice = 0;
-                for (CartItem cartitem : cartItemList) {
-                    totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
-                }
-
-                model.addAttribute("totalPrice", totalPrice);
-                model.addAttribute("cartItems", cartItemList);
-                model.addAttribute("user", userPageService.findUser(id));
-
-                return "/user/userCart";
-            }
-        }
-        // 로그인 id와 장바구니 접속 id가 같지 않는 경우
-        else {
-
-            return "redirect:/main";
-        }
-
-    }
-
-    // 장바구니에 물건 넣기
-    @PostMapping("/user/cart/{id}/{itemId}")
-    public String addCartItem(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId, int amount) {
-
-
-        User loginUser = userPageService.findUser(id);
-        Item item = itemService.itemView(itemId);
-
-        cartService.addCart(loginUser, item, amount);
-
-        return "redirect:/user/cart/{id}";
-    }
-
-    // 장바구니에서 물건 삭제 --> 삭제하고 남은 총액 다시 계산해서 모델로 보내기 = 장바구니 등록 로직이랑 같음!!
-    @GetMapping("/user/cart/{id}/{cartItemId}/delete")
-    public String deleteCartItem(@PathVariable("id") Integer id, @PathVariable("cartItemId") Integer itemId, Model model) {
-        cartService.deleteCartItem(itemId);
-
-        // 해당 유저의 카트가 있는지 없는지 찾기
-        Cart userCart = cartService.findCart(id);
-
-        if (userCart == null) {
-            // 장바구니가 존재하지 않다면
-            // 즉, 장바구니에 물건을 담은 적이 없다면
-            model.addAttribute("user", userPageService.findUser(id));
-            return "/user/emptyCart";
-        } else {
-            // 장바구니가 존재한다면
-            // 장바구니에 담은 상품 리스트 보여주기
-            // cartItem 중 유저의 카트 id가 있는 상품들만 반환해야 함
-            List<CartItem> cartItemList = cartService.findUserCartItems(userCart);
-
-            // 총 가격 += 수량 * 가격
+            // 장바구니에 들어있는 상품들의 총 가격
             int totalPrice = 0;
             for (CartItem cartitem : cartItemList) {
                 totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
@@ -133,6 +69,58 @@ public class UserPageController {
 
             return "/user/userCart";
         }
+        // 로그인 id와 장바구니 접속 id가 같지 않는 경우
+        else {
+            return "redirect:/main";
+        }
+    }
+
+    // 장바구니에 물건 넣기
+    @PostMapping("/user/cart/{id}/{itemId}")
+    public String addCartItem(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId, int amount) {
+
+
+        User user = userPageService.findUser(id);
+        Item item = itemService.itemView(itemId);
+
+        cartService.addCart(user, item, amount);
+
+        return "redirect:/item/view/{id}";
+    }
+
+    // 장바구니에서 물건 삭제
+    // 삭제하고 남은 총액 다시 계산해서 모델로 보내기 = 장바구니 등록 로직이랑 같음
+    // 삭제하고 남은 상품의 총 개수
+    @GetMapping("/user/cart/{id}/{cartItemId}/delete")
+    public String deleteCartItem(@PathVariable("id") Integer id, @PathVariable("cartItemId") Integer itemId, Model model) {
+
+        cartService.cartItemDelete(itemId);
+
+        // 해당 유저의 카트 찾기
+        Cart userCart = cartService.findUserCart(id);
+
+        // 해당 유저의 장바구니 상품들
+        List<CartItem> cartItemList = cartService.allUserCartView(userCart);
+
+        // 총 가격 += 수량 * 가격
+        int totalPrice = 0;
+        for (CartItem cartitem : cartItemList) {
+            totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
+        }
+
+        // 총 개수 += 수량
+        int totalCount = 0;
+        for (CartItem cartitem : cartItemList) {
+            totalPrice += cartitem.getCount();
+        }
+
+
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("cartItems", cartItemList);
+        model.addAttribute("user", userPageService.findUser(id));
+
+        return "/user/userCart";
 
     }
 

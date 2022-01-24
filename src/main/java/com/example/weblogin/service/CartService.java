@@ -23,12 +23,17 @@ public class CartService {
     private final ItemRepository itemRepository;
     private final CartItemRepository cartItemRepository;
 
+    // 회원가입 하면 회원 당 카트 하나 생성
+    public void createCart(User user){
+        Cart cart = Cart.createCart(user);
+        cartRepository.save(cart);
+    }
+
     // 장바구니 담기
     public void addCart(User user, Item newitem, int amount) {
 
         // 유저 id로 장바구니가 있는지 없는지 찾기
         Cart cart = cartRepository.findByUserId(user.getId());
-        System.out.println("*********************user = " + user.getId() + " item = " + newitem.getId() + " amount = " + amount);
 
         // 장바구니가 존재하지 않는다면
         if (cart == null) {
@@ -58,13 +63,13 @@ public class CartService {
     }
 
     // id에 해당하는 장바구니 찾기
-    public Cart findCart(int userId) {
+    public Cart findUserCart(int userId) {
         return cartRepository.findByUserId(userId);
     }
 
     // 카트 상품 리스트 중 해당하는 유저가 담은 상품만 반환
     // 유저의 카트 id와 카트상품의 id가 같아야 함
-    public List<CartItem> findUserCartItems(Cart userCart) {
+    public List<CartItem> allUserCartView(Cart userCart) {
 
         int userCartId = userCart.getId(); // 유저의 카트 id를 꺼냄
         List<CartItem> UserCartItems = new ArrayList<>(); // id에 해당하는 유저가 담은 상품들 넣어둘 곳
@@ -80,10 +85,26 @@ public class CartService {
         return UserCartItems;
     }
 
-    // 장바구니 상품 삭제 -> cartItemId 받아서 삭제
-    public void deleteCartItem(int id) {
+    // 장바구니 상품 개별 삭제 -> cartItemId 받아서 삭제
+    public void cartItemDelete(int id) {
 
         cartItemRepository.deleteById(id);
+    }
+
+    // 장바구니 아이템 전체 삭제 -> 매개변수는 유저 id
+    public void allCartItemDelete(int id){
+        List<CartItem> cartItems = cartItemRepository.findAll(); // 전체 cartItem 찾기
+
+        // 반복문을 이용하여 해당하는 User의 CartItem 만 찾아서 삭제
+        for(CartItem cartItem : cartItems){
+            if(cartItem.getCart().getUser().getId() == id){
+                int stock = cartItem.getItem().getStock();
+                stock = stock - cartItem.getCount();
+                cartItem.getItem().setStock(stock);
+                cartItem.getCart().setCount(cartItem.getCart().getCount() - 1);
+                cartItemRepository.deleteById(cartItem.getId());
+            }
+        }
     }
 
 }

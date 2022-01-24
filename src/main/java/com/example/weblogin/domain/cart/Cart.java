@@ -3,8 +3,10 @@ package com.example.weblogin.domain.cart;
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +26,18 @@ public class Cart {
     @JoinColumn(name="user_id")
     User user;
 
+    private int count; // 카트에 담긴 총 상품 개수
+
     @OneToMany(mappedBy = "cart")
-    private List<CartItem> cart_items = new ArrayList<>();
+    private List<CartItem> cartItems = new ArrayList<>();
+
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private LocalDate createDate; // 날짜
+
+    @PrePersist
+    public void createDate(){
+        this.createDate = LocalDate.now();
+    }
 
     public static Cart createCart(User user) {
         Cart cart = new Cart();

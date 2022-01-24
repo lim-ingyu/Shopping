@@ -13,14 +13,22 @@ import javax.transaction.Transactional;
 public class AuthService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CartService cartService;
 
     @Transactional // Write(Insert, Update, Delete)
     public User signup(User user) {
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
-        user.setRole("ROLE_SELLER");
+        user.setRole("ROLE_USER");
 
+        User userEntity = userRepository.save(user);
+        cartService.createCart(user);
+        return userEntity;
+    }
+
+    @Transactional // Write(Insert, Update, Delete)
+    public User userUpdate(User user) {
         User userEntity = userRepository.save(user);
         return userEntity;
     }
