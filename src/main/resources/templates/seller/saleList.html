@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title th:text="|${user.getUsername()}의 장바구니|">장바구니</title>
+    <title th:text="|${user.getUsername()}의 판매내역|">판매내역</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../../../../../../Downloads/startbootstrap-shop-item-gh-pages/assets/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -71,7 +71,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">마이페이지</a></lt>
                         <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">장바구니</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">구매내역</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">주문내역</a></lt>
                     </ul>
                 </div>
             </form>
@@ -85,7 +85,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매자페이지</a></lt>
                         <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">상품관리</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">매출보기</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매내역</a></lt>
                     </ul>
                 </div>
             </form>
@@ -104,25 +104,19 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">
                             <span data-feather="home"></span>
-                            장바구니
+                            판매자페이지
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">
+                            <span data-feather="home"></span>
+                            상품관리
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             <span data-feather="file"></span>
-                            주문내역
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            분석
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            유저설정
+                            판매내역
                         </a>
                     </li>
                 </ul>
@@ -134,7 +128,7 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">장바구니</h1>
+                <h1 class="h2">판매내역</h1>
             </div>
 
             <!--            <tr th:each="cart_item : ${cartItems}">-->
@@ -147,10 +141,11 @@
                         <th scope="col">번호</th>
                         <th scope="col">상품ID</th>
                         <th scope="col">상품명</th>
-                        <th scope="col">수량</th>
                         <th scope="col">가격</th>
-                        <th scope="col">담은날짜</th>
-                        <th scope="col">삭제</th>
+                        <th scope="col">판매량</th>
+                        <th scope="col">재고</th>
+                        <th scope="col">판매수익</th>
+                        <th scope="col">판매날짜</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -158,42 +153,19 @@
                         <td th:text="${i.count}">1</td>
                         <td th:text="${cartItem.getItem().getId()}">3번상품</td>
                         <td th:text="${cartItem.getItem().getName()}">상품명</td>
-                        <td th:text="${cartItem.getCount()}">수량</td>
-                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">가격</td>
+                        <td th:text="${cartItem.getItem().getPrice()}">가격</td>
+                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">판매량</td>
+                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">재고</td>
+                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">판매수익</td>
+                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">판매날짜</td>
                         <td class="btn btn-outline-dark"><a th:href="@{/user/cart/{id}/{cartItemId}/delete(id=${cartItem.getCart().getUser().id}, cartItemId=${cartItem.getId()})}" style="text-decoration: none">삭제</a></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <hr>
-            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-3">
-                <div class="col">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                        <div class="card-header py-3">
-                            <h4 class="my-0 fw-normal">총 수량</h4>
-                        </div>
-                        <form class="card-body" method="post">
-                            <h1 class="card-title pricing-card-title" th:text="|${totalCount} 개|">$0</h1>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-3">
-                <div class="col">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                        <div class="card-header py-3">
-                            <h4 class="my-0 fw-normal">총 결제금액</h4>
-                        </div>
-                        <form class="card-body" th:action="@{/user/{id}/cart/checkout(id=${user.getId()})}" method="post">
-                            <h1 class="card-title pricing-card-title" th:text="|${totalPrice} ₩|">$0</h1>
-                            <ul class="list-unstyled mt-3 mb-4">
-                                <li>잘못 담은 물건이 있는지 확인해보세요!</li>
-                            </ul>
-                            <button type="submit" class="w-100 btn btn-lg btn-outline-primary">구매하기</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        </main>
+    </div>
+</div>
 </body>
 </html>

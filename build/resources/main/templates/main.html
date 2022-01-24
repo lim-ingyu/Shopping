@@ -41,13 +41,10 @@
                     회원가입
                 </button>
             </form>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" >
-                <a class="btn btn-outline-dark" href="/item/upload" sec:authorize="hasRole('ROLE_SELLER')" >Resister</a>
-                <button class="btn btn-outline-dark" type="submit">
-                    로그아웃
-                </button>
-            </form>
             <form class="d-flex" sec:authorize="hasRole('ROLE_USER')">
+                <a class="btn btn-outline-dark" href="#" th:text="|현재잔액 : ${user.getCoin()} ₩|">
+                    현재잔액 : 10000 ₩
+                </a>
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle btn-outline-dark" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="|${user.getName()}회원님|">
                         회원님
@@ -72,6 +69,12 @@
                         <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">매출보기</a></lt>
                     </ul>
                 </div>
+            </form>
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" >
+                <a class="btn btn-outline-dark" href="/item/upload" sec:authorize="hasRole('ROLE_SELLER')" >Resister</a>
+                <button class="btn btn-outline-dark" type="submit">
+                    로그아웃
+                </button>
             </form>
 
         </div>
@@ -110,7 +113,7 @@
                     </div>
                     <!-- Product actions-->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#" th:href="@{item/{id}(id=${item.getId()})}">상세보기</a></div>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{/item/view/{id}(id=${item.getId()})}">상세보기</a></div>
                     </div>
                 </div>
             </div>

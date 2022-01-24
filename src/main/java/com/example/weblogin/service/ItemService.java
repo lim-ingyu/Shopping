@@ -1,11 +1,13 @@
 package com.example.weblogin.service;
 
+import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final CartService cartService;
 
     // 상품 등록
     public void saveItem(Item item, MultipartFile imgFile) throws Exception {
@@ -60,6 +63,7 @@ public class ItemService {
     }
 
     // 상품 수정
+    @Transactional
     public void itemModify(Item item, Integer id, MultipartFile imgFile) throws Exception {
         String oriImgName = imgFile.getOriginalFilename();
         String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
@@ -83,8 +87,12 @@ public class ItemService {
     }
 
     // 상품 삭제
+    @Transactional
     public void itemDelete(Integer id) {
-
+        List<CartItem> items = cartService.findCartItemByItemId(id);
+        for(CartItem item : items) {
+            cartService.cartItemDelete(item.getId());
+        }
         itemRepository.deleteById(id);
     }
 

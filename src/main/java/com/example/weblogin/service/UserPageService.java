@@ -14,4 +14,16 @@ public class UserPageService {
     public User findUser(Integer id) {
         return userRepository.findById(id).get();
     }
+
+    // 회원(판매자) 정보 수정
+    public void userModify(User user) {
+        User update = userRepository.findById(user.getId());
+        update.setUsername(user.getUsername());
+        update.setEmail(user.getEmail());
+        update.setAddress(user.getAddress());
+        update.setPhone(user.getPhone());
+        userRepository.save(update);
+
+    }
+
 }

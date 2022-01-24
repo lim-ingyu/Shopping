@@ -10,6 +10,7 @@ import com.example.weblogin.domain.user.User;
 import com.example.weblogin.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class CartService {
     }
 
     // 장바구니 담기
+    @Transactional
     public void addCart(User user, Item newitem, int amount) {
 
         // 유저 id로 장바구니가 있는지 없는지 찾기
@@ -83,6 +85,12 @@ public class CartService {
         }
 
         return UserCartItems;
+    }
+
+    // 카트 상품 리스트 중 해당하는 id의 상품만 반환
+    public List<CartItem> findCartItemByItemId(int id) {
+        List<CartItem> cartItems = cartItemRepository.findCartItemByItemId(id);
+        return cartItems;
     }
 
     // 장바구니 상품 개별 삭제 -> cartItemId 받아서 삭제

@@ -27,9 +27,4 @@ public class AuthService {
         return userEntity;
     }
 
-    @Transactional // Write(Insert, Update, Delete)
-    public User userUpdate(User user) {
-        User userEntity = userRepository.save(user);
-        return userEntity;
-    }
 }

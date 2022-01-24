@@ -45,6 +45,31 @@ public class UserPageController {
 
     }
 
+    // 회원(판매자) 정보 수정
+    @GetMapping("/user/modify/{id}")
+    public String userModify(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        // 로그인이 되어있는 유저의 id와 수정페이지에 접속하는 id가 같아야 한다.
+        if (principalDetails.getUser().getId() == id) {
+
+            model.addAttribute("user", userPageService.findUser(id));
+
+            return "/userModify";
+        } else {
+
+            return "redirect:/main";
+        }
+
+    }
+
+    // 수정 실행
+    @PostMapping("/user/update/{id}")
+    public String userUpdate(@PathVariable("id") Integer id, User user) {
+        userPageService.userModify(user);
+        return "redirect:/user/{id}";
+    }
+
+
+
     // 장바구니 페이지 접속
     @GetMapping("/user/cart/{id}")
     public String userCartPage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
