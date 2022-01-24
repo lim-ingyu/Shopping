@@ -37,59 +37,23 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                 <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/main}">Home</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" th:href="@{/item/list}">All Products</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                    </ul>
-                </li>
             </ul>
-            <form th:action="@{/signin}" sec:authorize="!isAuthenticated()">
-                <button class="btn btn-outline-dark" type="submit">
-                    로그인
-                </button>
-            </form>
-            <form th:action="@{/signup}" sec:authorize="!isAuthenticated()">
-                <button class="btn btn-outline-dark" type="submit">
-                    회원가입
-                </button>
-            </form>
-            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" >
-                <a class="btn btn-outline-dark" href="/item/upload" sec:authorize="hasRole('ROLE_SELLER')" >Resister</a>
-                <button class="btn btn-outline-dark" type="submit">
+            <form class="d-flex">
+                <a class="btn btn-outline-dark" th:href="@{/user/{id}/cart(id=${user.getId()})}">
+                    <i class="bi-cart-fill me-1"></i>
+                    Cart
+                    <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${user.getCart().getCount()}">0</span>
+                </a>
+                <a class="btn btn-outline-dark" th:href="@{/user/{id}(id=${user.getId()})}" th:text="|${user.getName()}님 환영합니다.|">
+                    ~~님 환영
+                </a>
+                <a class="btn btn-outline-dark" href="#" th:text="|현재잔액 : ${user.getCoin()} ₩|">
+                    현재잔액 : 10000 ₩
+                </a>
+                <a class="btn btn-outline-dark" th:href="@{/logout}">
                     로그아웃
-                </button>
+                </a>
             </form>
-            <form class="d-flex" sec:authorize="hasRole('ROLE_USER')">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle btn-outline-dark" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="|${user.getName()}회원님|">
-                        회원님
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">마이페이지</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">장바구니</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">구매내역</a></lt>
-                    </ul>
-                </div>
-            </form>
-
-            <form class="d-flex" sec:authorize="hasRole('ROLE_SELLER')">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle btn-outline-dark" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="|${user.getName()}판매자님|">
-                        판매자님
-                    </button>
-
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매자페이지</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">상품관리</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">매출보기</a></lt>
-                    </ul>
-                </div>
-            </form>
-
         </div>
     </div>
 </nav>
@@ -102,27 +66,21 @@
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
+                        <a class="nav-link active" aria-current="page" th:href="@{/user/{id}(id=${user.getId()})}">
+                            <span data-feather="home"></span>
+                            마이페이지
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/user/cart/{id}(id=${user.getId()})}">
                             <span data-feather="home"></span>
                             장바구니
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" th:href="@{/user/{id}(id=${user.getId()})}">
                             <span data-feather="file"></span>
                             주문내역
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            분석
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2"></span>
-                            유저설정
                         </a>
                     </li>
                 </ul>
@@ -160,6 +118,7 @@
                         <td th:text="${cartItem.getItem().getName()}">상품명</td>
                         <td th:text="${cartItem.getCount()}">수량</td>
                         <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">가격</td>
+                        <td th:text="${cartItem.getCart().getCreateDate()}">날짜</td>
                         <td class="btn btn-outline-dark"><a th:href="@{/user/cart/{id}/{cartItemId}/delete(id=${cartItem.getCart().getUser().id}, cartItemId=${cartItem.getId()})}" style="text-decoration: none">삭제</a></td>
                     </tr>
                     </tbody>
@@ -195,5 +154,8 @@
                     </div>
                 </div>
             </div>
+        </main>
+    </div>
+</div>
 </body>
 </html>

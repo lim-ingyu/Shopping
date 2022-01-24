@@ -80,15 +80,22 @@ public class UserPageController {
             Cart userCart = principalDetails.getUser().getCart();
 
             // 장바구니에 들어있는 아이템 모두 가져오기
-           List<CartItem> cartItemList = cartService.allUserCartView(userCart);
+            List<CartItem> cartItemList = cartService.allUserCartView(userCart);
 
             // 장바구니에 들어있는 상품들의 총 가격
             int totalPrice = 0;
             for (CartItem cartitem : cartItemList) {
                 totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
             }
+            // 총 개수 += 수량
+            int totalCount = 0;
+            for (CartItem cartitem : cartItemList) {
+                totalCount += cartitem.getCount();
+            }
+
 
             model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("totalCount", totalCount);
             model.addAttribute("cartItems", cartItemList);
             model.addAttribute("user", userPageService.findUser(id));
 
@@ -110,7 +117,7 @@ public class UserPageController {
 
         cartService.addCart(user, item, amount);
 
-        return "redirect:/item/view/{id}";
+        return "redirect:/item/view/{itemId}";
     }
 
     // 장바구니에서 물건 삭제
@@ -136,7 +143,7 @@ public class UserPageController {
         // 총 개수 += 수량
         int totalCount = 0;
         for (CartItem cartitem : cartItemList) {
-            totalPrice += cartitem.getCount();
+            totalCount += cartitem.getCount();
         }
 
 

@@ -58,7 +58,7 @@
             </form>
 
             <form class="d-flex" sec:authorize="hasRole('ROLE_SELLER')">
-                <a class="btn btn-outline-dark" href="#" th:text="|현재잔액 : ${user.getCoin()} ₩|">
+                <a class="btn btn-outline-dark" href="#" th:text="|현재수익 : ${user.getCoin()} ₩|">
                     현재잔액 : 10000 ₩
                 </a>
                 <div class="dropdown">
@@ -68,13 +68,12 @@
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매자페이지</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">상품관리</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매내역</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/seller/manage/{id}(id=${user.getId()})}">상품관리</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/seller/salelist/{id}(id=${user.getId()})}">판매내역</a></lt>
                     </ul>
                 </div>
             </form>
             <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" >
-                <a class="btn btn-outline-dark" href="/item/upload" sec:authorize="hasRole('ROLE_SELLER')" >Resister</a>
                 <button class="btn btn-outline-dark" type="submit">
                     로그아웃
                 </button>
