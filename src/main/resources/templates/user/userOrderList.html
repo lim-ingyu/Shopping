@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title th:text="|${user.getUsername()}의 장바구니|">장바구니</title>
+    <title th:text="|${user.getUsername()}의 주문내역|">주문내역</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../../../../../../Downloads/startbootstrap-shop-item-gh-pages/assets/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -78,7 +78,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/user/{id}(id=${user.getId()})}">
+                        <a class="nav-link" th:href="@{/user/orderHist/{id}(id=${user.getId()})}">
                             <span data-feather="file"></span>
                             주문내역
                         </a>
@@ -92,7 +92,7 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">장바구니</h1>
+                <h1 class="h2">주문내역</h1>
             </div>
 
             <!--            <tr th:each="cart_item : ${cartItems}">-->
@@ -107,21 +107,34 @@
                         <th scope="col">상품명</th>
                         <th scope="col">수량</th>
                         <th scope="col">가격</th>
-                        <th scope="col">담은날짜</th>
-                        <th scope="col">삭제</th>
+                        <th scope="col">주문날짜</th>
+                        <!--<th scope="col">주문취소</th>-->
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="cartItem, i: ${cartItems}">
+                    <tr th:each="orderItem, i: ${orderItems}">
                         <td th:text="${i.count}">1</td>
-                        <td th:text="${cartItem.getItem().getId()}">3번상품</td>
-                        <td th:text="${cartItem.getItem().getName()}">상품명</td>
-                        <td th:text="${cartItem.getCount()}">수량</td>
-                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">가격</td>
-                        <td th:text="${cartItem.getCart().getCreateDate()}">날짜</td>
-                        <td class="btn btn-outline-dark"><a th:href="@{/user/cart/{id}/{cartItemId}/delete(id=${cartItem.getCart().getUser().id}, cartItemId=${cartItem.getId()})}" style="text-decoration: none">삭제</a></td>
+                        <td th:text="${orderItem.getItem().getId()}">3번상품</td>
+                        <td th:text="${orderItem.getItem().getName()}">상품명</td>
+                        <td th:text="${orderItem.getOrderCount()}">수량</td>
+                        <td th:text="${orderItem.getItem().getPrice() * orderItem.getOrderCount()}">가격</td>
+                        <td th:text="${orderItem.getOrder().getCreateDate()}">날짜</td>
+                        <td class="btn btn-outline-dark"><a th:href="@{/#}" style="text-decoration: none">주문취소</a></td>
                     </tr>
                     </tbody>
+                    <!--<tbody>
+                    <tr th:each="order: ${orders}">
+                        <block th:object="${order}" th:each="orderItem, i: ${orderItems}" th:if="${orderItem.getOrder().getId() == order.getId()}">
+                            <td th:text="${i.count}">1</td>
+                            <td th:text="${}">3번상품</td>
+                            <td th:text="${orderItem.getItem().getName()}">상품명</td>
+                            <td th:text="${orderItem.getOrderCount()}">수량</td>
+                            <td th:text="${orderItem.getItem().getPrice() * orderItem.getOrderCount()}">가격</td>
+                            <td th:text="${orderItem.getOrder().getCreateDate()}">날짜</td>
+                            <td class="btn btn-outline-dark"><a th:href="@{/#}" style="text-decoration: none">주문취소</a></td>
+                        </block>
+                    </tr>
+                    </tbody>-->
                 </table>
             </div>
             <hr>
@@ -129,7 +142,7 @@
                 <div class="col">
                     <div class="card mb-4 rounded-3 shadow-sm">
                         <div class="card-header py-3">
-                            <h4 class="my-0 fw-normal">총 수량</h4>
+                            <h4 class="my-0 fw-normal">총 주문량</h4>
                         </div>
                         <form class="card-body" method="post">
                             <h1 class="card-title pricing-card-title" th:text="|${totalCount} 개|">$0</h1>
@@ -138,13 +151,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-3">
+            <!--<div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-3">
                 <div class="col">
                     <div class="card mb-4 rounded-3 shadow-sm">
                         <div class="card-header py-3">
                             <h4 class="my-0 fw-normal">총 결제금액</h4>
                         </div>
-                        <form class="card-body" th:action="@{/user/cart/checkout/{id}(id=${user.getId()})}" method="post">
+                        <form class="card-body" th:action="@{/user/{id}/cart/checkout(id=${user.getId()})}" method="post">
                             <h1 class="card-title pricing-card-title" th:text="|${totalPrice} ₩|">$0</h1>
                             <ul class="list-unstyled mt-3 mb-4">
                                 <li>잘못 담은 물건이 있는지 확인해보세요!</li>
@@ -153,7 +166,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </main>
     </div>
 </div>

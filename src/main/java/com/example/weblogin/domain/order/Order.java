@@ -27,9 +27,6 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user; // 구매자
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seller_id")
-    private User seller; // 판매자
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -47,15 +44,23 @@ public class Order {
         orderItem.setOrder(this);
     }
 
-    public static Order createOrder(User user, User seller, List<OrderItem> orderItemList) {
+
+    public static Order createOrder(User user, List<OrderItem> orderItemList) {
 
         Order order = new Order();
         order.setUser(user);
-        order.setSeller(seller);
         for (OrderItem orderItem : orderItemList) {
             order.addOrderItem(orderItem);
         }
         order.setCreateDate(order.createDate);
+        return order;
+    }
+
+
+    public static Order createOrder(User user) {
+
+        Order order = new Order();
+        order.setUser(user);
         return order;
     }
 

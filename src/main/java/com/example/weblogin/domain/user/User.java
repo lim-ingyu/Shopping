@@ -3,6 +3,7 @@ package com.example.weblogin.domain.user;
 import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
+import com.example.weblogin.domain.orderitem.OrderItem;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -48,7 +49,7 @@ public class User {
 
     // 판매자 판매 (구매자의 주문)
     @OneToMany(mappedBy = "seller")
-    private List<Order> sellerOrder = new ArrayList<>();;
+    private List<OrderItem> sellerOrder = new ArrayList<>();;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate; // 날짜

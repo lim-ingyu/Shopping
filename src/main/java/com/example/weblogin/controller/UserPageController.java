@@ -4,9 +4,12 @@ import com.example.weblogin.config.auth.PrincipalDetails;
 import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
+import com.example.weblogin.domain.order.Order;
+import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.user.User;
 import com.example.weblogin.service.CartService;
 import com.example.weblogin.service.ItemService;
+import com.example.weblogin.service.OrderService;
 import com.example.weblogin.service.UserPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +31,7 @@ public class UserPageController {
     private final UserPageService userPageService;
     private final CartService cartService;
     private final ItemService itemService;
+    private final OrderService orderService;
 
     // 유저 페이지 접속
     @GetMapping("/user/{id}")
@@ -111,7 +115,6 @@ public class UserPageController {
     @PostMapping("/user/cart/{id}/{itemId}")
     public String addCartItem(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId, int amount) {
 
-
         User user = userPageService.findUser(id);
         Item item = itemService.itemView(itemId);
 
@@ -158,11 +161,89 @@ public class UserPageController {
 
     // 구매 내역 조회 페이지
     @GetMapping("/user/orderHist/{id}")
-    public String orderHist(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
-        return "/user/userOrderHist";
+    public String orderList(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+        // 로그인이 되어있는 유저의 id와 구매내역에 접속하는 id가 같아야 한다.
+        if (principalDetails.getUser().getId() == id) {
+
+            // 로그인 되어 있는 유저에 해당하는 구매내역 가져오기
+            List<Order> orders = orderService.findUserOrders(id);
+            List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
+
+
+            // 총 개수 += 수량
+            int totalCount = 0;
+            for (OrderItem orderItem : orderItemList) {
+                totalCount += orderItem.getOrderCount();
+            }
+
+            model.addAttribute("orders", orders);
+            model.addAttribute("totalCount", totalCount);
+            model.addAttribute("orderItems", orderItemList);
+            model.addAttribute("user", userPageService.findUser(id));
+
+            return "user/userOrderList";
+        }
+        // 로그인 id와 구매내역 접속 id가 같지 않는 경우
+        else {
+            return "redirect:/main";
+        }
     }
 
-    // 상품 주문
+    // 상품 개별 주문 -> 주문 할 때마다 Order객체 생성해야함
+
+
+
+
+    // 장바구니 상품 전체 주문
+    @PostMapping("/user/cart/checkout/{id}")
+    public String checkout(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+
+        if(principalDetails.getUser().getId() == id) {
+            User user = userPageService.findUser(id);
+
+            Cart userCart = cartService.findUserCart(user.getId()); // 유저 카트 찾기
+            List<CartItem> userCartItems = cartService.allUserCartView(userCart); // 유저 카트 안에 있는 상품들
+
+            // 최종 결제 금액
+            int totalPrice = 0;
+            for (CartItem cartItem : userCartItems) {
+                totalPrice += cartItem.getCount() * cartItem.getItem().getPrice();
+            }
+
+
+            // 유저 돈에서 최종 결제금액 빼야함
+            user.setCoin(user.getCoin()-totalPrice);
+
+            // 판매자의 돈은 최종 결제금액만큼 늘어남
+            // 해당 상품들의 재고는 각각 구매한 수량만큼 줄어듬
+            // 상품들 개별 판매 개수 다 더해서 최종 판매 개수 구하기
+            // 장바구니에서 상품 전체 삭제하기
+            for (CartItem cartItem : userCartItems) {
+                User seller = cartItem.getItem().getUser(); // 각 상품에 대한 판매자
+
+                // 판매자 수익 증가
+                seller.setCoin(seller.getCoin()+ (cartItem.getCount()*cartItem.getItem().getPrice()));
+
+                // 재고 감소
+                cartItem.getItem().setStock(cartItem.getItem().getStock()-cartItem.getCount());
+
+                // 상품 개별로 판매 개수 증가
+                cartItem.getItem().setCount(cartItem.getItem().getCount()+cartItem.getCount());
+
+                // 장바구니 상품 모두 삭제
+                cartService.allCartItemDelete(id);
+            }
+            List<CartItem> cartItems = userCart.getCartItems();
+
+            // order에 담기
+            orderService.addOrder(id, cartItems);
+
+            return "redirect:/user/cart/{id}";
+        } else {
+            return "redirect:/main";
+        }
+    }
+
 
 
 }

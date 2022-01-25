@@ -3,6 +3,7 @@ package com.example.weblogin.domain.orderitem;
 import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
+import com.example.weblogin.domain.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,10 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="order_id")
     private Order order;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "seller_id")
+    private User seller; // 판매자
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="item_id")
