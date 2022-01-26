@@ -10,6 +10,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// 판매자에게는 판매 내역이 되고
+// 구매자에게는 구매 내역이 됨
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -64,13 +68,4 @@ public class Order {
         return order;
     }
 
-    // 각 주문 상품의 총 금액 구한 뒤 모두 더하기
-    public int getTotalPrice() {
-        int totalPrice = 0;
-
-        for (OrderItem orderItem : orderItems) {
-            totalPrice += orderItem.getTotalPrice();
-        }
-        return totalPrice;
-    }
 }

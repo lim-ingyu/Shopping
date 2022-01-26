@@ -7,10 +7,7 @@ import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
 import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.user.User;
-import com.example.weblogin.service.CartService;
-import com.example.weblogin.service.ItemService;
-import com.example.weblogin.service.OrderService;
-import com.example.weblogin.service.UserPageService;
+import com.example.weblogin.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -32,6 +29,7 @@ public class UserPageController {
     private final CartService cartService;
     private final ItemService itemService;
     private final OrderService orderService;
+    private final SaleService saleService;
 
     // 유저 페이지 접속
     @GetMapping("/user/{id}")
@@ -170,7 +168,10 @@ public class UserPageController {
             List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
 
 
-            // 총 개수 += 수량
+            System.out.println("******************************orders = " + orders + " orderItemList = " + orderItemList);
+
+
+            // 총 주문 개수 += 수량
             int totalCount = 0;
             for (OrderItem orderItem : orderItemList) {
                 totalCount += orderItem.getOrderCount();
@@ -230,13 +231,21 @@ public class UserPageController {
                 // 상품 개별로 판매 개수 증가
                 cartItem.getItem().setCount(cartItem.getItem().getCount()+cartItem.getCount());
 
-                // 장바구니 상품 모두 삭제
-                cartService.allCartItemDelete(id);
+                // sale에 담기
+                saleService.addSale(seller.getId(), cartItem.getItem());
+
             }
             List<CartItem> cartItems = userCart.getCartItems();
 
             // order에 담기
             orderService.addOrder(id, cartItems);
+
+            // 장바구니 상품 모두 삭제
+            cartService.allCartItemDelete(id);
+
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("user", userPageService.findUser(id));
 
             return "redirect:/user/cart/{id}";
         } else {

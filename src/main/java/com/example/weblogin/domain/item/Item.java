@@ -2,6 +2,7 @@ package com.example.weblogin.domain.item;
 
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.orderitem.OrderItem;
+import com.example.weblogin.domain.sale.Sale;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -45,6 +46,9 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToMany(mappedBy = "item")
+    private List<Sale> saleItems = new ArrayList<>();
+
     private String imgName; // 이미지 파일명
 
     private String imgPath; // 이미지 조회 경로
@@ -64,9 +68,6 @@ public class Item {
         this.stock = restStock;
     }
 
-    public void addStock(int stock) {
-        this.stock += stock;
-    }
 }
 
 

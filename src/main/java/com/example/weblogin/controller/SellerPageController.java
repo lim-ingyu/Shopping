@@ -1,9 +1,15 @@
 package com.example.weblogin.controller;
 
 import com.example.weblogin.config.auth.PrincipalDetails;
+import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
+import com.example.weblogin.domain.order.Order;
+import com.example.weblogin.domain.orderitem.OrderItem;
+import com.example.weblogin.domain.sale.Sale;
 import com.example.weblogin.domain.user.User;
 import com.example.weblogin.service.ItemService;
+import com.example.weblogin.service.OrderService;
+import com.example.weblogin.service.SaleService;
 import com.example.weblogin.service.UserPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +27,8 @@ public class SellerPageController {
 
     private final UserPageService userPageService;
     private final ItemService itemService;
+    private final OrderService orderService;
+    private final SaleService saleService;
 
     // 판매자 프로필 페이지 접속
     @GetMapping("/seller/{id}")
@@ -52,7 +60,7 @@ public class SellerPageController {
             List<Item> userItem = new ArrayList<>();
 
 
-            for(Item item : allItem ) {
+            for(Item item : allItem) {
                 if(item.getUser().getId() == id) {
                     userItem.add(item);
                 }
@@ -65,10 +73,39 @@ public class SellerPageController {
         }
     }
 
-    // 판매 내역 페이지
+    // 판매 내역 조회 페이지
     @GetMapping("/seller/salelist/{id}")
     public String saleList(@PathVariable("id")Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        return "seller/saleList";
+        // 로그인이 되어있는 유저의 id와 판매내역에 접속하는 id가 같아야 한다.
+        if (principalDetails.getUser().getId() == id) {
+
+            // 판매자 정보
+            User seller = userPageService.findUser(id);
+
+            // 판매상품 모두 가져오기
+            List<Sale> saleItemList = saleService.findSaleItemsById(id);
+            List<Sale> sellerSaleItem = new ArrayList<>();
+
+            // 해당 판매자가 판매한 것만 조회
+            // 총 판매 개수 += 수량
+            int totalCount = 0;
+            for (Sale sale : saleItemList) {
+                totalCount += sale.getItemCount();
+                sellerSaleItem.add(sale);
+            }
+
+            model.addAttribute("totalCount", totalCount);
+            model.addAttribute("sellerSaleItems", sellerSaleItem);
+            model.addAttribute("seller", seller);
+
+            return "seller/saleList";
+        }
+        // 로그인 id와 판매내역 접속 id가 같지 않는 경우
+        else {
+            return "redirect:/main";
+        }
+
     }
+
 
 }

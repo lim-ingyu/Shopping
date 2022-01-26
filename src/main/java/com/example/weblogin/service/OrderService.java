@@ -42,6 +42,9 @@ public class OrderService {
         return orderItemRepository.findOrderItemsById(userId);
     }
 
+    // OrderItem 모두 찾기
+    public List<OrderItem> findAllOrderItems() {return orderItemRepository.findAll();}
+
 
     // Order에 저장
     @Transactional
@@ -55,13 +58,13 @@ public class OrderService {
         for (CartItem cartItem1 : cartItem) {
             User seller = cartItem1.getItem().getUser();
             Item item = itemRepository.findById(cartItem1.getItem().getId());
-            OrderItem orderItem = OrderItem.createOrderItem(item, cartItem1.getCount());
+            OrderItem orderItem = OrderItem.createOrderItem(seller, item, cartItem1.getCount());
             orderItemList.add(orderItem);
+            orderItemRepository.save(orderItem);
         }
 
         Order order = Order.createOrder(user, orderItemList);
         orderRepository.save(order);
-
 
     }
 

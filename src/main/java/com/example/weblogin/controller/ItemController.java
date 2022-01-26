@@ -4,6 +4,7 @@ import com.example.weblogin.config.auth.PrincipalDetails;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.user.User;
 import com.example.weblogin.service.ItemService;
+import com.example.weblogin.service.UserPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+    private final UserPageService userPageService;
 
     // 메인 페이지 html 하나로 통일
     // 메인 페이지 (로그인 안 한 유저) /localhost:8080
@@ -46,16 +48,18 @@ public class ItemController {
     public String mainPage(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
             // 어드민, 판매자
+            int sellerId = principalDetails.getUser().getId();
             List<Item> items = itemService.allItemView();
             model.addAttribute("items", items);
-            model.addAttribute("user", principalDetails.getUser());
+            model.addAttribute("user", userPageService.findUser(sellerId));
 
             return "/main";
         } else {
             // 구매자
+            int userId = principalDetails.getUser().getId();
             List<Item> items = itemService.allItemView();
             model.addAttribute("items", items);
-            model.addAttribute("user", principalDetails.getUser());
+            model.addAttribute("user", userPageService.findUser(userId));
 
             return "/main";
         }

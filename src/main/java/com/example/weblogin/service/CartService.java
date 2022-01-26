@@ -60,8 +60,11 @@ public class CartService {
             update.addCount(amount);
             update.setCount(update.getCount());
             cartItemRepository.save(update);
-
         }
+
+        // 카트 상품 총 개수 증가
+        cart.setCount(cart.getCount()+amount);
+
     }
 
     // id에 해당하는 장바구니 찾기
@@ -87,7 +90,7 @@ public class CartService {
         return UserCartItems;
     }
 
-    // 카트 상품 리스트 중 해당하는 id의 상품만 반환
+    // 카트 상품 리스트 중 해당하는 상품 id의 상품만 반환
     public List<CartItem> findCartItemByItemId(int id) {
         List<CartItem> cartItems = cartItemRepository.findCartItemByItemId(id);
         return cartItems;
@@ -106,10 +109,11 @@ public class CartService {
         // 반복문을 이용하여 해당하는 User의 CartItem 만 찾아서 삭제
         for(CartItem cartItem : cartItems){
             if(cartItem.getCart().getUser().getId() == id){
-                int stock = cartItem.getItem().getStock();
-                stock = stock - cartItem.getCount();
-                cartItem.getItem().setStock(stock);
-                cartItem.getCart().setCount(cartItem.getCart().getCount() - 1);
+                // 해당 아이템의 재고 감소
+                //int stock = cartItem.getItem().getStock();
+                //stock = stock - cartItem.getCount();
+                //cartItem.getItem().setStock(stock);
+                cartItem.getCart().setCount(0);
                 cartItemRepository.deleteById(cartItem.getId());
             }
         }

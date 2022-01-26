@@ -4,6 +4,7 @@ import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
 import com.example.weblogin.domain.orderitem.OrderItem;
+import com.example.weblogin.domain.sale.Sale;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -42,6 +43,9 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     private Cart cart;
+
+    @OneToOne(mappedBy = "user")
+    private Sale sale;
 
     // 구매자 주문
     @OneToMany(mappedBy = "user")

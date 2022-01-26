@@ -7,4 +7,5 @@ import java.util.List;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Integer> {
 
     List<OrderItem> findOrderItemsById(int id);
+    List<OrderItem> findAll();
 }

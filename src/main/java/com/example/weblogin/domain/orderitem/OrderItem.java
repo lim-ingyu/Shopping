@@ -34,19 +34,15 @@ public class OrderItem {
     private int orderPrice; //주문가격
     private int orderCount; //수량
 
-    public static OrderItem createOrderItem(Item item, int count) {
+    public static OrderItem createOrderItem(User seller, Item item, int count) {
 
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
+        orderItem.setSeller(seller);
         orderItem.setOrderCount(count);
         orderItem.setOrderPrice(item.getPrice());
-
-        item.removeStock(count);
         return orderItem;
     }
 
-    // 구매 상품 개별 총가격
-    public int getTotalPrice() {
-        return this.orderPrice * this.orderCount;
-    }
+
 }
