@@ -37,8 +37,8 @@ public class Item {
     private boolean isSoldout; // 상품 상태 (판매중 / 품절)
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user; // 판매자 아이디
+    @JoinColumn(name = "seller_id")
+    private User seller; // 판매자 아이디
 
     @OneToMany(mappedBy = "item")
     private List<CartItem> cartItems = new ArrayList<>();
@@ -59,13 +59,6 @@ public class Item {
     @PrePersist // DB에 INSERT 되기 직전에 실행. 즉 DB에 값을 넣으면 자동으로 실행됨
     public void createDate() {
         this.createDate = LocalDate.now();
-    }
-
-    // 구매자가 상품 구매하면 재고 감소 함수
-    public void removeStock(int stock) {
-
-        int restStock = this.stock - stock;
-        this.stock = restStock;
     }
 
 }

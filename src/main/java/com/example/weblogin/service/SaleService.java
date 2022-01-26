@@ -1,5 +1,6 @@
 package com.example.weblogin.service;
 
+import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
@@ -20,6 +21,12 @@ public class SaleService {
 
     private final SaleRepository saleRepository;
     private final UserPageService userPageService;
+
+    // 회원가입 하면 판매자 당 판매내역 하나 생성
+    public void createSale(User user){
+        Sale sale = Sale.createSale(user);
+        saleRepository.save(sale);
+    }
 
     // 판매된 상품 모두 찾기
     public List<Sale> findAllSaleItems() {return saleRepository.findAll();}

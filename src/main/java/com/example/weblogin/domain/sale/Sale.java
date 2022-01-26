@@ -24,8 +24,8 @@ public class Sale {
     private int id;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="user_id")
-    private User user; // 판매자
+    @JoinColumn(name="seller_id")
+    private User seller; // 판매자
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="item_id")
@@ -45,11 +45,17 @@ public class Sale {
 
     public static Sale createSale(User user, Item item) {
         Sale sale = new Sale();
-        sale.setUser(user);
+        sale.setSeller(user);
         sale.setItem(item);
         sale.setItemName(item.getName());
         sale.setItemPrice(item.getPrice());
         sale.setItemCount(item.getCount());
+        return sale;
+    }
+
+    public static Sale createSale(User user) {
+        Sale sale = new Sale();
+        sale.setSeller(user);
         return sale;
     }
 }

@@ -24,7 +24,7 @@ public class Cart {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
-    private User user;
+    private User user; // 구매자
 
     private int count; // 카트에 담긴 총 상품 개수
 

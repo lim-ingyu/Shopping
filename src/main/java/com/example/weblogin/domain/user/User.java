@@ -38,22 +38,22 @@ public class User {
 
     private int coin; // 구매자 - 충전한 돈 / 판매자 - 수익
 
-    @OneToMany(mappedBy = "user")
-    private List<Item> items = new ArrayList<>();
+    @OneToMany(mappedBy = "seller")
+    private List<Item> items = new ArrayList<>(); // 판매자가 가지고 있는 상품들
 
     @OneToOne(mappedBy = "user")
-    private Cart cart;
+    private Cart cart; // 구매자의 장바구니
 
-    @OneToOne(mappedBy = "user")
-    private Sale sale;
+    @OneToOne(mappedBy = "seller")
+    private Sale sale; // 판매자의 판매
 
     // 구매자 주문
     @OneToMany(mappedBy = "user")
-    private List<Order> userOrder = new ArrayList<>();;
+    private List<Order> userOrder = new ArrayList<>();
 
     // 판매자 판매 (구매자의 주문)
     @OneToMany(mappedBy = "seller")
-    private List<OrderItem> sellerOrder = new ArrayList<>();;
+    private List<OrderItem> sellerOrder = new ArrayList<>();
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate; // 날짜

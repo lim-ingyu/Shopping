@@ -18,18 +18,19 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CartService cartService;
     private final OrderService orderService;
+    private final SaleService saleService;
 
     @Transactional // Write(Insert, Update, Delete)
     public User signup(User user) {
         String rawPassword = user.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
-        user.setRole("ROLE_SELLER");
+        user.setRole("ROLE_USER");
 
         User userEntity = userRepository.save(user);
         if (user.getRole() == "ROLE_SELLER") {
-
-        } else {
+            saleService.createSale(user);
+        } else if (user.getRole() == "ROLE_USER"){
             cartService.createCart(user);
             orderService.createOrder(user);
         }
