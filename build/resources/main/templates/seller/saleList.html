@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title th:text="|${user.getUsername()}의 판매내역|">판매내역</title>
+    <title th:text="|${seller.getUsername()}의 판매내역|">판매내역</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../../../../../../Downloads/startbootstrap-shop-item-gh-pages/assets/favicon.ico" />
     <!-- Bootstrap icons-->
@@ -63,18 +63,6 @@
                     로그아웃
                 </button>
             </form>
-            <form class="d-flex" sec:authorize="hasRole('ROLE_USER')">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle btn-outline-dark" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="|${user.getName()}회원님|">
-                        회원님
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">마이페이지</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">장바구니</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/user/{id}(id=${user.getId()})}">주문내역</a></lt>
-                    </ul>
-                </div>
-            </form>
 
             <form class="d-flex" sec:authorize="hasRole('ROLE_SELLER')">
                 <div class="dropdown">
@@ -83,9 +71,9 @@
                     </button>
 
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매자페이지</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">상품관리</a></lt>
-                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${user.getId()})}">판매내역</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/seller/{id}(id=${seller.getId()})}">판매자페이지</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/seller/manage/{id}(id=${seller.getId()})}">상품관리</a></lt>
+                        <lt><a class="dropdown-item" th:href="@{/seller/salelist/{id}(id=${seller.getId()})}">판매내역</a></lt>
                     </ul>
                 </div>
             </form>
@@ -102,19 +90,19 @@
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
+                        <a class="nav-link active" aria-current="page" th:href="@{/seller/{id}(id=${seller.getId()})}">
                             <span data-feather="home"></span>
                             판매자페이지
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">
+                        <a class="nav-link active" aria-current="page" th:href="@{/seller/manage/{id}(id=${seller.getId()})}">
                             <span data-feather="home"></span>
                             상품관리
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" th:href="@{/seller/salelist/{id}(id=${seller.getId()})}">
                             <span data-feather="file"></span>
                             판매내역
                         </a>
@@ -149,16 +137,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="cartItem, i: ${cartItems}">
+                    <tr th:each="saleItem, i: ${sellerSaleItems}">
                         <td th:text="${i.count}">1</td>
-                        <td th:text="${cartItem.getItem().getId()}">3번상품</td>
-                        <td th:text="${cartItem.getItem().getName()}">상품명</td>
-                        <td th:text="${cartItem.getItem().getPrice()}">가격</td>
-                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">판매량</td>
-                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">재고</td>
-                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">판매수익</td>
-                        <td th:text="${cartItem.getItem().getPrice() * cartItem.getCount()}">판매날짜</td>
-                        <td class="btn btn-outline-dark"><a th:href="@{/user/cart/{id}/{cartItemId}/delete(id=${cartItem.getCart().getUser().id}, cartItemId=${cartItem.getId()})}" style="text-decoration: none">삭제</a></td>
+                        <td th:text="${saleItem.getItem().getId()}">3번상품</td>
+                        <td th:text="${saleItem.getItem().getName()}">상품명</td>
+                        <td th:text="${saleItem.getItem().getPrice()}">가격</td>
+                        <td th:text="${saleItem.getItemCount()}">판매량</td>
+                        <td th:text="${saleItem.getItem().getStock()}">재고</td>
+                        <td th:text="${saleItem.getItem().getPrice() * saleItem.getItemCount()}">판매수익</td>
+                        <td th:text="${saleItem.getCreateDate()}">판매날짜</td>
                     </tr>
                     </tbody>
                 </table>
