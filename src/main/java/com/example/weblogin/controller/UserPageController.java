@@ -168,9 +168,6 @@ public class UserPageController {
             List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
 
 
-            System.out.println("******************************orders = " + orders + " orderItemList = " + orderItemList);
-
-
             // 총 주문 개수 += 수량
             int totalCount = 0;
             for (OrderItem orderItem : orderItemList) {
@@ -189,6 +186,8 @@ public class UserPageController {
             return "redirect:/main";
         }
     }
+
+
 
     // 상품 개별 주문 -> 주문 할 때마다 Order객체 생성해야함
 
@@ -220,7 +219,7 @@ public class UserPageController {
             // 상품들 개별 판매 개수 다 더해서 최종 판매 개수 구하기
             // 장바구니에서 상품 전체 삭제하기
             for (CartItem cartItem : userCartItems) {
-                User seller = cartItem.getItem().getUser(); // 각 상품에 대한 판매자
+                User seller = cartItem.getItem().getSeller(); // 각 상품에 대한 판매자
 
                 // 판매자 수익 증가
                 seller.setCoin(seller.getCoin()+ (cartItem.getCount()*cartItem.getItem().getPrice()));
@@ -232,13 +231,13 @@ public class UserPageController {
                 cartItem.getItem().setCount(cartItem.getItem().getCount()+cartItem.getCount());
 
                 // sale에 담기
-                saleService.addSale(seller.getId(), cartItem.getItem());
-
+                saleService.addSale(seller.getId(), cartItem.getItem(), cartItem.getCount());
             }
             List<CartItem> cartItems = userCart.getCartItems();
 
             // order에 담기
             orderService.addOrder(id, cartItems);
+
 
             // 장바구니 상품 모두 삭제
             cartService.allCartItemDelete(id);

@@ -85,7 +85,7 @@ public class ItemController {
     public String itemSave(Item item, @AuthenticationPrincipal PrincipalDetails principalDetails, MultipartFile imgFile) throws Exception {
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
             // 어드민, 판매자
-            item.setUser(principalDetails.getUser());
+            item.setSeller(principalDetails.getUser());
             itemService.saveItem(item, imgFile);
 
             return "redirect:/main";
@@ -100,7 +100,7 @@ public class ItemController {
     public String itemModifyForm(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || (principalDetails.getUser().getRole().equals("ROLE_SELLER"))) {
             // 어드민, 판매자
-            User user = itemService.itemView(id).getUser();
+            User user = itemService.itemView(id).getSeller();
             // 상품을 올린 판매자 id와 현재 로그인 중인 판매자의 id가 같을 때
             if(user.getId() == principalDetails.getUser().getId()) {
 
@@ -122,7 +122,7 @@ public class ItemController {
 
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || (principalDetails.getUser().getRole().equals("ROLE_SELLER"))) {
             // 어드민, 판매자
-            User user = itemService.itemView(id).getUser();
+            User user = itemService.itemView(id).getSeller();
 
             if(user.getId() == principalDetails.getUser().getId()) {
                 // 아이템 등록자와, 로그인 유저가 같으면 수정 진행
@@ -155,9 +155,9 @@ public class ItemController {
             return "itemView";
         } else {
             // 로그인 안 한 유저
-            principalDetails = null;
+
             model.addAttribute("item", itemService.itemView(id));
-            model.addAttribute("user", principalDetails.getUser());
+
             return "itemView";
 
         }
@@ -168,7 +168,7 @@ public class ItemController {
     public String itemDelete(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || (principalDetails.getUser().getRole().equals("ROLE_SELLER"))) {
             // 어드민, 판매자
-            User user = itemService.itemView(id).getUser();
+            User user = itemService.itemView(id).getSeller();
 
             if(user.getId() == principalDetails.getUser().getId()) {
 

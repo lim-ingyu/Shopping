@@ -1,11 +1,13 @@
 package com.example.weblogin.controller;
 
 import com.example.weblogin.config.auth.PrincipalDetails;
+import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
 import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.sale.Sale;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.user.User;
 import com.example.weblogin.service.ItemService;
 import com.example.weblogin.service.OrderService;
@@ -61,7 +63,7 @@ public class SellerPageController {
 
 
             for(Item item : allItem) {
-                if(item.getUser().getId() == id) {
+                if(item.getSeller().getId() == id) {
                     userItem.add(item);
                 }
             }
@@ -79,24 +81,19 @@ public class SellerPageController {
         // 로그인이 되어있는 유저의 id와 판매내역에 접속하는 id가 같아야 한다.
         if (principalDetails.getUser().getId() == id) {
 
-            // 판매자 정보
-            User seller = userPageService.findUser(id);
+            List<Sale> sales = saleService.findsellerSales(id);
+            List<SaleItem> saleItemList = saleService.findSellerSaleItems(id);
 
-            // 판매상품 모두 가져오기
-            List<Sale> saleItemList = saleService.findSaleItemsById(id);
-            List<Sale> sellerSaleItem = new ArrayList<>();
-
-            // 해당 판매자가 판매한 것만 조회
             // 총 판매 개수 += 수량
             int totalCount = 0;
-            for (Sale sale : saleItemList) {
-                totalCount += sale.getItemCount();
-                sellerSaleItem.add(sale);
+            for (SaleItem saleItem : saleItemList) {
+                totalCount += saleItem.getCount();
             }
 
+            model.addAttribute("sales", sales);
             model.addAttribute("totalCount", totalCount);
-            model.addAttribute("sellerSaleItems", sellerSaleItem);
-            model.addAttribute("seller", seller);
+            model.addAttribute("sellerSaleItems", saleItemList);
+            model.addAttribute("seller", userPageService.findUser(id));
 
             return "seller/saleList";
         }

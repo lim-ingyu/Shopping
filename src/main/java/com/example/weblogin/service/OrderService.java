@@ -56,7 +56,7 @@ public class OrderService {
 
         List<OrderItem> orderItemList = new ArrayList<>();
         for (CartItem cartItem1 : cartItem) {
-            User seller = cartItem1.getItem().getUser();
+            User seller = cartItem1.getItem().getSeller();
             Item item = itemRepository.findById(cartItem1.getItem().getId());
             OrderItem orderItem = OrderItem.createOrderItem(seller, item, cartItem1.getCount());
             orderItemList.add(orderItem);
