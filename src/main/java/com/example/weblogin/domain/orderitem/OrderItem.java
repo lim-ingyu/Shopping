@@ -44,5 +44,15 @@ public class OrderItem {
         return orderItem;
     }
 
+    public static OrderItem createOrderItem(User user, Order order, Item item, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setUser(user);
+        orderItem.setOrder(order);
+        orderItem.setOrderCount(count);
+        orderItem.setOrderPrice(item.getPrice());
+        return orderItem;
+    }
+
 
 }

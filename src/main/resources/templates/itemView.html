@@ -98,7 +98,7 @@
                     </div>
                 </form>
 
-                <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{#}" method="post">
+                <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/{id}/checkout/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
                     <div class="d-flex">
                         <input class="form-control text-center me-3" id="count" name="count" type="num" value="1"
                                style="max-width: 3rem"/>

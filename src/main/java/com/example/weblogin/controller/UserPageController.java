@@ -192,15 +192,10 @@ public class UserPageController {
 
 
 
-    // 상품 개별 주문 -> 주문 할 때마다 Order객체 생성해야함
-
-
-
-
     // 장바구니 상품 전체 주문
     @Transactional
     @PostMapping("/user/cart/checkout/{id}")
-    public String checkout(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+    public String cartCheckout(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 
         if(principalDetails.getUser().getId() == id) {
             User user = userPageService.findUser(id);
@@ -248,7 +243,7 @@ public class UserPageController {
 
             // 여기서부터 오류!/ orderitem 부터 담기지 않음 장바구니 삭제도 안됨
             // order에 담기 @aa41fbb
-            orderService.addOrder(id, userCartItems);
+            orderService.addCartOrder(id, userCartItems);
 
             // 장바구니 상품 모두 삭제
             cartService.allCartItemDelete(id);
@@ -263,6 +258,37 @@ public class UserPageController {
         }
     }
 
+
+    // 상품 개별 주문 -> 주문 할 때마다 Order객체 생성해야함
+    @Transactional
+    @PostMapping("/user/{id}/checkout/{itemId}")
+    public String checkout(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, int count) {
+        if(principalDetails.getUser().getId() == id) {
+
+            User user = userPageService.findUser(id);
+            Item item = itemService.itemView(itemId);
+
+            // 최종 결제 금액
+            int totalPrice = item.getPrice()*count;
+
+            // 유저 돈에서 최종 결제금액 빼야함
+            user.setCoin(user.getCoin()-totalPrice);
+
+            // 판매자의 돈은 최종 결제금액만큼 늘어남
+            item.getSeller().setCoin(item.getSeller().getCoin()+totalPrice);
+
+            // 해당 상품들의 재고는 각각 구매한 수량만큼 줄어듬
+            item.setStock(item.getStock()-count);
+
+            orderService.addOneItemOrder(id, item, count);
+
+            saleService.addSale(item.getId(), item, count);
+
+            return "redirect:/user/orderHist/{id}";
+        } else {
+            return "redirect:/main";
+        }
+    }
 
 
 }
