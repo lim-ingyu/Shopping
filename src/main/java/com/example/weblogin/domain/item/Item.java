@@ -3,6 +3,7 @@ package com.example.weblogin.domain.item;
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.sale.Sale;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,7 +48,7 @@ public class Item {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToMany(mappedBy = "item")
-    private List<Sale> saleItems = new ArrayList<>();
+    private List<SaleItem> saleItems = new ArrayList<>();
 
     private String imgName; // 이미지 파일명
 

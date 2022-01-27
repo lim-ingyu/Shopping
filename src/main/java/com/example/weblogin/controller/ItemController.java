@@ -140,7 +140,7 @@ public class ItemController {
 
     // 상품 상세 페이지 - 어드민, 판매자, 구매자 가능
     @GetMapping("/item/view/{id}")
-    public String itemView(Model model, @PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public String ItemView(Model model, @PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
             // 어드민, 판매자
             model.addAttribute("item", itemService.itemView(id));
@@ -161,6 +161,15 @@ public class ItemController {
             return "itemView";
 
         }
+    }
+
+    // 상품 상세 페이지 - 로그인 안 한 유저
+    @GetMapping("/item/view/nonlogin/{id}")
+    public String nonLoginItemView(Model model, @PathVariable("id") Integer id) {
+        // 로그인 안 한 유저
+        model.addAttribute("item", itemService.itemView(id));
+        return "itemView";
+
     }
 
     // 상품 삭제 - 어드민, 판매자만 가능
