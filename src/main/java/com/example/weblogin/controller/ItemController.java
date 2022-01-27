@@ -105,6 +105,8 @@ public class ItemController {
             if(user.getId() == principalDetails.getUser().getId()) {
 
                 model.addAttribute("item", itemService.itemView(id));
+                model.addAttribute("user", principalDetails.getUser());
+
 
                 return "/seller/itemModify";
             } else {
@@ -196,7 +198,7 @@ public class ItemController {
     // 상품 리스트 페이지
     @GetMapping("/item/list")
     public String itemList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-                           String searchKeyword) {
+                           String searchKeyword, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 
         Page<Item> items = null;
 
@@ -214,6 +216,8 @@ public class ItemController {
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("user", principalDetails.getUser());
+
 
         return "itemList";
     }

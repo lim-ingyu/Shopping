@@ -39,15 +39,6 @@
                 <li class="nav-item"><a class="nav-link" href="#" th:href="@{/item/new}">Upload</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" th:href="@{/seller/manage/{id}(id=${user.getId()})}">Manage</a></li>
 
-                <!--<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">All Products</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                    </ul>
-                </li>-->
             </ul>
             <form class="d-flex">
                 <a class="btn btn-outline-dark" href="#" th:text="|현재수익 : ${user.getCoin()} ₩|">
@@ -111,7 +102,7 @@
                                 <h4 th:text="${user.getUsername()}">John Doe</h4>
                                 <!--<p class="text-secondary mb-1">Full Stack Developer</p>
                                 <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>-->
-                                <button class="btn btn-primary" th:href="@{/item/new}">정보수정</button>
+                                <button class="btn btn-primary" th:href="@{/user/modify/{id}(id=${user.id})}">정보수정</button>
                                 <!--<button class="btn btn-outline-primary" th:href="@{/seller/manage}">판매내역</button>-->
                             </div>
                         </div>
@@ -179,5 +170,8 @@
 
     </div>
 </div>
+<footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 김연지 - 2022년 01월 쇼핑몰 프로젝트</p>
+</footer>
 </body>
 </html>
