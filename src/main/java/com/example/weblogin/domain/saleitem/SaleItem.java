@@ -7,8 +7,10 @@ import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.sale.Sale;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Builder
 @NoArgsConstructor
@@ -34,6 +36,14 @@ public class SaleItem {
     private Item item;
 
     private int count=0; // 상품 개수
+
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private LocalDate createDate; // 날짜
+
+    @PrePersist
+    public void createDate(){
+        this.createDate = LocalDate.now();
+    }
 
     public static SaleItem createSaleItem(Sale sale, User seller, Item item, int count) {
 

@@ -3,6 +3,7 @@ package com.example.weblogin.domain.sale;
 import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,39 +24,18 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="seller_id")
     private User seller; // 판매자
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="item_id")
-    private Item item;
+    @OneToMany(mappedBy = "sale")
+    private List<SaleItem> saleItems = new ArrayList<>();
 
-    private String itemName;
-    private int itemPrice;
-    private int itemCount; // 상품 각각 몇 개 구매?
 
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate createDate; // 날짜
-
-    @PrePersist
-    public void createDate(){
-        this.createDate = LocalDate.now();
-    }
-
-    public static Sale createSale(User user, Item item) {
+    public static Sale createSale(User seller) {
         Sale sale = new Sale();
-        sale.setSeller(user);
-        sale.setItem(item);
-        sale.setItemName(item.getName());
-        sale.setItemPrice(item.getPrice());
-        sale.setItemCount(item.getCount());
+        sale.setSeller(seller);
         return sale;
     }
 
-    public static Sale createSale(User user) {
-        Sale sale = new Sale();
-        sale.setSeller(user);
-        return sale;
-    }
 }

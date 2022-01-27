@@ -39,7 +39,7 @@ public class OrderService {
 
     // id에 해당하는 주문아이템 찾기
     public List<OrderItem> findUserOrderItems(int userId) {
-        return orderItemRepository.findOrderItemsById(userId);
+        return orderItemRepository.findOrderItemsByUserId(userId);
     }
 
     // OrderItem 모두 찾기
@@ -49,22 +49,28 @@ public class OrderService {
     // Order에 저장
     @Transactional
     public void addOrder(int userId, List<CartItem> cartItem) {
+        System.out.println("*******userId = "+userId+"  cartItem= "+cartItem);
 
-        Order userOrder = orderRepository.findByUserId(userId);
+        //Order userOrder = orderRepository.findByUserId(userId); // 뒤에 .get() 붙이기?!!? -> get()은 값이 존재하지 않으면 오류 발생하도록 하는 것
 
         User user = userPageService.findUser(userId);
 
+
         List<OrderItem> orderItemList = new ArrayList<>();
+        //cartItem은 해당 유저의 카트 안에 있는 상품들
         for (CartItem cartItem1 : cartItem) {
-            User seller = cartItem1.getItem().getSeller();
+            //User seller = cartItem1.getItem().getSeller();
             Item item = itemRepository.findById(cartItem1.getItem().getId());
-            OrderItem orderItem = OrderItem.createOrderItem(seller, item, cartItem1.getCount());
+            OrderItem orderItem = OrderItem.createOrderItem(user, item, cartItem1.getCount());
             orderItemList.add(orderItem);
             orderItemRepository.save(orderItem);
         }
 
-        Order order = Order.createOrder(user, orderItemList);
-        orderRepository.save(order);
+
+        Order userOrder = Order.createOrder(user, orderItemList);
+        System.out.println("*********************userId = "+userId + " userOrder = " + userOrder.getId());
+
+        orderRepository.save(userOrder);
 
     }
 

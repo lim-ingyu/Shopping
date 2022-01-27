@@ -69,7 +69,7 @@ public class CartService {
 
     // id에 해당하는 장바구니 찾기
     public Cart findUserCart(int userId) {
-        return cartRepository.findByUserId(userId);
+        return cartRepository.findCartByUserId(userId);
     }
 
     // 카트 상품 리스트 중 해당하는 유저가 담은 상품만 반환

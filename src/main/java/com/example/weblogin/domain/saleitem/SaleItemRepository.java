@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface SaleItemRepository extends JpaRepository<SaleItem, Integer> {
-    List<SaleItem> findSaleItemsById(int id);
+    List<SaleItem> findSaleItemsBySellerId(int sellerId);
     List<SaleItem> findAll();
 }

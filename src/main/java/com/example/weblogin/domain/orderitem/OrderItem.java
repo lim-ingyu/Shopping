@@ -24,8 +24,8 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seller_id")
-    private User seller; // 판매자
+    @JoinColumn(name = "user_id")
+    private User user; // 구매자
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="item_id")
@@ -34,11 +34,11 @@ public class OrderItem {
     private int orderPrice; //주문가격
     private int orderCount; //수량
 
-    public static OrderItem createOrderItem(User seller, Item item, int count) {
+    public static OrderItem createOrderItem(User user, Item item, int count) {
 
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
-        orderItem.setSeller(seller);
+        orderItem.setUser(user);
         orderItem.setOrderCount(count);
         orderItem.setOrderPrice(item.getPrice());
         return orderItem;

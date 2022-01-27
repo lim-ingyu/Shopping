@@ -5,6 +5,7 @@ import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
 import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.sale.Sale;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -36,7 +37,7 @@ public class User {
     private String grade; // 회원 등급
     private String role; // 권한 (회원 / 관리자)
 
-    private int coin; // 구매자 - 충전한 돈 / 판매자 - 수익
+    private int coin=0; // 구매자 - 충전한 돈 / 판매자 - 수익
 
     @OneToMany(mappedBy = "seller")
     private List<Item> items = new ArrayList<>(); // 판매자가 가지고 있는 상품들
@@ -44,16 +45,19 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Cart cart; // 구매자의 장바구니
 
-    @OneToOne(mappedBy = "seller")
-    private Sale sale; // 판매자의 판매
-
     // 구매자 주문
     @OneToMany(mappedBy = "user")
     private List<Order> userOrder = new ArrayList<>();
 
-    // 판매자 판매 (구매자의 주문)
+    // 구매자의 주문
+    @OneToMany(mappedBy = "user")
+    private List<OrderItem> userOrderItem = new ArrayList<>();
+
     @OneToMany(mappedBy = "seller")
-    private List<OrderItem> sellerOrder = new ArrayList<>();
+    private List<SaleItem> sellerSaleItem = new ArrayList<>();
+
+    @OneToMany(mappedBy = "seller")
+    private List<Sale> sellerSale; // 판매자의 판매
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate; // 날짜

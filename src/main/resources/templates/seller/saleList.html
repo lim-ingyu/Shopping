@@ -127,8 +127,8 @@
                         <td th:text="${saleItem.getItem().getId()}">3번상품</td>
                         <td th:text="${saleItem.getItem().getName()}">상품명</td>
                         <td th:text="${saleItem.getItem().getPrice()}">가격</td>
-                        <td th:text="${saleItem.getItemCount()}">판매량</td>
-                        <td th:text="${saleItem.getItem().getPrice() * saleItem.getItemCount()}">판매수익</td>
+                        <td th:text="${saleItem.getCount()}">판매량</td>
+                        <td th:text="${saleItem.getItem().getPrice() * saleItem.getCount()}">판매수익</td>
                         <td th:text="${saleItem.getCreateDate()}">판매날짜</td>
                     </tr>
                     </tbody>

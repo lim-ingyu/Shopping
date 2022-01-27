@@ -10,6 +10,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     // 유저의 id에 해당하는 주문내역
     Order findByUserId(int id);
-
+    Order findById(int id);
     List<Order> findOrdersByUserId(int id);
 }

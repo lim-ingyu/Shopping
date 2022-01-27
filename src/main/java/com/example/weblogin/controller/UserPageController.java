@@ -11,6 +11,7 @@ import com.example.weblogin.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -157,15 +158,17 @@ public class UserPageController {
 
     }
 
-    // 구매 내역 조회 페이지
+    // 주문 내역 조회 페이지
     @GetMapping("/user/orderHist/{id}")
     public String orderList(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         // 로그인이 되어있는 유저의 id와 구매내역에 접속하는 id가 같아야 한다.
         if (principalDetails.getUser().getId() == id) {
 
             // 로그인 되어 있는 유저에 해당하는 구매내역 가져오기
-            List<Order> orders = orderService.findUserOrders(id);
+            //List<Order> orders = orderService.findUserOrders(id);
             List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
+
+            System.out.println("******************************userId = " + id+" orderItemList = " + orderItemList);
 
 
             // 총 주문 개수 += 수량
@@ -174,7 +177,7 @@ public class UserPageController {
                 totalCount += orderItem.getOrderCount();
             }
 
-            model.addAttribute("orders", orders);
+            //model.addAttribute("orders", orders);
             model.addAttribute("totalCount", totalCount);
             model.addAttribute("orderItems", orderItemList);
             model.addAttribute("user", userPageService.findUser(id));
@@ -195,6 +198,7 @@ public class UserPageController {
 
 
     // 장바구니 상품 전체 주문
+    @Transactional
     @PostMapping("/user/cart/checkout/{id}")
     public String checkout(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
 
@@ -203,12 +207,17 @@ public class UserPageController {
 
             Cart userCart = cartService.findUserCart(user.getId()); // 유저 카트 찾기
             List<CartItem> userCartItems = cartService.allUserCartView(userCart); // 유저 카트 안에 있는 상품들
+            System.out.println("*********************userCart 아이디 = "+userCart.getId()+"  userCartItems= "+userCartItems);
+
 
             // 최종 결제 금액
             int totalPrice = 0;
             for (CartItem cartItem : userCartItems) {
                 totalPrice += cartItem.getCount() * cartItem.getItem().getPrice();
             }
+
+            // 이 아래로부터 데이터베이스 저장 안됨
+
 
 
             // 유저 돈에서 최종 결제금액 빼야함
@@ -233,17 +242,19 @@ public class UserPageController {
                 // sale에 담기
                 saleService.addSale(seller.getId(), cartItem.getItem(), cartItem.getCount());
             }
-            List<CartItem> cartItems = userCart.getCartItems();
+            //List<CartItem> cartItems = userCart.getCartItems();
+            //System.out.println("*****  위에 userCartItems이랑 같아야함 cartItems= "+cartItems); -> 같음
 
-            // order에 담기
-            orderService.addOrder(id, cartItems);
 
+            // 여기서부터 오류!/ orderitem 부터 담기지 않음 장바구니 삭제도 안됨
+            // order에 담기 @aa41fbb
+            orderService.addOrder(id, userCartItems);
 
             // 장바구니 상품 모두 삭제
             cartService.allCartItemDelete(id);
 
             model.addAttribute("totalPrice", totalPrice);
-            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("cartItems", userCartItems);
             model.addAttribute("user", userPageService.findUser(id));
 
             return "redirect:/user/cart/{id}";

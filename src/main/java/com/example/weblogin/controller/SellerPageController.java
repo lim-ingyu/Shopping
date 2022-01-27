@@ -81,7 +81,7 @@ public class SellerPageController {
         // 로그인이 되어있는 유저의 id와 판매내역에 접속하는 id가 같아야 한다.
         if (principalDetails.getUser().getId() == id) {
 
-            List<Sale> sales = saleService.findsellerSales(id);
+            Sale sales = saleService.findSaleById(id);
             List<SaleItem> saleItemList = saleService.findSellerSaleItems(id);
 
             // 총 판매 개수 += 수량
