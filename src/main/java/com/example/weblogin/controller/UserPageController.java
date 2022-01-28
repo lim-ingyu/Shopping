@@ -279,6 +279,7 @@ public class UserPageController {
 
             // 해당 상품들의 재고는 각각 구매한 수량만큼 줄어듬
             item.setStock(item.getStock()-count);
+            item.setCount(item.getCount()+count);
 
             orderService.addOneItemOrder(id, item, count);
 
