@@ -39,6 +39,8 @@ public class OrderItem {
     @JoinColumn(name="saleItem_id")
     private SaleItem saleItem; // 주문상품에 매핑되는 판매상품
 
+    private int isCancel; // 주문 취소 여부 (0:주문완료 / 1:주문취소)
+
     public static OrderItem createOrderItem(User user, Item item, int count) {
 
         OrderItem orderItem = new OrderItem();

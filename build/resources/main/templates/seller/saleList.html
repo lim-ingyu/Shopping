@@ -116,7 +116,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="saleItem, i: ${sellerSaleItems}">
+                    <tr th:each="saleItem, i: ${sellerSaleItems}" >
                         <td th:text="${i.count}">1</td>
                         <td th:text="${saleItem.getItem().getId()}">3번상품</td>
                         <td th:text="${saleItem.getItem().getName()}">상품명</td>

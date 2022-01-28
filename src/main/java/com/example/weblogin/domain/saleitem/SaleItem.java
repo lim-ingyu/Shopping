@@ -40,6 +40,8 @@ public class SaleItem {
     @OneToOne(mappedBy = "saleItem")
     private OrderItem orderItem; // 판매 상품에 매핑되는 주문 상품
 
+    private int isCancel; // 판매 취소 여부 (0:판매완료 / 1:판매취소)
+
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate; // 날짜
 

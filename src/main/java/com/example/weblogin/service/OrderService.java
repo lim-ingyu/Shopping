@@ -8,6 +8,7 @@ import com.example.weblogin.domain.order.Order;
 import com.example.weblogin.domain.order.OrderRepository;
 import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.orderitem.OrderItemRepository;
+import com.example.weblogin.domain.saleitem.SaleItemRepository;
 import com.example.weblogin.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class OrderService {
     private final CartService cartService;
     private final UserPageService userPageService;
     private final ItemRepository itemRepository;
+    private final SaleItemRepository saleItemRepository;
 
     // 회원가입 하면 회원 당 주문내역 하나 생성 - 주문내역 없을 때 대비
     public void createOrder(User user){
@@ -91,7 +93,33 @@ public class OrderService {
 
     }
 
+    // 주문 취소 기능
+    @Transactional
+    public void orderCancel(User user, OrderItem cancelItem) {
 
+        // 판매자의 판매내역 totalCount 감소
+        cancelItem.getSaleItem().getSale().setTotalCount(cancelItem.getSaleItem().getSale().getTotalCount()-cancelItem.getOrderCount());
+
+        // 해당 item 재고 다시 증가
+        cancelItem.getItem().setStock(cancelItem.getItem().getStock()+ cancelItem.getOrderCount());
+
+        // 판매자 돈 감소
+        cancelItem.getSaleItem().getSeller().setCoin(cancelItem.getSaleItem().getSeller().getCoin()- cancelItem.getOrderPrice());
+
+        // 구매자 돈 증가
+        cancelItem.getUser().setCoin(cancelItem.getUser().getCoin()+ cancelItem.getOrderPrice());
+
+        // 해당 orderItem의 주문 상태 1로 변경 -> 주문 취소를 의미
+        cancelItem.setIsCancel(cancelItem.getIsCancel()+1);
+
+        // 해당 orderItem.getsaleItemId 로 saleItem 찾아서 판매 상태 1로 변경 -> 판매 취소를 의미
+        cancelItem.getSaleItem().setIsCancel(cancelItem.getSaleItem().getIsCancel()+1);
+
+        orderItemRepository.save(cancelItem);
+        saleItemRepository.save(cancelItem.getSaleItem());
+
+
+    }
 
 
 }
