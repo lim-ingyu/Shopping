@@ -37,6 +37,9 @@ public class SaleItem {
 
     private int count=0; // 상품 개수
 
+    @OneToOne(mappedBy = "saleItem")
+    private OrderItem orderItem; // 판매 상품에 매핑되는 주문 상품
+
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate createDate; // 날짜
 

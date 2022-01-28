@@ -45,6 +45,9 @@ public class OrderService {
     // OrderItem 모두 찾기
     public List<OrderItem> findAllOrderItems() {return orderItemRepository.findAll();}
 
+    // OrderItem 하나 찾기
+    public OrderItem findOrderitem(int orderItemId) {return orderItemRepository.findOrderItemById(orderItemId);}
+
 
     // Order에 저장 - 장바구니 주문 용
     @Transactional

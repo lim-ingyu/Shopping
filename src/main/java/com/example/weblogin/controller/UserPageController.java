@@ -211,6 +211,8 @@ public class UserPageController {
                 totalPrice += cartItem.getCount() * cartItem.getItem().getPrice();
             }
 
+
+
             // 이 아래로부터 데이터베이스 저장 안됨
 
 
@@ -291,5 +293,45 @@ public class UserPageController {
         }
     }
 
+    // 주문 취소 기능
+    @PostMapping("/user/{id}/checkout/cancel/{orderItemId}")
+    public String cancelOrder(@PathVariable("id") Integer id, @PathVariable("orderItemId") Integer orderItemId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        // 로그인이 되어있는 유저의 id와 주문 취소하는 유저의 id가 같아야 한다.
+        if (principalDetails.getUser().getId() == id) {
+            OrderItem cancelItem= orderService.findOrderitem(orderItemId);  // 취소할 상품 찾기
+            User user = userPageService.findUser(id); // 취소하는 유저 찾기
+
+            // 주문 내역 총 개수에서 취소 상품 개수 줄어듬
+            List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
+            int totalCount = 0;
+            for (OrderItem orderItem : orderItemList) {
+                totalCount += orderItem.getOrderCount();
+            }
+            totalCount = totalCount - cancelItem.getOrderCount();
+
+            // 판매자의 판매내역 totalCount 감소
+
+            // 해당 item 재고 다시 증가
+
+            // 판매자 돈 감소
+
+            // 구매자 돈 증가
+
+            // 해당 orderItem의 주문 상태 1로 변경 -> 주문 취소를 의미
+
+            // 해당 orderItem.getsaleItemId 로 saleItem 찾아서 판매 상태 1로 변경 -> 판매 취소를 의미
+
+            model.addAttribute("totalCount", totalCount);
+
+
+            return "redirect:/user/orderHist/{id}";
+
+        }
+        // 로그인 id와 주문취소하는 유저 id가 같지 않는 경우
+        else {
+            return "redirect:/main";
+        }
+    }
 
 }

@@ -31,8 +31,9 @@ public class Sale {
     @OneToMany(mappedBy = "sale")
     private List<SaleItem> saleItems = new ArrayList<>();
 
+    private int totalCount; // 총 판매 개수
 
-    public static Sale createSale(User seller) {
+   public static Sale createSale(User seller) {
         Sale sale = new Sale();
         sale.setSeller(seller);
         return sale;

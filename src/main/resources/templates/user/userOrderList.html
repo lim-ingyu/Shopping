@@ -132,19 +132,6 @@
                         <td class="btn btn-outline-dark"><a th:href="@{/#}" style="text-decoration: none">주문취소</a></td>
                     </tr>
                     </tbody>
-                    <!--<tbody>
-                    <tr th:each="order: ${orders}">
-                        <block th:object="${order}" th:each="orderItem, i: ${orderItems}" th:if="${orderItem.getOrder().getId() == order.getId()}">
-                            <td th:text="${i.count}">1</td>
-                            <td th:text="${}">3번상품</td>
-                            <td th:text="${orderItem.getItem().getName()}">상품명</td>
-                            <td th:text="${orderItem.getOrderCount()}">수량</td>
-                            <td th:text="${orderItem.getItem().getPrice() * orderItem.getOrderCount()}">가격</td>
-                            <td th:text="${orderItem.getOrder().getCreateDate()}">날짜</td>
-                            <td class="btn btn-outline-dark"><a th:href="@{/#}" style="text-decoration: none">주문취소</a></td>
-                        </block>
-                    </tr>
-                    </tbody>-->
                 </table>
             </div>
             <hr>
@@ -161,22 +148,6 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="row row-cols-1 row-cols-md-3 mb-3 text-center mt-3">
-                <div class="col">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                        <div class="card-header py-3">
-                            <h4 class="my-0 fw-normal">총 결제금액</h4>
-                        </div>
-                        <form class="card-body" th:action="@{/user/{id}/cart/checkout(id=${user.getId()})}" method="post">
-                            <h1 class="card-title pricing-card-title" th:text="|${totalPrice} ₩|">$0</h1>
-                            <ul class="list-unstyled mt-3 mb-4">
-                                <li>잘못 담은 물건이 있는지 확인해보세요!</li>
-                            </ul>
-                            <button type="submit" class="w-100 btn btn-lg btn-outline-primary">구매하기</button>
-                        </form>
-                    </div>
-                </div>
-            </div>-->
         </main>
     </div>
 </div>

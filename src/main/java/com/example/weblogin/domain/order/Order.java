@@ -31,7 +31,6 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user; // 구매자
 
-
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 

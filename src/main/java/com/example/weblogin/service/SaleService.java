@@ -58,6 +58,7 @@ public class SaleService {
 
         User seller = userPageService.findUser(sellerId);
         Sale sale = saleRepository.findBySellerId(sellerId);
+        sale.setTotalCount(sale.getTotalCount()+count);
         saleRepository.save(sale);
 
         Item item = itemRepository.findItemById(sale_item.getId());

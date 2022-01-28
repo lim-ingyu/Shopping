@@ -3,6 +3,7 @@ package com.example.weblogin.domain.orderitem;
 import com.example.weblogin.domain.cart.Cart;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
 
@@ -33,6 +34,10 @@ public class OrderItem {
 
     private int orderPrice; //주문가격
     private int orderCount; //수량
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="saleItem_id")
+    private SaleItem saleItem; // 주문상품에 매핑되는 판매상품
 
     public static OrderItem createOrderItem(User user, Item item, int count) {
 
