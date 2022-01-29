@@ -54,7 +54,7 @@ public class SaleService {
 
     // 판매내역에 저장
     @Transactional
-    public void addSale(int sellerId, Item sale_item, int count) {
+    public SaleItem addSale(int sellerId, Item sale_item, int count) {
 
         User seller = userPageService.findUser(sellerId);
         Sale sale = saleRepository.findBySellerId(sellerId);
@@ -65,6 +65,8 @@ public class SaleService {
         SaleItem saleItem = SaleItem.createSaleItem(sale, seller, item, count);
         System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&7sale = "+sale.getId()+" seller = "+seller.getId()+" item = "+item.getId()+" count = "+count);
         saleItemRepository.save(saleItem);
+
+        return saleItem;
     }
 
     public List<SaleItem> findSellerSaleItems(Sale sellerSale) {

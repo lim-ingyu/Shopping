@@ -6,6 +6,7 @@ import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.order.Order;
 import com.example.weblogin.domain.orderitem.OrderItem;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.user.User;
 import com.example.weblogin.service.*;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // 유저(회원)에 해당하는 페이지 관리
@@ -174,7 +176,8 @@ public class UserPageController {
             // 총 주문 개수 += 수량
             int totalCount = 0;
             for (OrderItem orderItem : orderItemList) {
-                totalCount += orderItem.getOrderCount();
+                if (orderItem.getIsCancel() != 1)
+                    totalCount += orderItem.getOrderCount();
             }
 
             //model.addAttribute("orders", orders);
@@ -224,6 +227,7 @@ public class UserPageController {
             // 해당 상품들의 재고는 각각 구매한 수량만큼 줄어듬
             // 상품들 개별 판매 개수 다 더해서 최종 판매 개수 구하기
             // 장바구니에서 상품 전체 삭제하기
+            List<OrderItem> orderItemList = new ArrayList<>();
             for (CartItem cartItem : userCartItems) {
                 User seller = cartItem.getItem().getSeller(); // 각 상품에 대한 판매자
 
@@ -236,16 +240,22 @@ public class UserPageController {
                 // 상품 개별로 판매 개수 증가
                 cartItem.getItem().setCount(cartItem.getItem().getCount()+cartItem.getCount());
 
-                // sale에 담기
-                saleService.addSale(seller.getId(), cartItem.getItem(), cartItem.getCount());
+                // sale, saleItem 에 담기
+                SaleItem saleItem = saleService.addSale(seller.getId(), cartItem.getItem(), cartItem.getCount());
+
+                OrderItem orderItem = orderService.addCartOrder(id, cartItem.getItem(), cartItem.getCount(), saleItem);
+
+                orderItemList.add(orderItem);
+
             }
             //List<CartItem> cartItems = userCart.getCartItems();
             //System.out.println("*****  위에 userCartItems이랑 같아야함 cartItems= "+cartItems); -> 같음
 
 
             // 여기서부터 오류!/ orderitem 부터 담기지 않음 장바구니 삭제도 안됨
-            // order에 담기 @aa41fbb
-            orderService.addCartOrder(id, userCartItems);
+            //order에 담기 @aa41fbb
+
+            orderService.addOrder(user, orderItemList);
 
             // 장바구니 상품 모두 삭제
             cartService.allCartItemDelete(id);
@@ -302,6 +312,7 @@ public class UserPageController {
             OrderItem cancelItem= orderService.findOrderitem(orderItemId);  // 취소할 상품 찾기
             User user = userPageService.findUser(id); // 취소하는 유저 찾기
 
+
             // 주문 내역 총 개수에서 취소 상품 개수 줄어듬
             List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
             int totalCount = 0;
@@ -310,19 +321,34 @@ public class UserPageController {
             }
             totalCount = totalCount - cancelItem.getOrderCount();
 
+            orderService.orderCancel(user, cancelItem);
+
+
+            /*
             // 판매자의 판매내역 totalCount 감소
+            cancelItem.getSaleItem().getSale().setTotalCount(cancelItem.getSaleItem().getSale().getTotalCount()-cancelItem.getOrderCount());
 
             // 해당 item 재고 다시 증가
+            cancelItem.getItem().setStock(cancelItem.getItem().getStock()+ cancelItem.getOrderCount());
 
             // 판매자 돈 감소
+            cancelItem.getSaleItem().getSeller().setCoin(cancelItem.getSaleItem().getSeller().getCoin()- cancelItem.getOrderPrice());
 
             // 구매자 돈 증가
+            cancelItem.getUser().setCoin(cancelItem.getUser().getCoin()+ cancelItem.getOrderPrice());
 
             // 해당 orderItem의 주문 상태 1로 변경 -> 주문 취소를 의미
+            cancelItem.setIsCancel(cancelItem.getIsCancel()+1);
 
             // 해당 orderItem.getsaleItemId 로 saleItem 찾아서 판매 상태 1로 변경 -> 판매 취소를 의미
+            cancelItem.getSaleItem().setIsCancel(cancelItem.getSaleItem().getIsCancel()+1);
+
+            orderItemRepository.save(cancelItem);
+            */
 
             model.addAttribute("totalCount", totalCount);
+            model.addAttribute("orderItems", orderItemList);
+            model.addAttribute("user", user);
 
 
             return "redirect:/user/orderHist/{id}";

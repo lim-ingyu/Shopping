@@ -87,7 +87,8 @@ public class SellerPageController {
             // 총 판매 개수 += 수량
             int totalCount = 0;
             for (SaleItem saleItem : saleItemList) {
-                totalCount += saleItem.getCount();
+                if (saleItem.getIsCancel() != 1)
+                    totalCount += saleItem.getCount();
             }
 
             model.addAttribute("sales", sales);

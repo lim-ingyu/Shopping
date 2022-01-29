@@ -41,13 +41,14 @@ public class OrderItem {
 
     private int isCancel; // 주문 취소 여부 (0:주문완료 / 1:주문취소)
 
-    public static OrderItem createOrderItem(User user, Item item, int count) {
+    public static OrderItem createOrderItem(User user, Item item, int count, SaleItem saleItem) {
 
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setUser(user);
         orderItem.setOrderCount(count);
         orderItem.setOrderPrice(item.getPrice());
+        orderItem.setSaleItem(saleItem);
         return orderItem;
     }
 

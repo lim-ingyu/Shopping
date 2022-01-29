@@ -8,6 +8,7 @@ import com.example.weblogin.domain.order.Order;
 import com.example.weblogin.domain.order.OrderRepository;
 import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.orderitem.OrderItemRepository;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.saleitem.SaleItemRepository;
 import com.example.weblogin.domain.user.User;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +52,9 @@ public class OrderService {
     public OrderItem findOrderitem(int orderItemId) {return orderItemRepository.findOrderItemById(orderItemId);}
 
 
-    // Order에 저장 - 장바구니 주문 용
-    @Transactional
+
+    // 장바구니상품주문
+    /*@Transactional
     public void addCartOrder(int userId, List<CartItem> cartItem) {
         System.out.println("*******userId = "+userId+"  cartItem= "+cartItem);
 
@@ -67,6 +69,7 @@ public class OrderService {
             //User seller = cartItem1.getItem().getSeller();
             Item item = itemRepository.findById(cartItem1.getItem().getId());
             OrderItem orderItem = OrderItem.createOrderItem(user, item, cartItem1.getCount());
+
             orderItemList.add(orderItem);
             orderItemRepository.save(orderItem);
         }
@@ -78,6 +81,28 @@ public class OrderService {
         orderRepository.save(userOrder);
 
     }
+    */
+
+    @Transactional
+    public OrderItem addCartOrder(int userId, Item item, int count, SaleItem saleItem) {
+
+        User user = userPageService.findUser(userId);
+
+        OrderItem orderItem = OrderItem.createOrderItem(user, item, count, saleItem);
+
+        orderItemRepository.save(orderItem);
+
+        return orderItem;
+
+    }
+
+    @Transactional
+    public void addOrder(User user, List<OrderItem> orderItemList) {
+        Order userOrder = Order.createOrder(user, orderItemList);
+        orderRepository.save(userOrder);
+    }
+
+
 
     // 단일 상품 주문
     @Transactional
@@ -97,11 +122,16 @@ public class OrderService {
     @Transactional
     public void orderCancel(User user, OrderItem cancelItem) {
 
+        System.out.println("userid = "+user.getId()+" cancelItemId = "+cancelItem.getId());
+
         // 판매자의 판매내역 totalCount 감소
         cancelItem.getSaleItem().getSale().setTotalCount(cancelItem.getSaleItem().getSale().getTotalCount()-cancelItem.getOrderCount());
 
         // 해당 item 재고 다시 증가
         cancelItem.getItem().setStock(cancelItem.getItem().getStock()+ cancelItem.getOrderCount());
+
+        // 해당 item의 판매량 감소
+        cancelItem.getItem().setCount(cancelItem.getItem().getCount()-cancelItem.getOrderCount());
 
         // 판매자 돈 감소
         cancelItem.getSaleItem().getSeller().setCoin(cancelItem.getSaleItem().getSeller().getCoin()- cancelItem.getOrderPrice());
