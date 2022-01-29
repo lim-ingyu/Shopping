@@ -20,11 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-
-// return 다시 설정
-
-
-
 @Controller
 @RequiredArgsConstructor
 public class ItemController {
@@ -143,7 +138,7 @@ public class ItemController {
     // 상품 상세 페이지 - 어드민, 판매자, 구매자 가능
     @GetMapping("/item/view/{id}")
     public String ItemView(Model model, @PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
+        if(principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
             // 어드민, 판매자
             model.addAttribute("item", itemService.itemView(id));
             model.addAttribute("user", principalDetails.getUser());
@@ -177,7 +172,7 @@ public class ItemController {
     // 상품 삭제 - 어드민, 판매자만 가능
     @GetMapping("/item/delete/{id}")
     public String itemDelete(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        if(principalDetails.getUser().getRole().equals("ROLE_ADMIN") || (principalDetails.getUser().getRole().equals("ROLE_SELLER"))) {
+        if(principalDetails.getUser().getRole().equals("ROLE_SELLER")) {
             // 어드민, 판매자
             User user = itemService.itemView(id).getSeller();
 
@@ -195,7 +190,7 @@ public class ItemController {
         }
     }
 
-    // 상품 리스트 페이지
+    // 상품 리스트 페이지 - 로그인 유저
     @GetMapping("/item/list")
     public String itemList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
                            String searchKeyword, @AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -204,7 +199,7 @@ public class ItemController {
 
         if (searchKeyword == null) {  // 검색이 들어왔을 때
             items = itemService.allItemViewPage(pageable);
-        }else {  // 검색이 들어오지 않았을 때
+        } else {  // 검색이 들어오지 않았을 때
             items = itemService.itemSearchList(searchKeyword, pageable);
         }
 
@@ -218,8 +213,31 @@ public class ItemController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("user", principalDetails.getUser());
 
-
         return "itemList";
     }
 
+    // 상품 리스트 페이지 - 로그인 안 한 유저
+    @GetMapping("/nonlogin/item/list")
+    public String itemList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+                           String searchKeyword) {
+
+        Page<Item> items = null;
+
+        if (searchKeyword == null) {  // 검색이 들어왔을 때
+            items = itemService.allItemViewPage(pageable);
+        } else {  // 검색이 들어오지 않았을 때
+            items = itemService.itemSearchList(searchKeyword, pageable);
+        }
+
+        int nowPage = items.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, items.getTotalPages());
+
+        model.addAttribute("items", items);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return "itemList";
+    }
 }
