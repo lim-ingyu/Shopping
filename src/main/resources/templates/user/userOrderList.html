@@ -56,7 +56,7 @@
                     Cart
                     <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${user.getCart().getCount()}">0</span>
                 </a>
-                <a class="btn btn-outline-dark" th:href="@{/seller/{id}(id=${user.getId()})}" th:text="|${user.getName()}님 환영합니다.|">
+                <a class="btn btn-outline-dark" th:href="@{/user/{id}(id=${user.getId()})}" th:text="|${user.getName()}님 환영합니다.|">
                     마이페이지
                 </a>
                 <a class="btn btn-outline-dark" th:href="@{/logout}">
@@ -129,7 +129,14 @@
                         <td th:text="${orderItem.getOrderCount()}">수량</td>
                         <td th:text="${orderItem.getItem().getPrice() * orderItem.getOrderCount()}">가격</td>
                         <td th:text="${orderItem.getOrder().getCreateDate()}">날짜</td>
-                        <td class="btn btn-outline-dark"><a th:href="@{/#}" style="text-decoration: none">주문취소</a></td>
+                        <!--<td class="btn btn-outline-dark"><a th:href="@{/user/{id}/checkout/cancel/{orderItemId} (id=${user.getId()}, (orderItemId=${orderItem.getId()}))}" style="text-decoration: none" th:if="${orderItem.getIsCancel()} == 0">주문취소</a></td>  이거넣어야됨 th:value="${orderItem.getUser().getId()} + ${orderItem.getId()}"
+                        <td class="btn btn-outline-dark"><a type="button" th:value="${orderItem.getUser().getId()} + ${orderItem.getId()}" onclick="cancelOrder(this.value)" style="text-decoration: none" th:if="${orderItem.getIsCancel()} == 0">주문취소</a></td>-->
+                        <td th:if="${orderItem.getIsCancel()} == 1">취소완료</a></td>
+                        <td th:unless="${orderItem.getIsCancel()} == 1">
+                            <form th:action="@{/user/{id}/checkout/cancel/{orderItemId}(id=${user.id}, orderItemId=${orderItem.id})}" th:method="POST">
+                                <button type="submit">주문취소</button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
