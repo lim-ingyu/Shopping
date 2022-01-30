@@ -10,10 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
-// 판매자에게는 판매 내역이 되고
-// 구매자에게는 구매 내역이 됨
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,7 +27,6 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user; // 구매자
 
-
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
@@ -48,9 +43,7 @@ public class Order {
         orderItem.setOrder(this);
     }
 
-
     public static Order createOrder(User user, List<OrderItem> orderItemList) {
-
         Order order = new Order();
         order.setUser(user);
         for (OrderItem orderItem : orderItemList) {
@@ -60,11 +53,10 @@ public class Order {
         return order;
     }
 
-
     public static Order createOrder(User user) {
-
         Order order = new Order();
         order.setUser(user);
+        order.setCreateDate(order.createDate);
         return order;
     }
 

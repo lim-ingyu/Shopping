@@ -2,7 +2,6 @@ package com.example.weblogin.domain.item;
 
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.orderitem.OrderItem;
-import com.example.weblogin.domain.sale.Sale;
 import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
@@ -29,7 +28,7 @@ public class Item {
 
     private String text; // 물건에 대한 상세설명
 
-    private int price;
+    private int price; // 가격
 
     private int count; // 판매 개수
 
@@ -44,11 +43,11 @@ public class Item {
     @OneToMany(mappedBy = "item")
     private List<CartItem> cartItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item")
-    private List<OrderItem> orderItems = new ArrayList<>();
+    //@OneToMany(mappedBy = "item")
+    //private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item")
-    private List<SaleItem> saleItems = new ArrayList<>();
+    //@OneToMany(mappedBy = "item")
+    //private List<SaleItem> saleItems = new ArrayList<>();
 
     private String imgName; // 이미지 파일명
 

@@ -32,6 +32,7 @@ public class Sale {
     public static Sale createSale(User seller) {
         Sale sale = new Sale();
         sale.setSeller(seller);
+        sale.setTotalCount(0);
         return sale;
     }
 
