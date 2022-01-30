@@ -12,6 +12,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/css/styles.css" rel="stylesheet" />
+    <script>
+        if (item.getCount() < amount) {
+            alert("재고가 부족합니다.")
+        }
+
+    </script>
+
 </head>
 <body>
 <!-- Navigation-->
@@ -46,7 +53,7 @@
                 <a class="btn btn-outline-dark" th:href="@{/user/cart/{id}(id=${user.getId()})}">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
-                    <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${user.getCart().getCount()}">0</span>
+                    <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${cartCount}">0</span>
                 </a>
                 <a class="btn btn-outline-dark" th:href="@{/user/{id}(id=${user.getId()})}" th:text="|${user.getName()}님 환영합니다.|">
                     마이페이지
@@ -133,8 +140,6 @@
                         </a>
                     </div>
                 </form>
-
-
             </div>
         </div>
     </div>

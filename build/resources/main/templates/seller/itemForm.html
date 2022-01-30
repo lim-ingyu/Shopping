@@ -24,16 +24,6 @@
                 <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/main}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" th:href="@{/item/new}">Upload</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" th:href="@{/seller/manage/{id}(id=${user.getId()})}">Manage</a></li>
-
-                <!--<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">All Products</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                    </ul>
-                </li>-->
             </ul>
             <form class="d-flex">
                 <a class="btn btn-outline-dark" href="#" th:text="|현재수익 : ${user.getCoin()} ₩|">
@@ -69,7 +59,6 @@
                     </div>
                 </div>
 
-
                 <div class="col-12">
                     <label for="name" class="form-label">상품 이름</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="상품 이름을 입력하세요.">
@@ -77,7 +66,6 @@
                         Your name is required.
                     </div>
                 </div>
-
 
                 <div class="col-12">
                     <label for="text" class="form-label">상품 설명</label>
@@ -107,14 +95,10 @@
                 <div class="col-12">
                     <label for="text" class="form-label">상품 이미지 업로드</label>
                     <input type="file" class="form-control" id="imgFile" name="imgFile">
-
                 </div>
-
             </div>
-
             <hr class="my-4">
             <button class="w-100 btn btn-primary btn-lg mb-3" type="submit">상품 등록</button>
-            <!--                    <button class="w-100 btn btn-secondary btn-lg" th:href="@{memberlist}">목록으로</button>-->
         </form>
     </div>
     </div>
