@@ -26,7 +26,7 @@ public class CartItem {
     @JoinColumn(name="item_id")
     private Item item;
 
-    private int count=0; // 상품 개수
+    private int count; // 상품 개수
 
     public static CartItem createCartItem(Cart cart, Item item, int amount) {
         CartItem cartItem = new CartItem();
@@ -40,6 +40,5 @@ public class CartItem {
     public void addCount(int count) {
         this.count += count;
     }
-
 
 }

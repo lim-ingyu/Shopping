@@ -41,7 +41,9 @@ public class Cart {
 
     public static Cart createCart(User user) {
         Cart cart = new Cart();
+        cart.setCount(0);
         cart.setUser(user);
         return cart;
     }
+
 }
