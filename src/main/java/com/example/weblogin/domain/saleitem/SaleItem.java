@@ -1,7 +1,5 @@
 package com.example.weblogin.domain.saleitem;
 
-import com.example.weblogin.domain.cart.Cart;
-import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.orderitem.OrderItem;
 import com.example.weblogin.domain.sale.Sale;
@@ -19,6 +17,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 public class SaleItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -51,7 +50,6 @@ public class SaleItem {
     }
 
     public static SaleItem createSaleItem(Sale sale, User seller, Item item, int count) {
-
         SaleItem saleItem = new SaleItem();
         saleItem.setSale(sale);
         saleItem.setItem(item);

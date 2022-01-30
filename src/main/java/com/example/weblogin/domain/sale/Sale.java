@@ -1,15 +1,10 @@
 package com.example.weblogin.domain.sale;
 
-import com.example.weblogin.domain.cart.Cart;
-import com.example.weblogin.domain.cartitem.CartItem;
-import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.saleitem.SaleItem;
 import com.example.weblogin.domain.user.User;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +15,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Sale {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -33,7 +29,7 @@ public class Sale {
 
     private int totalCount; // 총 판매 개수
 
-   public static Sale createSale(User seller) {
+    public static Sale createSale(User seller) {
         Sale sale = new Sale();
         sale.setSeller(seller);
         return sale;
