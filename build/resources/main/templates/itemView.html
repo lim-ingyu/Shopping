@@ -12,12 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="/css/styles.css" rel="stylesheet" />
-    <script>
-        if (item.getCount() < amount) {
-            alert("재고가 부족합니다.")
-        }
 
-    </script>
+
 
 </head>
 <body>
@@ -107,32 +103,40 @@
                     </div>
                 </form>
 
-                <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/{id}/checkout/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
+                <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" onsubmit="return orderitem();" th:action="@{/user/{id}/checkout/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
                     <div class="d-flex">
                         <input class="form-control text-center me-3" id="count" name="count" type="num" value="1"
                                style="max-width: 3rem"/>
-                        <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                        <button class="btn btn-outline-dark flex-shrink-0" id="basket" type="submit">
                                 구매하기
                         </button>
                     </div>
                 </form>
+                    <!--<script th:inline="javascript">
+                        /* <![CDATA[ */
+                        var itemstock = [[${item.Stock}]];
+                        const button = document.getElementById("basket")
 
-                <!--<form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
-                    <div class="d-flex">
-                    <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
-                               style="max-width: 3rem"/>
-                        <button class="btn btn-outline-dark flex-shrink-0" type="submit">
-                            <i class="bi-cart-fill me-1"></i>
-                            장바구니
-                        </button>
-                    </div>
-                </form>-->
+                        function orderitem() {
+                            var count = document.getElementById("count").value
+                            if (isNaN(count)) {
+                                alert("숫자를 입력해주세요")
+                                return false
+                            } else if (count > itemstock) {
+                                alert("재고가 부족합니다")
+                                return false
+                            } else {
+                                return true
+                            }
+                        }
+
+                        /* ]]> */
+                    </script>-->
 
 
                 <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" onsubmit="return additem();" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
-                    <input id="amount" name="amount" type="num" value="1">
-                    <button id="basket" type="submit">장바구니</button>
-                    <!--<div id="buy"></div>-->
+                    <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1" style="max-width: 3rem"/>
+                    <button class="btn btn-outline-dark flex-shrink-0" id="basket" type="submit"><i class="bi-cart-fill me-1"></i>장바구니</button>
                 </form>
                     <script th:inline="javascript">
                         /* <![CDATA[ */
@@ -153,14 +157,35 @@
                             }
                         }
 
+                        function orderitem() {
+                            var count = document.getElementById("count").value
+                            if (isNaN(count)) {
+                                alert("숫자를 입력해주세요")
+                                return false
+                            } else if (count > leftitemcount) {
+                                alert("재고가 부족합니다")
+                                return false
+                            } else {
+                                <!--document.getElementById("buy").innerText = count-->
+                                return true
+                            }
+                        }
+
                         <!--button.addEventListener("click",additem)-->
                         /* ]]> */
                     </script>
 
 
-
-
-
+                <!--<form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
+                    <div class="d-flex">
+                    <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
+                               style="max-width: 3rem"/>
+                        <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                            <i class="bi-cart-fill me-1"></i>
+                            장바구니
+                        </button>
+                    </div>
+                </form>-->
 
 <form class="d-flex" sec:authorize="!isAuthenticated()">
     <div class="d-flex">
