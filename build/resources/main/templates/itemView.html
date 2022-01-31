@@ -116,7 +116,8 @@
                         </button>
                     </div>
                 </form>
-                <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
+
+                <!--<form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
                     <div class="d-flex">
                     <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
                                style="max-width: 3rem"/>
@@ -125,24 +126,58 @@
                             장바구니
                         </button>
                     </div>
-                </form>
+                </form>-->
 
-                <form class="d-flex" sec:authorize="!isAuthenticated()">
-                    <div class="d-flex">
-                        <a th:href="@{/signin}">
-                            <button class="btn btn-outline-dark flex-shrink-0" type="button">
-                                구매하기
-                            </button>
-                        </a>
-                        <a class="btn btn-outline-dark" th:href="@{/signin}">
-                            <i class="bi-cart-fill me-1"></i>
-                            장바구니
-                        </a>
-                    </div>
+
+                <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" onsubmit="return additem();" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
+                    <input id="amount" name="amount" type="num" value="1">
+                    <button id="basket" type="submit">장바구니</button>
+                    <!--<div id="buy"></div>-->
                 </form>
-            </div>
-        </div>
+                    <script th:inline="javascript">
+                        /* <![CDATA[ */
+                        var leftitemcount = [[${item.Stock}]];
+                        const button = document.getElementById("basket")
+
+                        function additem() {
+                            var count = document.getElementById("amount").value
+                            if (isNaN(count)) {
+                                alert("숫자를 입력해주세요")
+                                return false
+                            } else if (count > leftitemcount) {
+                                alert("재고가 부족합니다")
+                                return false
+                            } else {
+                                <!--document.getElementById("buy").innerText = count-->
+                                return true
+                            }
+                        }
+
+                        <!--button.addEventListener("click",additem)-->
+                        /* ]]> */
+                    </script>
+
+
+
+
+
+
+<form class="d-flex" sec:authorize="!isAuthenticated()">
+    <div class="d-flex">
+        <a th:href="@{/signin}">
+            <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                구매하기
+            </button>
+        </a>
+        <a class="btn btn-outline-dark" th:href="@{/signin}">
+            <i class="bi-cart-fill me-1"></i>
+            장바구니
+        </a>
     </div>
+</form>
+</div>
+</div>
+</div>
 </section>
 <!-- Footer-->
 <footer class="my-5 pt-5 text-muted text-center text-small">
