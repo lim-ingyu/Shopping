@@ -1,5 +1,6 @@
 package com.example.weblogin.service;
 
+import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.item.ItemRepository;
 import com.example.weblogin.domain.order.Order;
@@ -23,6 +24,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final UserPageService userPageService;
     private final SaleItemRepository saleItemRepository;
+    private final ItemService itemService;
 
     // 회원가입 하면 회원 당 주문 하나 생성
     public void createOrder(User user){
@@ -42,11 +44,11 @@ public class OrderService {
 
     // 장바구니상품주문
     @Transactional
-    public OrderItem addCartOrder(int userId, Item item, int count, SaleItem saleItem) {
+    public OrderItem addCartOrder(int itemId, int userId, CartItem cartItem, SaleItem saleItem) {
 
         User user = userPageService.findUser(userId);
 
-        OrderItem orderItem = OrderItem.createOrderItem(user, item, count, saleItem);
+        OrderItem orderItem = OrderItem.createOrderItem(itemId, user, cartItem, saleItem);
 
         orderItemRepository.save(orderItem);
 
@@ -70,7 +72,7 @@ public class OrderService {
 
         Order userOrder = Order.createOrder(user);
 
-        OrderItem orderItem = OrderItem.createOrderItem(user, item, count, userOrder, saleItem);
+        OrderItem orderItem = OrderItem.createOrderItem(item.getId(), user, item, count, userOrder, saleItem);
 
         orderItemRepository.save(orderItem);
         orderRepository.save(userOrder);
@@ -80,22 +82,22 @@ public class OrderService {
     @Transactional
     public void orderCancel(User user, OrderItem cancelItem) {
 
-        System.out.println("userid = "+user.getId()+" cancelItemId = "+cancelItem.getId());
+        Item item = itemService.itemView(cancelItem.getItemId());
 
         // 판매자의 판매내역 totalCount 감소
-        cancelItem.getSaleItem().getSale().setTotalCount(cancelItem.getSaleItem().getSale().getTotalCount()-cancelItem.getOrderCount());
+        cancelItem.getSaleItem().getSale().setTotalCount(cancelItem.getSaleItem().getSale().getTotalCount()-cancelItem.getItemCount());
 
         // 해당 item 재고 다시 증가
-        cancelItem.getItem().setStock(cancelItem.getItem().getStock()+ cancelItem.getOrderCount());
+        item.setStock(item.getStock()+ cancelItem.getItemCount());
 
         // 해당 item의 판매량 감소
-        cancelItem.getItem().setCount(cancelItem.getItem().getCount()-cancelItem.getOrderCount());
+        item.setCount(item.getCount()-cancelItem.getItemCount());
 
         // 판매자 돈 감소
-        cancelItem.getSaleItem().getSeller().setCoin(cancelItem.getSaleItem().getSeller().getCoin()- cancelItem.getOrderPrice());
+        cancelItem.getSaleItem().getSeller().setCoin(cancelItem.getSaleItem().getSeller().getCoin()- cancelItem.getItemTotalPrice());
 
         // 구매자 돈 증가
-        cancelItem.getUser().setCoin(cancelItem.getUser().getCoin()+ cancelItem.getOrderPrice());
+        cancelItem.getUser().setCoin(cancelItem.getUser().getCoin()+ cancelItem.getItemTotalPrice());
 
         // 해당 orderItem의 주문 상태 1로 변경 -> 주문 취소를 의미
         cancelItem.setIsCancel(cancelItem.getIsCancel()+1);

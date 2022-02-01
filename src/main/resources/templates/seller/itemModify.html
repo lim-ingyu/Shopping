@@ -19,16 +19,6 @@
                 <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/main}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" th:href="@{/item/new}">Upload</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" th:href="@{/seller/manage/{id}(id=${user.getId()})}">Manage</a></li>
-
-                <!--<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">All Products</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                    </ul>
-                </li>-->
             </ul>
             <form class="d-flex">
                 <a class="btn btn-outline-dark" href="#" th:text="|현재수익 : ${user.getCoin()} ₩|">
@@ -50,10 +40,6 @@
             <h2>상품 수정</h2>
         </div>
         <hr/>
-
-
-
-
         <div class="col-md-7 col-lg-8">
             <form th:action="@{/item/modify/pro/{id}(id=${item.id})}" method="post">
                 <div class="row g-3">
@@ -69,8 +55,6 @@
                             Input is empty.
                         </div>
                     </div>
-
-
                     <div class="col-12">
                         <label for="itemName" class="form-label">상품 이름</label>
                         <input type="text" class="form-control" id="itemName" name="itemName" th:placeholder="${item.getName()}">
@@ -78,8 +62,6 @@
                             Your name is required.
                         </div>
                     </div>
-
-
                     <div class="col-12">
                         <label for="itemText" class="form-label">상품 설명</label>
                         <input type="text" class="form-control" name="itemText" id="itemText" th:placeholder="${item.getText()}">
@@ -87,7 +69,6 @@
                             Input is empty.
                         </div>
                     </div>
-
                     <div class="col-12">
                         <label for="itemPrice" class="form-label">상품 가격</label>
                         <input type="text" class="form-control" id="itemPrice" name="itemPrice" th:placeholder="${item.getPrice()}">
@@ -95,7 +76,6 @@
                             Input is empty.
                         </div>
                     </div>
-
                     <div class="col-12">
                         <label for="stock" class="form-label">상품 재고</label>
                         <input type="text" class="form-control" id="stock" name="stock"
@@ -104,7 +84,6 @@
                             Input is empty.
                         </div>
                     </div>
-
                     <div class="col-12">
                         <label for="imgName" class="form-label">상품 이미지 업로드</label>
                         <input type="file" class="form-control" id="imgName" name="imgName">
@@ -112,12 +91,9 @@
                             Input is empty.
                         </div>
                     </div>
-
                 </div>
-
                 <hr class="my-4">
                 <button class="w-100 btn btn-primary btn-lg mb-3" type="submit">상품 수정</button>
-                <!--                    <button class="w-100 btn btn-secondary btn-lg" th:href="@{memberlist}">목록으로</button>-->
             </form>
         </div>
     </main>

@@ -48,12 +48,15 @@
             <div class="row g-3">
                 <hr/>
                 <div class="col-12">
-                    <label class="form-label">상품 상태</label>
+                    <!--<label class="form-label">상품 상태</label>
                     <select name="isSoldout">
                         <option value="">선택</option>
                         <option value="SELL">판매중</option>
                         <option value="SOLDOUT">품절</option>
-                    </select>
+                    </select>-->
+                    <label class="form-label" for="isSoldout">상품 상태</label><br/>
+                    <input type="radio" name="isSoldout" id="isSoldout" value="0">판매중<br/>
+                    <input type="radio" name="isSoldout" id="isSoldout" value="1">품절<br/>
                     <div class="invalid-feedback">
                         Input is empty.
                     </div>

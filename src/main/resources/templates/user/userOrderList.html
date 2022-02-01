@@ -100,6 +100,7 @@
                         <th scope="col">상품명</th>
                         <th scope="col">수량</th>
                         <th scope="col">가격</th>
+                        <th scope="col">주문금액</th>
                         <th scope="col">주문날짜</th>
                         <th scope="col">주문취소</th>
                     </tr>
@@ -107,10 +108,11 @@
                     <tbody>
                     <tr th:each="orderItem, i: ${orderItems}">
                         <td th:text="${i.count}">1</td>
-                        <td th:text="${orderItem.getItem().getId()}">3번상품</td>
-                        <td th:text="${orderItem.getItem().getName()}">상품명</td>
-                        <td th:text="${orderItem.getOrderCount()}">수량</td>
-                        <td th:text="${orderItem.getItem().getPrice() * orderItem.getOrderCount()}">가격</td>
+                        <td th:text="${orderItem.getItemId()}">3번상품</td>
+                        <td th:text="${orderItem.getItemName()}">상품명</td>
+                        <td th:text="${orderItem.getItemCount()}">수량</td>
+                        <td th:text="${orderItem.getItemPrice()}">가격</td>
+                        <td th:text="${orderItem.getItemTotalPrice()}">주문금액</td>
                         <td th:text="${orderItem.getOrder().getCreateDate()}">날짜</td>
                         <td th:if="${orderItem.getIsCancel()} == 1">취소완료</a></td>
                         <td th:unless="${orderItem.getIsCancel()} == 1">

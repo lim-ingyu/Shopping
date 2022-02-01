@@ -125,7 +125,7 @@
                             <h4 class="my-0 fw-normal">총 수량</h4>
                         </div>
                         <form class="card-body" method="post">
-                            <h1 class="card-title pricing-card-title" th:text="|${totalCount} 개|">$0</h1>
+                            <h1 class="card-title pricing-card-title" th:text="|${user.getCart().getCount()} 개|">$0</h1>
 
                         </form>
                     </div>

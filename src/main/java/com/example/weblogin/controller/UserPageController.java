@@ -76,8 +76,10 @@ public class UserPageController {
     public String userCartPage(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 로그인이 되어있는 유저의 id와 장바구니에 접속하는 id가 같아야 함
         if (principalDetails.getUser().getId() == id) {
+
+            User user = userPageService.findUser(id);
             // 로그인 되어 있는 유저에 해당하는 장바구니 가져오기
-            Cart userCart = principalDetails.getUser().getCart();
+            Cart userCart = user.getCart();
 
             // 장바구니에 들어있는 아이템 모두 가져오기
             List<CartItem> cartItemList = cartService.allUserCartView(userCart);
@@ -88,15 +90,8 @@ public class UserPageController {
                 totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
             }
 
-            // 총 개수 += 수량
-            int totalCount = 0;
-            for (CartItem cartitem : cartItemList) {
-                totalCount += cartitem.getCount();
-            }
-            userCart.setCount(totalCount);
-
             model.addAttribute("totalPrice", totalPrice);
-            model.addAttribute("totalCount", totalCount);
+            model.addAttribute("totalCount", userCart.getCount());
             model.addAttribute("cartItems", cartItemList);
             model.addAttribute("user", userPageService.findUser(id));
 
@@ -121,17 +116,22 @@ public class UserPageController {
     }
 
     // 장바구니에서 물건 삭제
-    // 삭제하고 남은 총액 다시 계산해서 모델로 보내기 = 장바구니 등록 로직이랑 같음
     // 삭제하고 남은 상품의 총 개수
     @GetMapping("/user/cart/{id}/{cartItemId}/delete")
     public String deleteCartItem(@PathVariable("id") Integer id, @PathVariable("cartItemId") Integer itemId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         // 로그인 유저 id와 장바구니 유저의 id가 같아야 함
         if (principalDetails.getUser().getId() == id) {
-            // 장바구니 물건 삭제
-            cartService.cartItemDelete(itemId);
+            // itemId로 장바구니 상품 찾기
+            CartItem cartItem = cartService.findCartItemById(itemId);
 
             // 해당 유저의 카트 찾기
             Cart userCart = cartService.findUserCart(id);
+
+            // 장바구니 전체 수량 감소
+            userCart.setCount(userCart.getCount()-cartItem.getCount());
+
+            // 장바구니 물건 삭제
+            cartService.cartItemDelete(itemId);
 
             // 해당 유저의 장바구니 상품들
             List<CartItem> cartItemList = cartService.allUserCartView(userCart);
@@ -143,14 +143,14 @@ public class UserPageController {
             }
 
             // 총 개수 += 수량
-            int totalCount = 0;
-            for (CartItem cartitem : cartItemList) {
-                totalCount += cartitem.getCount();
-            }
-            userCart.setCount(totalCount);
+            //int totalCount = 0;
+            //for (CartItem cartitem : cartItemList) {
+            //    totalCount += cartitem.getCount();
+            //}
+
 
             model.addAttribute("totalPrice", totalPrice);
-            model.addAttribute("totalCount", totalCount);
+            model.addAttribute("totalCount", userCart.getCount());
             model.addAttribute("cartItems", cartItemList);
             model.addAttribute("user", userPageService.findUser(id));
 
@@ -171,11 +171,11 @@ public class UserPageController {
             // 로그인 되어 있는 유저에 해당하는 구매내역 가져오기
             List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
 
-            // 총 주문 개수 += 수량
+            // 총 주문 개수
             int totalCount = 0;
             for (OrderItem orderItem : orderItemList) {
                 if (orderItem.getIsCancel() != 1)
-                    totalCount += orderItem.getOrderCount();
+                    totalCount += orderItem.getItemCount();
             }
 
             model.addAttribute("totalCount", totalCount);
@@ -238,10 +238,10 @@ public class UserPageController {
                     cartItem.getItem().setCount(cartItem.getItem().getCount() + cartItem.getCount());
 
                     // sale, saleItem 에 담기
-                    SaleItem saleItem = saleService.addSale(seller.getId(), cartItem.getItem(), cartItem.getCount());
+                    SaleItem saleItem = saleService.addSale(cartItem.getItem().getId(), seller.getId(), cartItem);
 
                     // order, orderItem 에 담기
-                    OrderItem orderItem = orderService.addCartOrder(id, cartItem.getItem(), cartItem.getCount(), saleItem);
+                    OrderItem orderItem = orderService.addCartOrder(cartItem.getItem().getId(), user.getId(), cartItem, saleItem);
 
                     orderItemList.add(orderItem);
                 }
@@ -299,7 +299,7 @@ public class UserPageController {
                 SaleItem saleItem = saleService.addSale(item.getSeller().getId(), item, count);
 
                 // order, orderItem 에 담기
-                orderService.addOneItemOrder(id, item, count, saleItem);
+                orderService.addOneItemOrder(user.getId(), item, count, saleItem);
             }
 
             return "redirect:/user/orderHist/{id}";
@@ -322,15 +322,17 @@ public class UserPageController {
             List<OrderItem> orderItemList = orderService.findUserOrderItems(id);
             int totalCount = 0;
             for (OrderItem orderItem : orderItemList) {
-                totalCount += orderItem.getOrderCount();
+                totalCount += orderItem.getItemCount();
             }
-            totalCount = totalCount - cancelItem.getOrderCount();
+            totalCount = totalCount - cancelItem.getItemCount();
 
             orderService.orderCancel(user, cancelItem);
 
             model.addAttribute("totalCount", totalCount);
             model.addAttribute("orderItems", orderItemList);
             model.addAttribute("user", user);
+            //model.addAttribute("message", "주문 취소가 완료되었습니다.");
+            //model.addAttribute("searchUrl", "/user/orderHist/{id}");
 
             return "redirect:/user/orderHist/{id}";
 

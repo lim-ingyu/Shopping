@@ -105,6 +105,14 @@ public class CartService {
         return cartItems;
     }
 
+    // 카트 상품 리스트 중 해당하는 상품 id의 상품만 반환
+    public CartItem findCartItemById(int id) {
+
+        CartItem cartItem = cartItemRepository.findCartItemById(id);
+
+        return cartItem;
+    }
+
     // 장바구니의 상품 개별 삭제
     public void cartItemDelete(int id) {
 

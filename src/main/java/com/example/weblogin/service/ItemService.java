@@ -3,6 +3,7 @@ package com.example.weblogin.service;
 import com.example.weblogin.domain.cartitem.CartItem;
 import com.example.weblogin.domain.item.Item;
 import com.example.weblogin.domain.item.ItemRepository;
+import com.example.weblogin.domain.saleitem.SaleItem;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final CartService cartService;
+    private final SaleService saleService;
 
     // 상품 등록
     public void saveItem(Item item, MultipartFile imgFile) throws Exception {
@@ -42,6 +44,7 @@ public class ItemService {
         imgFile.transferTo(saveFile);
 
         item.setImgName(imgName);
+
         item.setImgPath("/files/" + imgName);
 
         itemRepository.save(item);
@@ -65,14 +68,11 @@ public class ItemService {
     // 상품 수정
     @Transactional
     public void itemModify(Item item, Integer id, MultipartFile imgFile) throws Exception {
-        String oriImgName = imgFile.getOriginalFilename();
+
         String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files/";
         UUID uuid = UUID.randomUUID();
-        String extension = oriImgName.substring(oriImgName.lastIndexOf("."));
-        String savedFileName = uuid.toString() + extension; // 파일명 -> imgName
-
-
-        File saveFile = new File(projectPath, savedFileName);
+        String fileName = uuid + "_" + imgFile.getOriginalFilename();
+        File saveFile = new File(projectPath, fileName);
         imgFile.transferTo(saveFile);
 
         Item update = itemRepository.findItemById(id);
@@ -80,19 +80,21 @@ public class ItemService {
         update.setText(item.getText());
         update.setPrice(item.getPrice());
         update.setStock(item.getStock());
-        update.setImgName(savedFileName);
-        update.setImgPath("/files/"+savedFileName);
+        update.setImgName(fileName);
+        update.setImgPath("/files/"+fileName);
         itemRepository.save(update);
-
     }
 
     // 상품 삭제
     @Transactional
     public void itemDelete(Integer id) {
+        // cartItem 중에 해당 id 를 가진 item 찾기
         List<CartItem> items = cartService.findCartItemByItemId(id);
+
         for(CartItem item : items) {
             cartService.cartItemDelete(item.getId());
         }
+
         itemRepository.deleteById(id);
     }
 
@@ -101,4 +103,5 @@ public class ItemService {
 
         return itemRepository.findByNameContaining(searchKeyword, pageable);
     }
+
 }

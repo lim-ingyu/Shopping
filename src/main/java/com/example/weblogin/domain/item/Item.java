@@ -34,7 +34,7 @@ public class Item {
 
     private int stock; // 재고
 
-    private boolean isSoldout; // 상품 상태 (판매중 / 품절)
+    private int isSoldout; // 상품 상태 (0 : 판매중 / 1 : 품절)
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id")

@@ -76,15 +76,8 @@ public class SellerPageController {
             Sale sales = saleService.findSaleById(id);
             List<SaleItem> saleItemList = saleService.findSellerSaleItems(id);
 
-            // 총 판매 개수 += 수량
-            int totalCount = 0;
-            for (SaleItem saleItem : saleItemList) {
-                if (saleItem.getIsCancel() != 1)
-                    totalCount += saleItem.getCount();
-            }
-
             model.addAttribute("sales", sales);
-            model.addAttribute("totalCount", totalCount);
+            model.addAttribute("totalCount", sales.getTotalCount());
             model.addAttribute("sellerSaleItems", saleItemList);
             model.addAttribute("seller", userPageService.findUser(id));
 
