@@ -137,13 +137,31 @@
                         <div class="card-header py-3">
                             <h4 class="my-0 fw-normal">총 결제금액</h4>
                         </div>
-                        <form class="card-body" th:action="@{/user/cart/checkout/{id}(id=${user.getId()})}" method="post">
+                        <form class="card-body" onsubmit="return orderitem();" th:action="@{/user/cart/checkout/{id}(id=${user.getId()})}" method="post">
                             <h1 class="card-title pricing-card-title" th:text="|${totalPrice} ₩|">$0</h1>
                             <ul class="list-unstyled mt-3 mb-4">
                                 <li>잘못 담은 물건이 있는지 확인해보세요!</li>
                             </ul>
                             <button type="submit" class="w-100 btn btn-lg btn-outline-primary">구매하기</button>
                         </form>
+                        <script th:inline="javascript">
+                            /* <![CDATA[ */
+                            function orderitem() {
+                                var userMoney = [[${user.Coin}]];
+                                var totalPrice = [[${totalPrice}]];
+
+                                if (userMoney < totalPrice) {
+                                    alert("잔액이 부족합니다.")
+                                    return false
+                                } else {
+                                    <!--document.getElementById("buy").innerText = count-->
+                                    return true
+                                }
+                            }
+
+                            <!--button.addEventListener("click",additem)-->
+                            /* ]]> */
+                        </script>
                     </div>
                 </div>
             </div>

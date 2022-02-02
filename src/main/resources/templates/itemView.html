@@ -147,10 +147,10 @@
                         function additem() {
                             var count = document.getElementById("amount").value
                             if (isNaN(count)) {
-                                alert("숫자를 입력해주세요")
+                                alert("숫자를 입력해주세요.")
                                 return false
                             } else if (count > leftitemcount) {
-                                alert("재고가 부족합니다")
+                                alert("재고가 부족합니다.")
                                 return false
                             } else {
                                 <!--document.getElementById("buy").innerText = count-->
@@ -160,11 +160,17 @@
 
                         function orderitem() {
                             var count = document.getElementById("count").value
+                            var userMoney = [[${user.Coin}]];
+                            var itemPrice = [[${item.Price}]];
                             if (isNaN(count)) {
-                                alert("숫자를 입력해주세요")
+                                alert("숫자를 입력해주세요.")
                                 return false
-                            } else if (count > leftitemcount) {
-                                alert("재고가 부족합니다")
+                            } else if ((count > leftitemcount) || (userMoney < (count*itemPrice))) {
+                                if (count > leftitemcount) {
+                                    alert("재고가 부족합니다.")
+                                } else if (userMoney < (count*itemPrice)) {
+                                    alert("잔액이 부족합니다.")
+                                }
                                 return false
                             } else {
                                 <!--document.getElementById("buy").innerText = count-->
