@@ -41,37 +41,34 @@
         </div>
         <hr/>
         <div class="col-md-7 col-lg-8">
-            <form th:action="@{/item/modify/pro/{id}(id=${item.id})}" method="post">
+            <form th:action="@{/item/modify/pro/{id}(id=${item.id})}" method="post" enctype="multipart/form-data">
                 <div class="row g-3">
                     <hr/>
                     <div class="col-12">
-                        <label class="form-label">상품 상태</label>
-                        <select name="isSoldout">
-                            <option value="">선택</option>
-                            <option value="SELL">판매중</option>
-                            <option value="SOLDOUT">품절</option>
-                        </select>
+                        <label class="form-label" for="isSoldout">상품 상태</label><br/>
+                        <input type="radio" name="isSoldout" id="isSoldout" value="0">판매중<br/>
+                        <input type="radio" name="isSoldout" id="isSoldout" value="1">품절<br/>
                         <div class="invalid-feedback">
                             Input is empty.
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="itemName" class="form-label">상품 이름</label>
-                        <input type="text" class="form-control" id="itemName" name="itemName" th:placeholder="${item.getName()}">
+                        <label for="name" class="form-label">상품 이름</label>
+                        <input type="text" class="form-control" id="name" name="name" th:placeholder="${item.getName()}">
                         <div class="invalid-feedback">
                             Your name is required.
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="itemText" class="form-label">상품 설명</label>
-                        <input type="text" class="form-control" name="itemText" id="itemText" th:placeholder="${item.getText()}">
+                        <label for="text" class="form-label">상품 설명</label>
+                        <input type="text" class="form-control" name="text" id="text" th:placeholder="${item.getText()}">
                         <div class="invalid-feedback">
                             Input is empty.
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="itemPrice" class="form-label">상품 가격</label>
-                        <input type="text" class="form-control" id="itemPrice" name="itemPrice" th:placeholder="${item.getPrice()}">
+                        <label for="price" class="form-label">상품 가격</label>
+                        <input type="text" class="form-control" id="price" name="price" th:placeholder="${item.getPrice()}">
                         <div class="invalid-feedback">
                             Input is empty.
                         </div>
@@ -85,8 +82,8 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="imgName" class="form-label">상품 이미지 업로드</label>
-                        <input type="file" class="form-control" id="imgName" name="imgName">
+                        <label for="text" class="form-label">상품 이미지 업로드</label>
+                        <input type="file" class="form-control" id="imgFile" name="imgFile">
                         <div class="invalid-feedback">
                             Input is empty.
                         </div>
