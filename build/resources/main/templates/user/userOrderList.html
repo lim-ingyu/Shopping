@@ -116,9 +116,18 @@
                         <td th:text="${orderItem.getOrder().getCreateDate()}">날짜</td>
                         <td th:if="${orderItem.getIsCancel()} == 1">취소완료</a></td>
                         <td th:unless="${orderItem.getIsCancel()} == 1">
-                            <form th:action="@{/user/{id}/checkout/cancel/{orderItemId}(id=${user.id}, orderItemId=${orderItem.id})}" th:method="POST">
+                            <form onsubmit="return cancel();" th:action="@{/user/{id}/checkout/cancel/{orderItemId}(id=${user.id}, orderItemId=${orderItem.id})}" th:method="POST">
                                 <button type="submit">주문취소</button>
                             </form>
+                            <script th:inline="javascript">
+                                /* <![CDATA[ */
+                                function cancel() {
+                                if (1) {
+                                    alert("주문 취소가 완료되었습니다.")
+                                    return true
+                                }
+                            }
+                            </script>
                         </td>
                     </tr>
                     </tbody>

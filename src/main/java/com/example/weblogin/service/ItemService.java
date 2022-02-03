@@ -80,6 +80,7 @@ public class ItemService {
         update.setText(item.getText());
         update.setPrice(item.getPrice());
         update.setStock(item.getStock());
+        update.setIsSoldout(item.getIsSoldout());
         update.setImgName(fileName);
         update.setImgPath("/files/"+fileName);
         itemRepository.save(update);
