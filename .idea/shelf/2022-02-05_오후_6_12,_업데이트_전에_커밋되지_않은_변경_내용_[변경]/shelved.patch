@@ -1,0 +1,668 @@
+Index: src/main/resources/templates/seller/itemForm.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\" xmlns:th=\"http://www.thymeleaf.org\" xmlns=\"http://www.w3.org/1999/html\" xmlns:sec=\"http://www.thymeleaf.org/extras/spring-security\">\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\r\n    <meta name=\"description\" content=\"\" />\r\n    <meta name=\"author\" content=\"\" />\r\n    <title>상품등록</title>\r\n    <!-- Favicon-->\r\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"../../../../../../../Downloads/startbootstrap-shop-item-gh-pages/assets/favicon.ico\" />\r\n    <!-- Bootstrap icons-->\r\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css\" rel=\"stylesheet\" />\r\n    <!-- Core theme CSS (includes Bootstrap)-->\r\n    <link href=\"/css/styles.css\" rel=\"stylesheet\" />\r\n</head>\r\n<body>\r\n<!-- Navigation-->\r\n<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\r\n    <div class=\"container px-4 px-lg-5\">\r\n        <a class=\"navbar-brand\" th:href=\"@{/main}\">연지의 쇼핑몰</a>\r\n        <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button>\r\n        <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\r\n            <ul class=\"navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4\">\r\n                <li class=\"nav-item\"><a class=\"nav-link active\" aria-current=\"page\" th:href=\"@{/main}\">Home</a></li>\r\n                <li class=\"nav-item\"><a class=\"nav-link\" href=\"#\" th:href=\"@{/item/new}\">Upload</a></li>\r\n                <li class=\"nav-item\"><a class=\"nav-link\" href=\"#\" th:href=\"@{/seller/manage/{id}(id=${user.getId()})}\">Manage</a></li>\r\n            </ul>\r\n            <form class=\"d-flex\">\r\n                <a class=\"btn btn-outline-dark\" href=\"#\" th:text=\"|현재수익 : ${user.getCoin()} ₩|\">\r\n                    현재잔액 : 10000 ₩\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/seller/{id}(id=${user.getId()})}\" th:text=\"|${user.getName()}님 환영합니다.|\">\r\n                    판매자 페이지\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/logout}\">\r\n                    로그아웃\r\n                </a>\r\n            </form>\r\n        </div>\r\n    </div>\r\n</nav>\r\n<!-- Product section-->\r\n<section class=\"py-5\">\r\n    <div class=\"container px-4 px-lg-5 my-5\">\r\n        <div class=\"row gx-4 gx-lg-5 align-items-center\">\r\n    <!--<div class=\"col-md-7 col-lg-8 container\">-->\r\n        <form th:action=\"@{/item/new/pro}\" method=\"post\" enctype=\"multipart/form-data\">\r\n            <div class=\"row g-3\">\r\n                <hr/>\r\n                <div class=\"col-12\">\r\n                    <!--<label class=\"form-label\">상품 상태</label>\r\n                    <select name=\"isSoldout\">\r\n                        <option value=\"\">선택</option>\r\n                        <option value=\"SELL\">판매중</option>\r\n                        <option value=\"SOLDOUT\">품절</option>\r\n                    </select>-->\r\n                    <label class=\"form-label\" for=\"isSoldout\">상품 상태</label><br/>\r\n                    <input type=\"radio\" name=\"isSoldout\" id=\"isSoldout\" value=\"0\">판매중<br/>\r\n                    <input type=\"radio\" name=\"isSoldout\" id=\"isSoldout\" value=\"1\">품절<br/>\r\n                    <div class=\"invalid-feedback\">\r\n                        Input is empty.\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"col-12\">\r\n                    <label for=\"name\" class=\"form-label\">상품 이름</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\"상품 이름을 입력하세요.\">\r\n                    <div class=\"invalid-feedback\">\r\n                        Your name is required.\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"col-12\">\r\n                    <label for=\"text\" class=\"form-label\">상품 설명</label>\r\n                    <input type=\"text\" class=\"form-control\" name=\"text\" id=\"text\" placeholder=\"상품 설명을 입력하세요.\">\r\n                    <div class=\"invalid-feedback\">\r\n                        Input is empty.\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"col-12\">\r\n                    <label for=\"price\" class=\"form-label\">상품 가격</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"price\" name=\"price\" placeholder=\"상품 가격을 입력하세요.\">\r\n                    <div class=\"invalid-feedback\">\r\n                        Input is empty.\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"col-12\">\r\n                    <label for=\"stock\" class=\"form-label\">상품 재고</label>\r\n                    <input type=\"text\" class=\"form-control\" id=\"stock\" name=\"stock\"\r\n                           placeholder=\"상품 재고를 입력하세요.\">\r\n                    <div class=\"invalid-feedback\">\r\n                        Input is empty.\r\n                    </div>\r\n                </div>\r\n\r\n                <div class=\"col-12\">\r\n                    <label for=\"text\" class=\"form-label\">상품 이미지 업로드</label>\r\n                    <input type=\"file\" class=\"form-control\" id=\"imgFile\" name=\"imgFile\">\r\n                </div>\r\n            </div>\r\n            <hr class=\"my-4\">\r\n            <button class=\"w-100 btn btn-primary btn-lg mb-3\" type=\"submit\">상품 등록</button>\r\n        </form>\r\n    </div>\r\n    </div>\r\n</section>\r\n\r\n<footer class=\"my-5 pt-5 text-muted text-center text-small\">\r\n    <p class=\"mb-1\">&copy; 김연지 - 2022년 01월 쇼핑몰 프로젝트</p>\r\n</footer>\r\n\r\n</body>\r\n\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/templates/seller/itemForm.html b/src/main/resources/templates/seller/itemForm.html
+--- a/src/main/resources/templates/seller/itemForm.html	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/resources/templates/seller/itemForm.html	(date 1644052248073)
+@@ -48,12 +48,7 @@
+             <div class="row g-3">
+                 <hr/>
+                 <div class="col-12">
+-                    <!--<label class="form-label">상품 상태</label>
+-                    <select name="isSoldout">
+-                        <option value="">선택</option>
+-                        <option value="SELL">판매중</option>
+-                        <option value="SOLDOUT">품절</option>
+-                    </select>-->
++
+                     <label class="form-label" for="isSoldout">상품 상태</label><br/>
+                     <input type="radio" name="isSoldout" id="isSoldout" value="0">판매중<br/>
+                     <input type="radio" name="isSoldout" id="isSoldout" value="1">품절<br/>
+Index: src/main/resources/templates/user/userPage.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\" xmlns:th=\"http://www.thymeleaf.org\" xmlns=\"http://www.w3.org/1999/html\" xmlns:sec=\"http://www.thymeleaf.org/extras/spring-security\">\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\r\n    <meta name=\"description\" content=\"\" />\r\n    <meta name=\"author\" content=\"\" />\r\n    <title>마이페이지</title>\r\n    <!-- Bootstrap icons-->\r\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css\" rel=\"stylesheet\" />\r\n    <!-- Core theme CSS (includes Bootstrap)-->\r\n    <link href=\"/css/styles.css\" rel=\"stylesheet\" />\r\n\r\n    <style>\r\n        .bd-placeholder-img {\r\n            font-size: 1.125rem;\r\n            text-anchor: middle;\r\n            -webkit-user-select: none;\r\n            -moz-user-select: none;\r\n            user-select: none;\r\n        }\r\n\r\n        @media (min-width: 768px) {\r\n            .bd-placeholder-img-lg {\r\n                font-size: 3.5rem;\r\n            }\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n<!-- Navigation-->\r\n<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\r\n    <div class=\"container px-4 px-lg-5\">\r\n        <a class=\"navbar-brand\" th:href=\"@{/main}\">연지의 쇼핑몰</a>\r\n        <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button>\r\n        <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\r\n            <ul class=\"navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4\">\r\n                <li class=\"nav-item\"><a class=\"nav-link active\" aria-current=\"page\" th:href=\"@{/main}\">Home</a></li>\r\n\r\n            </ul>\r\n            <form class=\"d-flex\">\r\n                <a class=\"btn btn-outline-dark\" href=\"#\" th:text=\"|현재잔액 : ${user.getCoin()} ₩|\">\r\n                    현재잔액 : 10000 ₩\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/user/cart/{id}(id=${user.getId()})}\">\r\n                    <i class=\"bi-cart-fill me-1\"></i>\r\n                    Cart\r\n                    <span class=\"badge bg-dark text-white ms-1 rounded-pill\" th:text=\"${user.getCart().getCount()}\">0</span>\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/seller/{id}(id=${user.getId()})}\" th:text=\"|${user.getName()}님 환영합니다.|\">\r\n                    마이페이지\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/logout}\">\r\n                    로그아웃\r\n                </a>\r\n            </form>\r\n\r\n        </div>\r\n    </div>\r\n</nav>\r\n\r\n\r\n<!-- SIDE BAR -->\r\n<nav id=\"sidebarMenu\" class=\"col-md-3 col-lg-2 d-md-block bg-light sidebar collapse\">\r\n    <div class=\"position-sticky pt-3\">\r\n        <ul class=\"nav flex-column\">\r\n            <li class=\"nav-item\">\r\n                <a class=\"nav-link active\" aria-current=\"page\" th:href=\"@{/user/{id}(id=${user.getId()})}\">\r\n                    <span data-feather=\"home\"></span>\r\n                    마이페이지\r\n                </a>\r\n            </li>\r\n            <li class=\"nav-item\">\r\n                <a class=\"nav-link active\" aria-current=\"page\" th:href=\"@{/user/cart/{id}(id=${user.getId()})}\">\r\n                    <span data-feather=\"home\"></span>\r\n                    장바구니\r\n                </a>\r\n            </li>\r\n            <li class=\"nav-item\">\r\n                <a class=\"nav-link\" th:href=\"@{/user/orderHist/{id}(id=${user.getId()})}\">\r\n                    <span data-feather=\"file\"></span>\r\n                    주문내역\r\n                </a>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</nav>\r\n\r\n<main class=\"col-md-9 ms-sm-auto col-lg-10 px-md-4\">\r\n    <div class=\"d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom\">\r\n        <h1 class=\"h2\">마이페이지</h1>\r\n    </div>\r\n</main>\r\n\r\n<div class=\"container\">\r\n    <div class=\"main-body\">\r\n\r\n        <div class=\"row gutters-sm\">\r\n            <div class=\"col-md-4 mb-3\">\r\n                <div class=\"card\">\r\n                    <div class=\"card-body\">\r\n                        <div class=\"d-flex flex-column align-items-center text-center\">\r\n                            <img src=\"https://bootdey.com/img/Content/avatar/avatar7.png\" alt=\"Admin\" class=\"rounded-circle\" width=\"150\">\r\n                            <div class=\"mt-3\">\r\n                                <h4 th:text=\"${user.getUsername()}\">John Doe</h4>\r\n                                <a type=\"button\" class=\"btn btn-primary\" th:href=\"@{/user/modify/{id}(id=${user.id})}\">정보수정</a>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"col-md-8\">\r\n                <div class=\"card mb-3\">\r\n                    <div class=\"card-body\">\r\n                        <div class=\"row\">\r\n                            <div class=\"col-sm-3\">\r\n                                <h6 class=\"mb-0\">회원이름</h6>\r\n                            </div>\r\n                            <div class=\"col-sm-9 text-secondary\" th:text=\"${user.getName()}\">\r\n                                회원 이름\r\n                            </div>\r\n                        </div>\r\n                        <hr>\r\n                        <div class=\"row\">\r\n                            <div class=\"col-sm-3\">\r\n                                <h6 class=\"mb-0\">닉네임</h6>\r\n                            </div>\r\n                            <div class=\"col-sm-9 text-secondary\" th:text=\"${user.getUsername()}\">\r\n                                회원 닉네임\r\n                            </div>\r\n                        </div>\r\n                        <hr>\r\n                        <div class=\"row\">\r\n                            <div class=\"col-sm-3\">\r\n                                <h6 class=\"mb-0\">이메일</h6>\r\n                            </div>\r\n                            <div class=\"col-sm-9 text-secondary\" th:text=\"${user.getEmail()}\">\r\n                                회원 이메일\r\n                            </div>\r\n                        </div>\r\n                        <hr>\r\n                        <div class=\"row\">\r\n                            <div class=\"col-sm-3\">\r\n                                <h6 class=\"mb-0\">전화번호</h6>\r\n                            </div>\r\n                            <div class=\"col-sm-9 text-secondary\" th:text=\"${user.getPhone()}\">\r\n                                (239) 816-9029\r\n                            </div>\r\n                        </div>\r\n                        <hr>\r\n                        <div class=\"row\">\r\n                            <div class=\"col-sm-3\">\r\n                                <h6 class=\"mb-0\">주소</h6>\r\n                            </div>\r\n                            <div class=\"col-sm-9 text-secondary\" th:text=\"${user.getAddress()}\">\r\n                                회원 주소\r\n                            </div>\r\n                        </div>\r\n                        <hr>\r\n                    </div>\r\n                </div>\r\n\r\n            </div>\r\n        </div>\r\n\r\n    </div>\r\n</div>\r\n<footer class=\"my-5 pt-5 text-muted text-center text-small\">\r\n    <p class=\"mb-1\">&copy; 김연지 - 2022년 01월 쇼핑몰 프로젝트</p>\r\n</footer>\r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/templates/user/userPage.html b/src/main/resources/templates/user/userPage.html
+--- a/src/main/resources/templates/user/userPage.html	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/resources/templates/user/userPage.html	(date 1643901966409)
+@@ -39,7 +39,7 @@
+ 
+             </ul>
+             <form class="d-flex">
+-                <a class="btn btn-outline-dark" href="#" th:text="|현재잔액 : ${user.getCoin()} ₩|">
++                <a class="btn btn-outline-dark" th:href="@{/user/cash/{id}(id=${user.getId()})}" th:text="|현재잔액 : ${user.getCoin()} ₩|">
+                     현재잔액 : 10000 ₩
+                 </a>
+                 <a class="btn btn-outline-dark" th:href="@{/user/cart/{id}(id=${user.getId()})}">
+@@ -80,6 +80,12 @@
+                 <a class="nav-link" th:href="@{/user/orderHist/{id}(id=${user.getId()})}">
+                     <span data-feather="file"></span>
+                     주문내역
++                </a>
++            </li>
++            <li class="nav-item">
++                <a class="nav-link" th:href="@{/user/cash/{id}(id=${user.getId()})}">
++                    <span data-feather="file"></span>
++                    충전하기
+                 </a>
+             </li>
+         </ul>
+Index: src/main/java/com/example/weblogin/domain/orderitem/OrderItem.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.domain.orderitem;\r\n\r\nimport com.example.weblogin.domain.cartitem.CartItem;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport com.example.weblogin.domain.order.Order;\r\nimport com.example.weblogin.domain.saleitem.SaleItem;\r\nimport com.example.weblogin.domain.user.User;\r\nimport lombok.*;\r\n\r\nimport javax.persistence.*;\r\n\r\n@Builder\r\n@AllArgsConstructor\r\n@NoArgsConstructor\r\n@Getter\r\n@Setter\r\n@Entity\r\npublic class OrderItem {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private int id;\r\n\r\n    @ManyToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name=\"order_id\")\r\n    private Order order;\r\n\r\n    @ManyToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name = \"user_id\")\r\n    private User user; // 구매자\r\n\r\n    //@ManyToOne(fetch = FetchType.EAGER)\r\n    //@JoinColumn(name=\"item_id\")\r\n    //private Item item;\r\n\r\n    private int itemId; // 주문 상품 번호\r\n    private String itemName; // 주문 상품 이름\r\n    private int itemPrice; // 주문 상품 가격\r\n    private int itemCount; // 주문 상품 수량\r\n    private int itemTotalPrice; // 가격*수량\r\n\r\n    @OneToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name=\"saleItem_id\")\r\n    private SaleItem saleItem; // 주문상품에 매핑되는 판매상품\r\n\r\n    private int isCancel; // 주문 취소 여부 (0:주문완료 / 1:주문취소)\r\n\r\n    // 장바구니 전체 주문\r\n    public static OrderItem createOrderItem(int itemId, User user, CartItem cartItem, SaleItem saleItem) {\r\n        OrderItem orderItem = new OrderItem();\r\n        orderItem.setItemId(itemId);\r\n        orderItem.setUser(user);\r\n        orderItem.setItemName(cartItem.getItem().getName());\r\n        orderItem.setItemPrice(cartItem.getItem().getPrice());\r\n        orderItem.setItemCount(cartItem.getCount());\r\n        orderItem.setItemTotalPrice(cartItem.getItem().getPrice()*cartItem.getCount());\r\n        orderItem.setSaleItem(saleItem);\r\n        return orderItem;\r\n    }\r\n\r\n    // 상품 개별 주문\r\n    public static OrderItem createOrderItem(int itemId, User user, Item item, int count, Order order, SaleItem saleItem) {\r\n        OrderItem orderItem = new OrderItem();\r\n        orderItem.setItemId(itemId);\r\n        orderItem.setUser(user);\r\n        orderItem.setOrder(order);\r\n        orderItem.setItemName(item.getName());\r\n        orderItem.setItemPrice(item.getPrice());\r\n        orderItem.setItemCount(count);\r\n        orderItem.setItemTotalPrice(item.getPrice()*count);\r\n        orderItem.setSaleItem(saleItem);\r\n        return orderItem;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/domain/orderitem/OrderItem.java b/src/main/java/com/example/weblogin/domain/orderitem/OrderItem.java
+--- a/src/main/java/com/example/weblogin/domain/orderitem/OrderItem.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/domain/orderitem/OrderItem.java	(date 1643955974164)
+@@ -29,10 +29,6 @@
+     @JoinColumn(name = "user_id")
+     private User user; // 구매자
+ 
+-    //@ManyToOne(fetch = FetchType.EAGER)
+-    //@JoinColumn(name="item_id")
+-    //private Item item;
+-
+     private int itemId; // 주문 상품 번호
+     private String itemName; // 주문 상품 이름
+     private int itemPrice; // 주문 상품 가격
+Index: src/main/java/com/example/weblogin/controller/UserPageController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.controller;\r\n\r\nimport com.example.weblogin.config.auth.PrincipalDetails;\r\nimport com.example.weblogin.domain.cart.Cart;\r\nimport com.example.weblogin.domain.cartitem.CartItem;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport com.example.weblogin.domain.orderitem.OrderItem;\r\nimport com.example.weblogin.domain.saleitem.SaleItem;\r\nimport com.example.weblogin.domain.user.User;\r\nimport com.example.weblogin.service.*;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.security.core.annotation.AuthenticationPrincipal;\r\nimport org.springframework.stereotype.Controller;\r\nimport org.springframework.transaction.annotation.Transactional;\r\nimport org.springframework.ui.Model;\r\nimport org.springframework.web.bind.annotation.GetMapping;\r\nimport org.springframework.web.bind.annotation.PathVariable;\r\nimport org.springframework.web.bind.annotation.PostMapping;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n// 구매자에 해당하는 페이지 관리\r\n// 마이페이지, 회원정보수정, 장바구니, 주문, 주문취소\r\n\r\n@RequiredArgsConstructor\r\n@Controller\r\npublic class UserPageController {\r\n\r\n    private final UserPageService userPageService;\r\n    private final CartService cartService;\r\n    private final ItemService itemService;\r\n    private final OrderService orderService;\r\n    private final SaleService saleService;\r\n\r\n    // 유저 페이지 접속\r\n    @GetMapping(\"/user/{id}\")\r\n    public String userPage(@PathVariable(\"id\") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        // 로그인이 되어있는 유저의 id와 유저 페이지에 접속하는 id가 같아야 함\r\n        if (principalDetails.getUser().getId() == id) {\r\n\r\n            model.addAttribute(\"user\", userPageService.findUser(id));\r\n\r\n            return \"/user/userPage\";\r\n        } else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 회원 정보 수정\r\n    @GetMapping(\"/user/modify/{id}\")\r\n    public String userModify(@PathVariable(\"id\") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        // 로그인이 되어있는 유저의 id와 수정페이지에 접속하는 id가 같아야 함\r\n        if (principalDetails.getUser().getId() == id) {\r\n\r\n            model.addAttribute(\"user\", userPageService.findUser(id));\r\n\r\n            return \"/userModify\";\r\n        } else {\r\n            return \"redirect:/main\";\r\n        }\r\n\r\n    }\r\n\r\n    // 수정 실행\r\n    @PostMapping(\"/user/update/{id}\")\r\n    public String userUpdate(@PathVariable(\"id\") Integer id, User user) {\r\n\r\n        userPageService.userModify(user);\r\n\r\n        return \"redirect:/user/{id}\";\r\n    }\r\n\r\n    // 장바구니 페이지 접속\r\n    @GetMapping(\"/user/cart/{id}\")\r\n    public String userCartPage(@PathVariable(\"id\") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        // 로그인이 되어있는 유저의 id와 장바구니에 접속하는 id가 같아야 함\r\n        if (principalDetails.getUser().getId() == id) {\r\n\r\n            User user = userPageService.findUser(id);\r\n            // 로그인 되어 있는 유저에 해당하는 장바구니 가져오기\r\n            Cart userCart = user.getCart();\r\n\r\n            // 장바구니에 들어있는 아이템 모두 가져오기\r\n            List<CartItem> cartItemList = cartService.allUserCartView(userCart);\r\n\r\n            // 장바구니에 들어있는 상품들의 총 가격\r\n            int totalPrice = 0;\r\n            for (CartItem cartitem : cartItemList) {\r\n                totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();\r\n            }\r\n\r\n            model.addAttribute(\"totalPrice\", totalPrice);\r\n            model.addAttribute(\"totalCount\", userCart.getCount());\r\n            model.addAttribute(\"cartItems\", cartItemList);\r\n            model.addAttribute(\"user\", userPageService.findUser(id));\r\n\r\n            return \"/user/userCart\";\r\n        }\r\n        // 로그인 id와 장바구니 접속 id가 같지 않는 경우\r\n        else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 장바구니에 물건 넣기\r\n    @PostMapping(\"/user/cart/{id}/{itemId}\")\r\n    public String addCartItem(@PathVariable(\"id\") Integer id, @PathVariable(\"itemId\") Integer itemId, int amount) {\r\n\r\n        User user = userPageService.findUser(id);\r\n        Item item = itemService.itemView(itemId);\r\n\r\n        cartService.addCart(user, item, amount);\r\n\r\n        return \"redirect:/item/view/{itemId}\";\r\n    }\r\n\r\n    // 장바구니에서 물건 삭제\r\n    // 삭제하고 남은 상품의 총 개수\r\n    @GetMapping(\"/user/cart/{id}/{cartItemId}/delete\")\r\n    public String deleteCartItem(@PathVariable(\"id\") Integer id, @PathVariable(\"cartItemId\") Integer itemId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        // 로그인 유저 id와 장바구니 유저의 id가 같아야 함\r\n        if (principalDetails.getUser().getId() == id) {\r\n            // itemId로 장바구니 상품 찾기\r\n            CartItem cartItem = cartService.findCartItemById(itemId);\r\n\r\n            // 해당 유저의 카트 찾기\r\n            Cart userCart = cartService.findUserCart(id);\r\n\r\n            // 장바구니 전체 수량 감소\r\n            userCart.setCount(userCart.getCount()-cartItem.getCount());\r\n\r\n            // 장바구니 물건 삭제\r\n            cartService.cartItemDelete(itemId);\r\n\r\n            // 해당 유저의 장바구니 상품들\r\n            List<CartItem> cartItemList = cartService.allUserCartView(userCart);\r\n\r\n            // 총 가격 += 수량 * 가격\r\n            int totalPrice = 0;\r\n            for (CartItem cartitem : cartItemList) {\r\n                totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();\r\n            }\r\n\r\n            // 총 개수 += 수량\r\n            //int totalCount = 0;\r\n            //for (CartItem cartitem : cartItemList) {\r\n            //    totalCount += cartitem.getCount();\r\n            //}\r\n\r\n\r\n            model.addAttribute(\"totalPrice\", totalPrice);\r\n            model.addAttribute(\"totalCount\", userCart.getCount());\r\n            model.addAttribute(\"cartItems\", cartItemList);\r\n            model.addAttribute(\"user\", userPageService.findUser(id));\r\n\r\n            return \"/user/userCart\";\r\n        }\r\n        // 로그인 id와 장바구니 삭제하려는 유저의 id가 같지 않는 경우\r\n        else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 주문 내역 조회 페이지\r\n    @GetMapping(\"/user/orderHist/{id}\")\r\n    public String orderList(@PathVariable(\"id\") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {\r\n        // 로그인이 되어있는 유저의 id와 주문 내역에 접속하는 id가 같아야 함\r\n        if (principalDetails.getUser().getId() == id) {\r\n\r\n            // 로그인 되어 있는 유저에 해당하는 구매내역 가져오기\r\n            List<OrderItem> orderItemList = orderService.findUserOrderItems(id);\r\n\r\n            // 총 주문 개수\r\n            int totalCount = 0;\r\n            for (OrderItem orderItem : orderItemList) {\r\n                if (orderItem.getIsCancel() != 1)\r\n                    totalCount += orderItem.getItemCount();\r\n            }\r\n\r\n            model.addAttribute(\"totalCount\", totalCount);\r\n            model.addAttribute(\"orderItems\", orderItemList);\r\n            model.addAttribute(\"user\", userPageService.findUser(id));\r\n\r\n            return \"user/userOrderList\";\r\n        }\r\n        // 로그인 id와 주문 내역 접속 id가 같지 않는 경우\r\n        else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 장바구니 상품 전체 주문\r\n    @Transactional\r\n    @PostMapping(\"/user/cart/checkout/{id}\")\r\n    public String cartCheckout(@PathVariable(\"id\") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {\r\n        // 로그인이 되어있는 유저의 id와 주문하는 id가 같아야 함\r\n        if(principalDetails.getUser().getId() == id) {\r\n            User user = userPageService.findUser(id);\r\n\r\n            // 유저 카트 찾기\r\n            Cart userCart = cartService.findUserCart(user.getId());\r\n\r\n            // 유저 카트 안에 있는 상품들\r\n            List<CartItem> userCartItems = cartService.allUserCartView(userCart);\r\n\r\n            // 최종 결제 금액\r\n            int totalPrice = 0;\r\n            for (CartItem cartItem : userCartItems) {\r\n                // 장바구니 안에 있는 상품의 재고가 없거나 재고보다 많이 주문할 경우\r\n                if (cartItem.getItem().getStock() == 0 || cartItem.getItem().getStock() < cartItem.getCount()) {\r\n                    return \"redirect:/main\";\r\n                }\r\n                totalPrice += cartItem.getCount() * cartItem.getItem().getPrice();\r\n            }\r\n\r\n            int userCoin = user.getCoin();\r\n            // 유저의 현재 잔액이 부족하다면\r\n            if (userCoin < totalPrice) {\r\n                return \"redirect:/main\";\r\n            } else {\r\n                // 유저 돈에서 최종 결제금액 빼야함\r\n                user.setCoin(user.getCoin() - totalPrice);\r\n\r\n                List<OrderItem> orderItemList = new ArrayList<>();\r\n\r\n                for (CartItem cartItem : userCartItems) {\r\n                    // 각 상품에 대한 판매자\r\n                    User seller = cartItem.getItem().getSeller();\r\n\r\n                    // 판매자 수익 증가\r\n                    seller.setCoin(seller.getCoin() + (cartItem.getCount() * cartItem.getItem().getPrice()));\r\n\r\n                    // 재고 감소\r\n                    cartItem.getItem().setStock(cartItem.getItem().getStock() - cartItem.getCount());\r\n\r\n                    // 상품 개별로 판매 개수 증가\r\n                    cartItem.getItem().setCount(cartItem.getItem().getCount() + cartItem.getCount());\r\n\r\n                    // sale, saleItem 에 담기\r\n                    SaleItem saleItem = saleService.addSale(cartItem.getItem().getId(), seller.getId(), cartItem);\r\n\r\n                    // order, orderItem 에 담기\r\n                    OrderItem orderItem = orderService.addCartOrder(cartItem.getItem().getId(), user.getId(), cartItem, saleItem);\r\n\r\n                    orderItemList.add(orderItem);\r\n                }\r\n\r\n                orderService.addOrder(user, orderItemList);\r\n\r\n                // 장바구니 상품 모두 삭제\r\n                cartService.allCartItemDelete(id);\r\n            }\r\n\r\n            model.addAttribute(\"totalPrice\", totalPrice);\r\n            model.addAttribute(\"cartItems\", userCartItems);\r\n            model.addAttribute(\"user\", userPageService.findUser(id));\r\n\r\n            return \"redirect:/user/cart/{id}\";\r\n        } else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 상품 개별 주문 -> 상품 상세페이지에서 구매하기 버튼으로 주문\r\n    @Transactional\r\n    @PostMapping(\"/user/{id}/checkout/{itemId}\")\r\n    public String checkout(@PathVariable(\"id\") Integer id, @PathVariable(\"itemId\") Integer itemId, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model, int count) {\r\n        // 로그인이 되어있는 유저의 id와 주문하는 id가 같아야 함\r\n        if(principalDetails.getUser().getId() == id) {\r\n\r\n            User user = userPageService.findUser(id);\r\n            Item item = itemService.itemView(itemId);\r\n\r\n            // 상품의 재고가 0이거나 재고가 적은 경우\r\n            if (item.getStock() == 0 || item.getStock() < count) {\r\n                return \"redirect:/main\";\r\n            }\r\n\r\n            // 최종 결제 금액\r\n            int totalPrice = item.getPrice() * count;\r\n\r\n            int userCoin = user.getCoin();\r\n            // 유저의 현재 잔액이 부족하다면\r\n            if (userCoin < totalPrice) {\r\n                return \"redirect:/main\";\r\n            } else {\r\n                // 유저 돈에서 최종 결제금액 빼야함\r\n                user.setCoin(user.getCoin() - totalPrice);\r\n\r\n                // 판매자의 돈은 최종 결제금액만큼 늘어남\r\n                item.getSeller().setCoin(item.getSeller().getCoin() + totalPrice);\r\n\r\n                // 해당 상품들의 재고는 각각 구매한 수량만큼 줄어듬\r\n                item.setStock(item.getStock() - count);\r\n                item.setCount(item.getCount() + count);\r\n\r\n                // sale, saleItem 에 담기\r\n                SaleItem saleItem = saleService.addSale(item.getSeller().getId(), item, count);\r\n\r\n                // order, orderItem 에 담기\r\n                orderService.addOneItemOrder(user.getId(), item, count, saleItem);\r\n            }\r\n\r\n            return \"redirect:/user/orderHist/{id}\";\r\n        } else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 주문 취소 기능\r\n    @PostMapping(\"/user/{id}/checkout/cancel/{orderItemId}\")\r\n    public String cancelOrder(@PathVariable(\"id\") Integer id, @PathVariable(\"orderItemId\") Integer orderItemId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        // 로그인이 되어있는 유저의 id와 주문 취소하는 유저의 id가 같아야 함\r\n        if (principalDetails.getUser().getId() == id) {\r\n            // 취소할 상품 찾기\r\n            OrderItem cancelItem= orderService.findOrderitem(orderItemId);\r\n            // 취소하는 유저 찾기\r\n            User user = userPageService.findUser(id);\r\n\r\n            // 주문 내역 총 개수에서 취소 상품 개수 줄어듬\r\n            List<OrderItem> orderItemList = orderService.findUserOrderItems(id);\r\n            int totalCount = 0;\r\n            for (OrderItem orderItem : orderItemList) {\r\n                totalCount += orderItem.getItemCount();\r\n            }\r\n            totalCount = totalCount - cancelItem.getItemCount();\r\n\r\n            orderService.orderCancel(user, cancelItem);\r\n\r\n            model.addAttribute(\"totalCount\", totalCount);\r\n            model.addAttribute(\"orderItems\", orderItemList);\r\n            model.addAttribute(\"user\", user);\r\n            //model.addAttribute(\"message\", \"주문 취소가 완료되었습니다.\");\r\n            //model.addAttribute(\"searchUrl\", \"/user/orderHist/{id}\");\r\n\r\n            return \"redirect:/user/orderHist/{id}\";\r\n\r\n        }\r\n        // 로그인 id와 주문취소하는 유저 id가 같지 않는 경우 취소 불가\r\n        else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/controller/UserPageController.java b/src/main/java/com/example/weblogin/controller/UserPageController.java
+--- a/src/main/java/com/example/weblogin/controller/UserPageController.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/controller/UserPageController.java	(date 1643955974281)
+@@ -21,7 +21,7 @@
+ import java.util.List;
+ 
+ // 구매자에 해당하는 페이지 관리
+-// 마이페이지, 회원정보수정, 장바구니, 주문, 주문취소
++// 마이페이지, 회원정보수정, 장바구니, 주문, 주문취소, 잔액충전
+ 
+ @RequiredArgsConstructor
+ @Controller
+@@ -62,7 +62,7 @@
+ 
+     }
+ 
+-    // 수정 실행
++    // 회원 정보 수정 실행
+     @PostMapping("/user/update/{id}")
+     public String userUpdate(@PathVariable("id") Integer id, User user) {
+ 
+@@ -108,6 +108,7 @@
+     public String addCartItem(@PathVariable("id") Integer id, @PathVariable("itemId") Integer itemId, int amount) {
+ 
+         User user = userPageService.findUser(id);
++
+         Item item = itemService.itemView(itemId);
+ 
+         cartService.addCart(user, item, amount);
+@@ -142,13 +143,6 @@
+                 totalPrice += cartitem.getCount() * cartitem.getItem().getPrice();
+             }
+ 
+-            // 총 개수 += 수량
+-            //int totalCount = 0;
+-            //for (CartItem cartitem : cartItemList) {
+-            //    totalCount += cartitem.getCount();
+-            //}
+-
+-
+             model.addAttribute("totalPrice", totalPrice);
+             model.addAttribute("totalCount", userCart.getCount());
+             model.addAttribute("cartItems", cartItemList);
+@@ -256,7 +250,7 @@
+             model.addAttribute("cartItems", userCartItems);
+             model.addAttribute("user", userPageService.findUser(id));
+ 
+-            return "redirect:/user/cart/{id}";
++            return "redirect:/user/orderHist/{id}";
+         } else {
+             return "redirect:/main";
+         }
+@@ -331,8 +325,6 @@
+             model.addAttribute("totalCount", totalCount);
+             model.addAttribute("orderItems", orderItemList);
+             model.addAttribute("user", user);
+-            //model.addAttribute("message", "주문 취소가 완료되었습니다.");
+-            //model.addAttribute("searchUrl", "/user/orderHist/{id}");
+ 
+             return "redirect:/user/orderHist/{id}";
+ 
+@@ -342,5 +334,34 @@
+             return "redirect:/main";
+         }
+     }
++
++    // 잔액 충전 페이지
++    @Transactional
++    @GetMapping("/user/cash/{id}")
++    public String charge(@PathVariable("id") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
++        // 로그인이 되어있는 유저의 id와 잔액 충전하는 유저의 id가 같아야 함
++        if(principalDetails.getUser().getId() == id){
++            // 유저 찾기
++            User user = userPageService.findUser(id);
++
++            model.addAttribute("user",user);
++
++            return "/user/cash";
++        }else{
++            return "redirect:/main";
++        }
++    }
++
++    // 잔액 충전 처리
++    // amount는 html에서 받은 값
++    @GetMapping("/user/charge/pro")
++    public String chargePro(int amount, @AuthenticationPrincipal PrincipalDetails principalDetails){
++        // 유저 찾기
++        User user = userPageService.findUser(principalDetails.getUser().getId());
++
++        userPageService.chargeCoin(user.getId(),amount);
++
++        return "redirect:/main";
++    }
+ 
+ }
+Index: src/main/resources/templates/itemView.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\r\n<html lang=\"en\" xmlns:th=\"http://www.thymeleaf.org\" xmlns=\"http://www.w3.org/1999/html\" xmlns:sec=\"http://www.thymeleaf.org/extras/spring-security\">\r\n<head>\r\n    <meta charset=\"utf-8\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\r\n    <meta name=\"description\" content=\"\" />\r\n    <meta name=\"author\" content=\"\" />\r\n    <title th:text=\"${item.getName()}\">타이틀 - 상품 이름</title>\r\n    <!-- Favicon-->\r\n    <link rel=\"icon\" type=\"image/x-icon\" href=\"../../../../../../../Downloads/startbootstrap-shop-item-gh-pages/assets/favicon.ico\" />\r\n    <!-- Bootstrap icons-->\r\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css\" rel=\"stylesheet\" />\r\n    <!-- Core theme CSS (includes Bootstrap)-->\r\n    <link href=\"/css/styles.css\" rel=\"stylesheet\" />\r\n\r\n\r\n\r\n</head>\r\n<body>\r\n<!-- Navigation-->\r\n<nav class=\"navbar navbar-expand-lg navbar-light bg-light\">\r\n    <div class=\"container px-4 px-lg-5\">\r\n        <a class=\"navbar-brand\" th:href=\"@{/main}\" sec:authorize=\"isAuthenticated()\">연지의 쇼핑몰</a>\r\n        <a class=\"navbar-brand\" th:href=\"@{/}\" sec:authorize=\"!isAuthenticated()\">연지의 쇼핑몰</a>\r\n        <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\"><span class=\"navbar-toggler-icon\"></span></button>\r\n        <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\r\n            <ul class=\"navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4\">\r\n                <li class=\"nav-item\"><a class=\"nav-link active\" aria-current=\"page\" th:href=\"@{/main}\" sec:authorize=\"isAuthenticated()\">Home</a></li>\r\n                <li class=\"nav-item\"><a class=\"nav-link active\" aria-current=\"page\" th:href=\"@{/}\" sec:authorize=\"!isAuthenticated()\">Home</a></li>\r\n                <li class=\"nav-item\"><a class=\"nav-link\" href=\"#\" th:href=\"@{/item/new}\" sec:authorize=\"hasRole('ROLE_SELLER')\">Upload</a></li>\r\n                <li class=\"nav-item\"><a class=\"nav-link\" href=\"#\" th:href=\"@{/seller/manage/{id}(id=${user.getId()})}\" sec:authorize=\"hasRole('ROLE_SELLER')\">Manage</a></li>\r\n\r\n            </ul>\r\n            <form th:action=\"@{/signin}\" sec:authorize=\"!isAuthenticated()\">\r\n                <button class=\"btn btn-outline-dark\" type=\"submit\">\r\n                    로그인\r\n                </button>\r\n            </form>\r\n            <form th:action=\"@{/signup}\" sec:authorize=\"!isAuthenticated()\">\r\n                <button class=\"btn btn-outline-dark\" type=\"submit\">\r\n                    회원가입\r\n                </button>\r\n            </form>\r\n\r\n            <form class=\"d-flex\" sec:authorize=\"hasRole('ROLE_USER')\">\r\n                <a class=\"btn btn-outline-dark\" href=\"#\" th:text=\"|현재잔액 : ${user.getCoin()} ₩|\">\r\n                    현재잔액 : 10000 ₩\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/user/cart/{id}(id=${user.getId()})}\">\r\n                    <i class=\"bi-cart-fill me-1\"></i>\r\n                    Cart\r\n                    <span class=\"badge bg-dark text-white ms-1 rounded-pill\" th:text=\"${cartCount}\">0</span>\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/user/{id}(id=${user.getId()})}\" th:text=\"|${user.getName()}님 환영합니다.|\">\r\n                    마이페이지\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/logout}\">\r\n                    로그아웃\r\n                </a>\r\n            </form>\r\n\r\n            <form class=\"d-flex\" sec:authorize=\"hasRole('ROLE_SELLER')\">\r\n                <a class=\"btn btn-outline-dark\" href=\"#\" th:text=\"|현재수익 : ${user.getCoin()} ₩|\">\r\n                    현재잔액 : 10000 ₩\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/seller/{id}(id=${user.getId()})}\" th:text=\"|${user.getName()}님 환영합니다.|\">\r\n                    판매자 페이지\r\n                </a>\r\n                <a class=\"btn btn-outline-dark\" th:href=\"@{/logout}\">\r\n                    로그아웃\r\n                </a>\r\n            </form>\r\n\r\n        </div>\r\n    </div>\r\n</nav>\r\n<!-- Product section-->\r\n<section class=\"py-5\">\r\n    <div class=\"container px-4 px-lg-5 my-5\">\r\n        <div class=\"row gx-4 gx-lg-5 align-items-center\">\r\n            <div class=\"col-md-6\"><img class=\"card-img-top mb-5 mb-md-0\" th:src=\"@{${item.getImgPath()}}\" alt=\"...\" /></div>\r\n            <div class=\"col-md-6\">\r\n                <div class=\"small mb-1\" th:text=\"|판매자 : ${item.getSeller().getUsername()}|\">판매자 이름</div>\r\n                <div class=\"small mb-1\" th:if=\"${item.getIsSoldout()} == 0\" th:text=\"|재고 : ${item.getStock()}개|\">재고</div>\r\n                <div class=\"small mb-1\" th:unless=\"${item.getIsSoldout()} == 0\" th:text=\"|품절|\">재고</div>\r\n                <h1 class=\"display-5 fw-bolder\" th:text=\"${item.getName()}\">상품 이름</h1>\r\n                <div class=\"fs-5 mb-5\">\r\n                    <span th:text=\"|${item.getPrice()} 원|\">아이템 가격</span>\r\n                </div>\r\n                <p class=\"lead\" th:text=\"${item.getText()}\">아이템 설명</p>\r\n\r\n                <form class=\"d-flex\" sec:authorize=\"hasRole('ROLE_SELLER')\" th:if=\"${item.getSeller().getId()} == ${user.getId()}\">\r\n                    <div class=\"d-flex\">\r\n                        <a th:href=\"@{/item/modify/{id} (id=${item.getId()})}\">\r\n                            <button class=\"btn btn-outline-dark flex-shrink-0\" type=\"button\">\r\n                                상품 수정\r\n                            </button>\r\n                        </a>\r\n                        <a th:href=\"@{/item/delete/{id} (id=${item.getId()})}\">\r\n                            <button class=\"btn btn-outline-dark flex-shrink-0\" type=\"button\">\r\n                                상품 삭제\r\n                            </button>\r\n                        </a>\r\n                    </div>\r\n                </form>\r\n\r\n                <form class=\"d-flex\" sec:authorize=\"hasRole('ROLE_USER')\" onsubmit=\"return orderitem();\" th:action=\"@{/user/{id}/checkout/{itemId}(id=${user.id}, itemId=${item.id})}\" method=\"post\">\r\n                    <div class=\"d-flex\">\r\n                        <input class=\"form-control text-center me-3\" id=\"count\" name=\"count\" type=\"num\" value=\"1\"\r\n                               style=\"max-width: 3rem\"/>\r\n                        <button class=\"btn btn-outline-dark flex-shrink-0\" id=\"basket\" type=\"submit\">\r\n                                구매하기\r\n                        </button>\r\n                    </div>\r\n                </form>\r\n                    <!--<script th:inline=\"javascript\">\r\n                        /* <![CDATA[ */\r\n                        var itemstock = [[${item.Stock}]];\r\n                        const button = document.getElementById(\"basket\")\r\n\r\n                        function orderitem() {\r\n                            var count = document.getElementById(\"count\").value\r\n                            if (isNaN(count)) {\r\n                                alert(\"숫자를 입력해주세요\")\r\n                                return false\r\n                            } else if (count > itemstock) {\r\n                                alert(\"재고가 부족합니다\")\r\n                                return false\r\n                            } else {\r\n                                return true\r\n                            }\r\n                        }\r\n\r\n                        /* ]]> */\r\n                    </script>-->\r\n\r\n\r\n                <form class=\"d-flex\" sec:authorize=\"hasRole('ROLE_USER')\" onsubmit=\"return additem();\" th:action=\"@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}\" method=\"post\">\r\n                    <input class=\"form-control text-center me-3\" id=\"amount\" name=\"amount\" type=\"num\" value=\"1\" style=\"max-width: 3rem\"/>\r\n                    <button class=\"btn btn-outline-dark flex-shrink-0\" id=\"basket\" type=\"submit\"><i class=\"bi-cart-fill me-1\"></i>장바구니</button>\r\n                </form>\r\n                    <script th:inline=\"javascript\">\r\n                        /* <![CDATA[ */\r\n                        var leftitemcount = [[${item.Stock}]];\r\n                        const button = document.getElementById(\"basket\")\r\n\r\n                        function additem() {\r\n                            var count = document.getElementById(\"amount\").value\r\n                            if (isNaN(count)) {\r\n                                alert(\"숫자를 입력해주세요.\")\r\n                                return false\r\n                            } else if (count > leftitemcount) {\r\n                                alert(\"재고가 부족합니다.\")\r\n                                return false\r\n                            } else {\r\n                                <!--document.getElementById(\"buy\").innerText = count-->\r\n                                return true\r\n                            }\r\n                        }\r\n\r\n                        function orderitem() {\r\n                            var count = document.getElementById(\"count\").value\r\n                            var userMoney = [[${user.Coin}]];\r\n                            var itemPrice = [[${item.Price}]];\r\n                            if (isNaN(count)) {\r\n                                alert(\"숫자를 입력해주세요.\")\r\n                                return false\r\n                            } else if ((count > leftitemcount) || (userMoney < (count*itemPrice))) {\r\n                                if (count > leftitemcount) {\r\n                                    alert(\"재고가 부족합니다.\")\r\n                                } else if (userMoney < (count*itemPrice)) {\r\n                                    alert(\"잔액이 부족합니다.\")\r\n                                }\r\n                                return false\r\n                            } else {\r\n                                <!--document.getElementById(\"buy\").innerText = count-->\r\n                                return true\r\n                            }\r\n                        }\r\n\r\n                        <!--button.addEventListener(\"click\",additem)-->\r\n                        /* ]]> */\r\n                    </script>\r\n\r\n\r\n                <!--<form class=\"d-flex\" sec:authorize=\"hasRole('ROLE_USER')\" th:action=\"@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}\" method=\"post\">\r\n                    <div class=\"d-flex\">\r\n                    <input class=\"form-control text-center me-3\" id=\"amount\" name=\"amount\" type=\"num\" value=\"1\"\r\n                               style=\"max-width: 3rem\"/>\r\n                        <button class=\"btn btn-outline-dark flex-shrink-0\" type=\"submit\">\r\n                            <i class=\"bi-cart-fill me-1\"></i>\r\n                            장바구니\r\n                        </button>\r\n                    </div>\r\n                </form>-->\r\n\r\n<form class=\"d-flex\" sec:authorize=\"!isAuthenticated()\">\r\n    <div class=\"d-flex\">\r\n        <a th:href=\"@{/signin}\">\r\n            <button class=\"btn btn-outline-dark flex-shrink-0\" type=\"button\">\r\n                구매하기\r\n            </button>\r\n        </a>\r\n        <a class=\"btn btn-outline-dark\" th:href=\"@{/signin}\">\r\n            <i class=\"bi-cart-fill me-1\"></i>\r\n            장바구니\r\n        </a>\r\n    </div>\r\n</form>\r\n</div>\r\n</div>\r\n</div>\r\n</section>\r\n<!-- Footer-->\r\n<footer class=\"my-5 pt-5 text-muted text-center text-small\">\r\n    <p class=\"mb-1\">&copy; 김연지 - 2022년 01월 쇼핑몰 프로젝트</p>\r\n</footer>\r\n<!-- Bootstrap core JS-->\r\n<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js\"></script>\r\n<!-- Core theme JS-->\r\n<script src=\"/js/scripts.js\"></script>\r\n</body>\r\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/templates/itemView.html b/src/main/resources/templates/itemView.html
+--- a/src/main/resources/templates/itemView.html	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/resources/templates/itemView.html	(date 1644052248057)
+@@ -113,27 +113,6 @@
+                         </button>
+                     </div>
+                 </form>
+-                    <!--<script th:inline="javascript">
+-                        /* <![CDATA[ */
+-                        var itemstock = [[${item.Stock}]];
+-                        const button = document.getElementById("basket")
+-
+-                        function orderitem() {
+-                            var count = document.getElementById("count").value
+-                            if (isNaN(count)) {
+-                                alert("숫자를 입력해주세요")
+-                                return false
+-                            } else if (count > itemstock) {
+-                                alert("재고가 부족합니다")
+-                                return false
+-                            } else {
+-                                return true
+-                            }
+-                        }
+-
+-                        /* ]]> */
+-                    </script>-->
+-
+ 
+                 <form class="d-flex" sec:authorize="hasRole('ROLE_USER')" onsubmit="return additem();" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
+                     <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1" style="max-width: 3rem"/>
+@@ -183,17 +162,6 @@
+                     </script>
+ 
+ 
+-                <!--<form class="d-flex" sec:authorize="hasRole('ROLE_USER')" th:action="@{/user/cart/{id}/{itemId}(id=${user.id}, itemId=${item.id})}" method="post">
+-                    <div class="d-flex">
+-                    <input class="form-control text-center me-3" id="amount" name="amount" type="num" value="1"
+-                               style="max-width: 3rem"/>
+-                        <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+-                            <i class="bi-cart-fill me-1"></i>
+-                            장바구니
+-                        </button>
+-                    </div>
+-                </form>-->
+-
+ <form class="d-flex" sec:authorize="!isAuthenticated()">
+     <div class="d-flex">
+         <a th:href="@{/signin}">
+Index: src/main/java/com/example/weblogin/domain/saleitem/SaleItem.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.domain.saleitem;\r\n\r\nimport com.example.weblogin.domain.cartitem.CartItem;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport com.example.weblogin.domain.orderitem.OrderItem;\r\nimport com.example.weblogin.domain.sale.Sale;\r\nimport com.example.weblogin.domain.user.User;\r\nimport lombok.*;\r\nimport org.springframework.format.annotation.DateTimeFormat;\r\n\r\nimport javax.persistence.*;\r\nimport java.time.LocalDate;\r\n\r\n@Builder\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Getter\r\n@Setter\r\n@Entity\r\npublic class SaleItem {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private int id;\r\n\r\n    @ManyToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name=\"sale_id\")\r\n    private Sale sale;\r\n\r\n    @ManyToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name = \"seller_id\")\r\n    private User seller; // 판매자\r\n\r\n    //@ManyToOne(fetch = FetchType.EAGER)\r\n    //@JoinColumn(name=\"item_id\")\r\n    //private Item item;\r\n\r\n    private int itemId; // 주문 상품 번호\r\n    private String itemName; // 주문 상품 이름\r\n    private int itemPrice; // 주문 상품 가격\r\n    private int itemCount; // 주문 상품 수량\r\n    private int itemTotalPrice; // 가격*수량\r\n\r\n    @OneToOne(mappedBy = \"saleItem\")\r\n    private OrderItem orderItem; // 판매 상품에 매핑되는 주문 상품\r\n\r\n    private int isCancel; // 판매 취소 여부 (0:판매완료 / 1:판매취소)\r\n\r\n    @DateTimeFormat(pattern = \"yyyy-mm-dd\")\r\n    private LocalDate createDate; // 날짜\r\n\r\n    @PrePersist\r\n    public void createDate(){\r\n        this.createDate = LocalDate.now();\r\n    }\r\n\r\n    // 장바구니 전체 주문\r\n    public static SaleItem createSaleItem(int itemId, Sale sale, User seller, CartItem cartItem) {\r\n        SaleItem saleItem = new SaleItem();\r\n        saleItem.setItemId(itemId);\r\n        saleItem.setSale(sale);\r\n        saleItem.setSeller(seller);\r\n        saleItem.setItemName(cartItem.getItem().getName());\r\n        saleItem.setItemPrice(cartItem.getItem().getPrice());\r\n        saleItem.setItemCount(cartItem.getCount());\r\n        saleItem.setItemTotalPrice(cartItem.getItem().getPrice()*cartItem.getCount());\r\n        return saleItem;\r\n    }\r\n\r\n    // 상품 개별 주문\r\n    public static SaleItem createSaleItem(int itemId, Sale sale, User seller, Item item, int count) {\r\n        SaleItem saleItem = new SaleItem();\r\n        saleItem.setItemId(itemId);\r\n        saleItem.setSale(sale);\r\n        saleItem.setSeller(seller);\r\n        saleItem.setItemName(item.getName());\r\n        saleItem.setItemPrice(item.getPrice());\r\n        saleItem.setItemCount(count);\r\n        saleItem.setItemTotalPrice(item.getPrice()*count);\r\n        return saleItem;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/domain/saleitem/SaleItem.java b/src/main/java/com/example/weblogin/domain/saleitem/SaleItem.java
+--- a/src/main/java/com/example/weblogin/domain/saleitem/SaleItem.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/domain/saleitem/SaleItem.java	(date 1643955974214)
+@@ -31,10 +31,6 @@
+     @JoinColumn(name = "seller_id")
+     private User seller; // 판매자
+ 
+-    //@ManyToOne(fetch = FetchType.EAGER)
+-    //@JoinColumn(name="item_id")
+-    //private Item item;
+-
+     private int itemId; // 주문 상품 번호
+     private String itemName; // 주문 상품 이름
+     private int itemPrice; // 주문 상품 가격
+Index: src/main/java/com/example/weblogin/service/ItemService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.service;\r\n\r\nimport com.example.weblogin.domain.cartitem.CartItem;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport com.example.weblogin.domain.item.ItemRepository;\r\nimport com.example.weblogin.domain.saleitem.SaleItem;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.transaction.annotation.Transactional;\r\nimport org.springframework.web.multipart.MultipartFile;\r\n\r\nimport java.io.File;\r\nimport java.util.List;\r\nimport java.util.UUID;\r\n\r\n@RequiredArgsConstructor\r\n@Service\r\npublic class ItemService {\r\n\r\n    private final ItemRepository itemRepository;\r\n    private final CartService cartService;\r\n    private final SaleService saleService;\r\n\r\n    // 상품 등록\r\n    public void saveItem(Item item, MultipartFile imgFile) throws Exception {\r\n\r\n        String oriImgName = imgFile.getOriginalFilename();\r\n        String imgName = \"\";\r\n\r\n        String projectPath = System.getProperty(\"user.dir\") + \"/src/main/resources/static/files/\";\r\n\r\n        // UUID 를 이용하여 파일명 새로 생성\r\n        // UUID - 서로 다른 객체들을 구별하기 위한 클래스\r\n        UUID uuid = UUID.randomUUID();\r\n\r\n        String savedFileName = uuid + \"_\" + oriImgName; // 파일명 -> imgName\r\n\r\n        imgName = savedFileName;\r\n\r\n        File saveFile = new File(projectPath, imgName);\r\n\r\n        imgFile.transferTo(saveFile);\r\n\r\n        item.setImgName(imgName);\r\n\r\n        item.setImgPath(\"/files/\" + imgName);\r\n\r\n        itemRepository.save(item);\r\n    }\r\n\r\n    // 상품 개별 불러오기\r\n    public Item itemView(Integer id) {\r\n        return itemRepository.findById(id).get();\r\n    }\r\n\r\n    // 상품 리스트 불러오기\r\n    public List<Item> allItemView() {\r\n        return itemRepository.findAll();\r\n    }\r\n\r\n    // 상품 리스트 페이지용 불러오기\r\n    public Page<Item> allItemViewPage(Pageable pageable) {\r\n        return itemRepository.findAll(pageable);\r\n    }\r\n\r\n    // 상품 수정\r\n    @Transactional\r\n    public void itemModify(Item item, Integer id, MultipartFile imgFile) throws Exception {\r\n\r\n        String projectPath = System.getProperty(\"user.dir\") + \"/src/main/resources/static/files/\";\r\n        UUID uuid = UUID.randomUUID();\r\n        String fileName = uuid + \"_\" + imgFile.getOriginalFilename();\r\n        File saveFile = new File(projectPath, fileName);\r\n        imgFile.transferTo(saveFile);\r\n\r\n        Item update = itemRepository.findItemById(id);\r\n        update.setName(item.getName());\r\n        update.setText(item.getText());\r\n        update.setPrice(item.getPrice());\r\n        update.setStock(item.getStock());\r\n        update.setIsSoldout(item.getIsSoldout());\r\n        update.setImgName(fileName);\r\n        update.setImgPath(\"/files/\"+fileName);\r\n        itemRepository.save(update);\r\n    }\r\n\r\n    // 상품 삭제\r\n    @Transactional\r\n    public void itemDelete(Integer id) {\r\n        // cartItem 중에 해당 id 를 가진 item 찾기\r\n        List<CartItem> items = cartService.findCartItemByItemId(id);\r\n\r\n        for(CartItem item : items) {\r\n            cartService.cartItemDelete(item.getId());\r\n        }\r\n\r\n        itemRepository.deleteById(id);\r\n    }\r\n\r\n    // 상품 검색\r\n    public Page<Item> itemSearchList(String searchKeyword, Pageable pageable) {\r\n\r\n        return itemRepository.findByNameContaining(searchKeyword, pageable);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/service/ItemService.java b/src/main/java/com/example/weblogin/service/ItemService.java
+--- a/src/main/java/com/example/weblogin/service/ItemService.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/service/ItemService.java	(date 1643955974186)
+@@ -21,7 +21,6 @@
+ 
+     private final ItemRepository itemRepository;
+     private final CartService cartService;
+-    private final SaleService saleService;
+ 
+     // 상품 등록
+     public void saveItem(Item item, MultipartFile imgFile) throws Exception {
+Index: src/main/resources/templates/user/cash.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/templates/user/cash.html b/src/main/resources/templates/user/cash.html
+new file mode 100644
+--- /dev/null	(date 1643902418988)
++++ b/src/main/resources/templates/user/cash.html	(date 1643902418988)
+@@ -0,0 +1,215 @@
++<!DOCTYPE html>
++<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
++<head>
++  <meta charset="utf-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
++  <meta name="description" content="" />
++  <meta name="author" content="" />
++  <title>충전하기</title>
++  <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
++  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
++  <!-- Bootstrap icons-->
++  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
++  <!-- Core theme CSS (includes Bootstrap)-->
++  <link href="/css/styles.css" rel="stylesheet" />
++
++  <style>
++    .bd-placeholder-img {
++      font-size: 1.125rem;
++      text-anchor: middle;
++      -webkit-user-select: none;
++      -moz-user-select: none;
++      user-select: none;
++    }
++
++    @media (min-width: 768px) {
++      .bd-placeholder-img-lg {
++        font-size: 3.5rem;
++      }
++    }
++
++    .container{
++      width: 90%;
++      margin: 10px auto;
++    }
++
++    .first{
++      border: 1px solid green;
++      float : left;
++      width: 30%;
++      box-sizing: border-box;
++    }
++
++    .second{
++      border: 1px solid yellow;
++      float : left;
++      margin-left: 5%;
++      margin-right: 5%;
++      width: 30%;
++      box-sizing: border-box;
++    }
++
++    .third{
++      border: 1px solid red;
++      float : left;
++      width: 30%;
++      box-sizing: border-box;
++    }
++  </style>
++</head>
++<body>
++<!-- Navigation-->
++<nav class="navbar navbar-expand-lg navbar-light bg-light">
++  <div class="container px-4 px-lg-5">
++      <a class="navbar-brand" th:href="@{/main}">연지의 쇼핑몰</a>
++      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
++      <div class="collapse navbar-collapse" id="navbarSupportedContent">
++        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
++          <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/main}">Home</a></li>
++        </ul>
++        <form class="d-flex">
++          <a class="btn btn-outline-dark" th:href="@{/user/cash/{id}(id=${user.getId()})}" th:text="|현재잔액 : ${user.getCoin()} ₩|">
++            현재잔액 : 10000 ₩
++          </a>
++          <a class="btn btn-outline-dark" th:href="@{/user/cart/{id}(id=${user.getId()})}">
++            <i class="bi-cart-fill me-1"></i>
++            Cart
++            <span class="badge bg-dark text-white ms-1 rounded-pill" th:text="${user.getCart().getCount()}">0</span>
++          </a>
++          <a class="btn btn-outline-dark" th:href="@{/seller/{id}(id=${user.getId()})}" th:text="|${user.getName()}님 환영합니다.|">
++            마이페이지
++          </a>
++          <a class="btn btn-outline-dark" th:href="@{/logout}">
++            로그아웃
++          </a>
++      </form>
++
++    </div>
++  </div>
++</nav>
++<!---- Cart ---->
++<div class="container-fluid mt-3">
++  <div class="row">
++    <!-- SIDE BAR -->
++    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
++      <div class="position-sticky pt-3">
++        <ul class="nav flex-column">
++          <li class="nav-item">
++            <a class="nav-link active" aria-current="page" th:href="@{/user/{id}(id=${user.getId()})}">
++              <span data-feather="home"></span>
++              마이페이지
++            </a>
++          </li>
++          <li class="nav-item">
++            <a class="nav-link active" aria-current="page" th:href="@{/user/cart/{id}(id=${user.getId()})}">
++              <span data-feather="home"></span>
++              장바구니
++            </a>
++          </li>
++          <li class="nav-item">
++            <a class="nav-link" th:href="@{/user/orderHist/{id}(id=${user.getId()})}">
++              <span data-feather="file"></span>
++              주문내역
++            </a>
++          </li>
++          <li class="nav-item">
++            <a class="nav-link" th:href="@{/user/cash/{id}(id=${user.getId()})}">
++              <span data-feather="file"></span>
++              충전하기
++            </a>
++          </li>
++        </ul>
++      </div>
++    </nav>
++    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" >
++      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
++        <h1 class="h2">충전하기</h1>
++      </div>
++
++      <div class="container">
++        <div class="first" align="center">
++          <img class="card-img-top" width="20" height="300" src="/files/naver.jpg" alt="..." />
++          <p style="font-weight: bold">서비스 준비중입니다.</p>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="10000"><span>10,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="20000"><span>20,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="30000"><span>30,000원</span></label><br/>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="40000"><span>40,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="50000"><span>50,000원</span></label>
++          <p  style="color: #ac2925; margin-top: 30px">네이버페이의 최소 충전금액은 10,000원이며 <br/>최대 충전금액은 50,000원 입니다.</p>
++          <button type="button" class="btn btn-outline-dark" id="charge_naver">결제하기</button>
++        </div>
++        <div class="second" align="center">
++          <img class="card-img-top" width="20" height="300" src="/files/kakao.jpg" alt="..." />
++          <p style="font-weight: bold">카카오페이 현재 사용가능</p>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="10000"><span>10,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="20000"><span>20,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="30000"><span>30,000원</span></label><br/>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="40000"><span>40,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="50000"><span>50,000원</span></label>
++          <p  style="color: #ac2925; margin-top: 30px">카카오페이의 최소 충전금액은 10,000원이며 <br/>최대 충전금액은 50,000원 입니다.</p>
++          <button type="button" class="btn btn-outline-dark" id="charge_kakao">결제하기</button>
++        </div>
++        <div class="third" align="center">
++          <img class="card-img-top" width="20" height="300" src="/files/payco.jpg" alt="..." />
++          <p style="font-weight: bold">서비스 준비중입니다.</p>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="10000"><span>10,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="20000"><span>20,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="30000"><span>30,000원</span></label><br/>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="40000"><span>40,000원</span></label>
++          <label class="box-radio-input"><input type="radio" name="cp_item" value="50000"><span>50,000원</span></label>
++          <p  style="color: #ac2925; margin-top: 30px">페이코의 최소 충전금액은 10,000원이며 <br/>최대 충전금액은 50,000원 입니다.</p>
++          <button type="button" class="btn btn-outline-dark" id="charge_payco">결제하기</button>
++        </div>
++      </div>
++    </main>
++  </div>
++</div>
++<script type="text/javascript">
++  $('#charge_kakao').click(function () {
++    // getter
++    var IMP = window.IMP;
++    IMP.init('imp54145885');
++    var money = $('input[name="cp_item"]:checked').val();
++    console.log(money);
++
++    IMP.request_pay({
++      pg: 'kakao',
++      merchant_uid: 'merchant_' + new Date().getTime(),
++
++      name: '결제테스트',
++      amount: money,
++      buyer_email: 'iamport@siot.do',
++      buyer_name: '구매자',
++      buyer_tel: '010-1234-5678',
++      buyer_addr: '서울특별시 강남구 삼성동',
++      buyer_postcode: '123-456'
++    }, function (rsp) {
++      console.log(rsp);
++      if (rsp.success) {
++        var msg = '결제가 완료되었습니다.';
++        msg += ' 고유ID : ' + rsp.imp_uid;
++        msg += ' 상점 거래ID : ' + rsp.merchant_uid;
++        msg += ' 결제 금액 : ' + rsp.paid_amount;
++        msg += ' 카드 승인번호 : ' + rsp.apply_num;
++        $.ajax({
++          type: "GET",
++          url: "/user/charge/pro", //충전 금액값을 보낼 url 설정
++          data: {
++            "amount" : money
++          },
++        });
++      } else {
++        var msg = '결제에 실패하였습니다.';
++        msg += '에러내용 : ' + rsp.error_msg;
++      }
++      alert(msg);
++      document.location.href="/main"; //alert창 확인 후 이동할 url 설정
++    });
++  });
++</script>
++<!-- Bootstrap core JS-->
++<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
++<!-- Core theme JS-->
++<script src="/js/scripts.js"></script>
++</body>
++</html>
+\ No newline at end of file
+Index: src/main/java/com/example/weblogin/domain/cartitem/CartItem.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.domain.cartitem;\r\n\r\nimport com.example.weblogin.domain.cart.Cart;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport lombok.*;\r\n\r\nimport javax.persistence.*;\r\n\r\n@Builder\r\n@NoArgsConstructor\r\n@AllArgsConstructor\r\n@Getter\r\n@Setter\r\n@Entity\r\npublic class CartItem {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private int id;\r\n\r\n    @ManyToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name=\"cart_id\")\r\n    private Cart cart;\r\n\r\n    @ManyToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name=\"item_id\")\r\n    private Item item;\r\n\r\n    private int count; // 상품 개수\r\n\r\n    public static CartItem createCartItem(Cart cart, Item item, int amount) {\r\n        CartItem cartItem = new CartItem();\r\n        cartItem.setCart(cart);\r\n        cartItem.setItem(item);\r\n        cartItem.setCount(amount);\r\n        return cartItem;\r\n    }\r\n\r\n    // 이미 담겨있는 물건 또 담을 경우 수량 증가\r\n    public void addCount(int count) {\r\n        this.count += count;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/domain/cartitem/CartItem.java b/src/main/java/com/example/weblogin/domain/cartitem/CartItem.java
+--- a/src/main/java/com/example/weblogin/domain/cartitem/CartItem.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/domain/cartitem/CartItem.java	(date 1643955974314)
+@@ -20,7 +20,7 @@
+ 
+     @ManyToOne(fetch = FetchType.EAGER)
+     @JoinColumn(name="cart_id")
+-    private Cart cart;
++    private Cart cart; // cartItem의 cart
+ 
+     @ManyToOne(fetch = FetchType.EAGER)
+     @JoinColumn(name="item_id")
+@@ -36,7 +36,7 @@
+         return cartItem;
+     }
+ 
+-    // 이미 담겨있는 물건 또 담을 경우 수량 증가
++    // 이미 장바구니에 담겨있는 물건 또 담을 경우 수량 증가
+     public void addCount(int count) {
+         this.count += count;
+     }
+Index: src/main/java/com/example/weblogin/service/SaleService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.service;\r\n\r\nimport com.example.weblogin.domain.cartitem.CartItem;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport com.example.weblogin.domain.item.ItemRepository;\r\nimport com.example.weblogin.domain.sale.Sale;\r\nimport com.example.weblogin.domain.sale.SaleRepository;\r\nimport com.example.weblogin.domain.saleitem.SaleItem;\r\nimport com.example.weblogin.domain.saleitem.SaleItemRepository;\r\nimport com.example.weblogin.domain.user.User;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.transaction.annotation.Transactional;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Service\r\n@RequiredArgsConstructor\r\npublic class SaleService {\r\n\r\n    private final SaleRepository saleRepository;\r\n    private final UserPageService userPageService;\r\n    private final SaleItemRepository saleItemRepository;\r\n    private final ItemRepository itemRepository;\r\n\r\n    // 회원가입 하면 판매자 당 판매내역 하나 생성\r\n    public void createSale (User user){\r\n\r\n        Sale sale = Sale.createSale(user);\r\n\r\n        saleRepository.save(sale);\r\n    }\r\n\r\n    // id에 해당하는 판매아이템 찾기\r\n    public List<SaleItem> findSellerSaleItems (int sellerId) {\r\n\r\n        return saleItemRepository.findSaleItemsBySellerId(sellerId);\r\n    }\r\n\r\n    // 판매자 id에 해당하는 Sale 찾기\r\n    public Sale findSaleById (int sellerId) { return saleRepository.findBySellerId(sellerId); }\r\n\r\n    // 판매내역에 저장 (장바구니 전체 주문)\r\n    @Transactional\r\n    public SaleItem addSale (int itemId, int sellerId, CartItem cartItem) {\r\n\r\n        User seller = userPageService.findUser(sellerId);\r\n        Sale sale = saleRepository.findBySellerId(sellerId);\r\n        sale.setTotalCount(sale.getTotalCount()+cartItem.getCount());\r\n        saleRepository.save(sale);\r\n        SaleItem saleItem = SaleItem.createSaleItem(itemId, sale, seller, cartItem);\r\n        saleItemRepository.save(saleItem);\r\n\r\n        return saleItem;\r\n    }\r\n\r\n    // 판매내역에 저장 (상품 개별 주문)\r\n    @Transactional\r\n    public SaleItem addSale (int sellerId, Item item, int count) {\r\n\r\n        User seller = userPageService.findUser(sellerId);\r\n        Sale sale = saleRepository.findBySellerId(sellerId);\r\n        sale.setTotalCount(sale.getTotalCount()+count);\r\n        saleRepository.save(sale);\r\n        SaleItem saleItem = SaleItem.createSaleItem(item.getId(), sale, seller, item, count);\r\n        saleItemRepository.save(saleItem);\r\n\r\n        return saleItem;\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/service/SaleService.java b/src/main/java/com/example/weblogin/service/SaleService.java
+--- a/src/main/java/com/example/weblogin/service/SaleService.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/service/SaleService.java	(date 1643955974174)
+@@ -22,7 +22,6 @@
+     private final SaleRepository saleRepository;
+     private final UserPageService userPageService;
+     private final SaleItemRepository saleItemRepository;
+-    private final ItemRepository itemRepository;
+ 
+     // 회원가입 하면 판매자 당 판매내역 하나 생성
+     public void createSale (User user){
+@@ -32,15 +31,15 @@
+         saleRepository.save(sale);
+     }
+ 
++    // 판매자 id에 해당하는 Sale 찾기
++    public Sale findSaleById (int sellerId) { return saleRepository.findBySellerId(sellerId); }
++
+     // id에 해당하는 판매아이템 찾기
+     public List<SaleItem> findSellerSaleItems (int sellerId) {
+ 
+         return saleItemRepository.findSaleItemsBySellerId(sellerId);
+     }
+ 
+-    // 판매자 id에 해당하는 Sale 찾기
+-    public Sale findSaleById (int sellerId) { return saleRepository.findBySellerId(sellerId); }
+-
+     // 판매내역에 저장 (장바구니 전체 주문)
+     @Transactional
+     public SaleItem addSale (int itemId, int sellerId, CartItem cartItem) {
+Index: src/main/java/com/example/weblogin/domain/item/Item.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.domain.item;\r\n\r\nimport com.example.weblogin.domain.cartitem.CartItem;\r\nimport com.example.weblogin.domain.orderitem.OrderItem;\r\nimport com.example.weblogin.domain.saleitem.SaleItem;\r\nimport com.example.weblogin.domain.user.User;\r\nimport lombok.*;\r\nimport org.springframework.format.annotation.DateTimeFormat;\r\n\r\nimport javax.persistence.*;\r\nimport java.time.LocalDate;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Builder\r\n@AllArgsConstructor\r\n@NoArgsConstructor\r\n@Setter\r\n@Getter\r\n@Entity\r\npublic class Item {\r\n\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private int id;\r\n\r\n    private String name;\r\n\r\n    private String text; // 물건에 대한 상세설명\r\n\r\n    private int price; // 가격\r\n\r\n    private int count; // 판매 개수\r\n\r\n    private int stock; // 재고\r\n\r\n    private int isSoldout; // 상품 상태 (0 : 판매중 / 1 : 품절)\r\n\r\n    @ManyToOne(fetch = FetchType.EAGER)\r\n    @JoinColumn(name = \"seller_id\")\r\n    private User seller; // 판매자 아이디\r\n\r\n    @OneToMany(mappedBy = \"item\")\r\n    private List<CartItem> cartItems = new ArrayList<>();\r\n\r\n    //@OneToMany(mappedBy = \"item\")\r\n    //private List<OrderItem> orderItems = new ArrayList<>();\r\n\r\n    //@OneToMany(mappedBy = \"item\")\r\n    //private List<SaleItem> saleItems = new ArrayList<>();\r\n\r\n    private String imgName; // 이미지 파일명\r\n\r\n    private String imgPath; // 이미지 조회 경로\r\n\r\n    @DateTimeFormat(pattern = \"yyyy-mm-dd\")\r\n    private LocalDate createDate; // 상품 등록 날짜\r\n\r\n    @PrePersist // DB에 INSERT 되기 직전에 실행. 즉 DB에 값을 넣으면 자동으로 실행됨\r\n    public void createDate() {\r\n        this.createDate = LocalDate.now();\r\n    }\r\n\r\n}\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/domain/item/Item.java b/src/main/java/com/example/weblogin/domain/item/Item.java
+--- a/src/main/java/com/example/weblogin/domain/item/Item.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/domain/item/Item.java	(date 1643955974201)
+@@ -24,7 +24,7 @@
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private int id;
+ 
+-    private String name;
++    private String name; // 상품 이름
+ 
+     private String text; // 물건에 대한 상세설명
+ 
+@@ -43,12 +43,6 @@
+     @OneToMany(mappedBy = "item")
+     private List<CartItem> cartItems = new ArrayList<>();
+ 
+-    //@OneToMany(mappedBy = "item")
+-    //private List<OrderItem> orderItems = new ArrayList<>();
+-
+-    //@OneToMany(mappedBy = "item")
+-    //private List<SaleItem> saleItems = new ArrayList<>();
+-
+     private String imgName; // 이미지 파일명
+ 
+     private String imgPath; // 이미지 조회 경로
+Index: src/main/java/com/example/weblogin/service/UserPageService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.service;\r\n\r\nimport com.example.weblogin.domain.user.User;\r\nimport com.example.weblogin.domain.user.UserRepository;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.stereotype.Service;\r\n\r\n@RequiredArgsConstructor\r\n@Service\r\npublic class UserPageService {\r\n\r\n    private final UserRepository userRepository;\r\n\r\n    // 유저 id로 User 찾기\r\n    public User findUser(Integer id) {\r\n        return userRepository.findById(id).get();\r\n    }\r\n\r\n    // 회원 정보 수정\r\n    public void userModify(User user) {\r\n        User update = userRepository.findById(user.getId());\r\n        update.setUsername(user.getUsername());\r\n        update.setEmail(user.getEmail());\r\n        update.setAddress(user.getAddress());\r\n        update.setPhone(user.getPhone());\r\n        userRepository.save(update);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/service/UserPageService.java b/src/main/java/com/example/weblogin/service/UserPageService.java
+--- a/src/main/java/com/example/weblogin/service/UserPageService.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/service/UserPageService.java	(date 1643901796842)
+@@ -26,4 +26,13 @@
+         userRepository.save(update);
+     }
+ 
++    // 잔액 충전
++    public void chargeCoin(int id, int amount){
++        User user = userRepository.findById(id);
++        // 유저의 잔액 설정 (기존 잔액 + 충전 금액)
++        user.setCoin(user.getCoin() + amount);
++
++        userRepository.save(user);
++    }
++
+ }
+Index: src/main/java/com/example/weblogin/controller/SellerPageController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.controller;\r\n\r\nimport com.example.weblogin.config.auth.PrincipalDetails;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport com.example.weblogin.domain.sale.Sale;\r\nimport com.example.weblogin.domain.saleitem.SaleItem;\r\nimport com.example.weblogin.service.ItemService;\r\nimport com.example.weblogin.service.OrderService;\r\nimport com.example.weblogin.service.SaleService;\r\nimport com.example.weblogin.service.UserPageService;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.security.core.annotation.AuthenticationPrincipal;\r\nimport org.springframework.stereotype.Controller;\r\nimport org.springframework.ui.Model;\r\nimport org.springframework.web.bind.annotation.GetMapping;\r\nimport org.springframework.web.bind.annotation.PathVariable;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n// 판매자에 해당하는 페이지 관리\r\n// 판매자페이지, 상품관리, 판매내역\r\n\r\n@RequiredArgsConstructor\r\n@Controller\r\npublic class SellerPageController {\r\n\r\n    private final UserPageService userPageService;\r\n    private final ItemService itemService;\r\n    private final SaleService saleService;\r\n\r\n    // 판매자 프로필 페이지 접속\r\n    @GetMapping(\"/seller/{id}\")\r\n    public String sellerPage(@PathVariable(\"id\") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        if (principalDetails.getUser().getId() == id) {\r\n            // 로그인이 되어있는 판매자의 id와 판매자 페이지에 접속하는 id가 같아야 함\r\n            model.addAttribute(\"user\", userPageService.findUser(id));\r\n\r\n            return \"/seller/sellerPage\";\r\n        } else {\r\n            return \"redirect:/main\";\r\n        }\r\n\r\n    }\r\n\r\n    // 상품 관리 페이지\r\n    @GetMapping(\"/seller/manage/{id}\")\r\n    public String itemManage(@PathVariable(\"id\") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        if(principalDetails.getUser().getId() == id) {\r\n            // 로그인이 되어있는 판매자의 id와 상품관리 페이지에 접속하는 id가 같아야 함\r\n            List<Item> allItem = itemService.allItemView();\r\n            List<Item> userItem = new ArrayList<>();\r\n\r\n            // 자신이 올린 상품만 가져오기\r\n            for(Item item : allItem) {\r\n                if(item.getSeller().getId() == id) {\r\n                    userItem.add(item);\r\n                }\r\n            }\r\n\r\n            model.addAttribute(\"seller\", userPageService.findUser(id));\r\n            model.addAttribute(\"userItem\", userItem);\r\n\r\n            return \"seller/itemManage\";\r\n        } else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 판매 내역 조회 페이지\r\n    @GetMapping(\"/seller/salelist/{id}\")\r\n    public String saleList(@PathVariable(\"id\")Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        // 로그인이 되어있는 유저의 id와 판매내역에 접속하는 id가 같아야 함\r\n        if (principalDetails.getUser().getId() == id) {\r\n\r\n            Sale sales = saleService.findSaleById(id);\r\n            List<SaleItem> saleItemList = saleService.findSellerSaleItems(id);\r\n\r\n            model.addAttribute(\"sales\", sales);\r\n            model.addAttribute(\"totalCount\", sales.getTotalCount());\r\n            model.addAttribute(\"sellerSaleItems\", saleItemList);\r\n            model.addAttribute(\"seller\", userPageService.findUser(id));\r\n\r\n            return \"seller/saleList\";\r\n        }\r\n        else {\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/controller/SellerPageController.java b/src/main/java/com/example/weblogin/controller/SellerPageController.java
+--- a/src/main/java/com/example/weblogin/controller/SellerPageController.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/controller/SellerPageController.java	(date 1643955974149)
+@@ -40,7 +40,6 @@
+         } else {
+             return "redirect:/main";
+         }
+-
+     }
+ 
+     // 상품 관리 페이지
+Index: src/main/java/com/example/weblogin/controller/ItemController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.weblogin.controller;\r\n\r\nimport com.example.weblogin.config.auth.PrincipalDetails;\r\nimport com.example.weblogin.domain.cart.Cart;\r\nimport com.example.weblogin.domain.cartitem.CartItem;\r\nimport com.example.weblogin.domain.item.Item;\r\nimport com.example.weblogin.domain.user.User;\r\nimport com.example.weblogin.service.CartService;\r\nimport com.example.weblogin.service.ItemService;\r\nimport com.example.weblogin.service.UserPageService;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.data.domain.Page;\r\nimport org.springframework.data.domain.Pageable;\r\nimport org.springframework.data.domain.Sort;\r\nimport org.springframework.data.web.PageableDefault;\r\nimport org.springframework.security.core.annotation.AuthenticationPrincipal;\r\nimport org.springframework.stereotype.Controller;\r\nimport org.springframework.ui.Model;\r\nimport org.springframework.web.bind.annotation.GetMapping;\r\nimport org.springframework.web.bind.annotation.PathVariable;\r\nimport org.springframework.web.bind.annotation.PostMapping;\r\nimport org.springframework.web.multipart.MultipartFile;\r\n\r\nimport java.util.List;\r\n\r\n@Controller\r\n@RequiredArgsConstructor\r\npublic class ItemController {\r\n\r\n    private final ItemService itemService;\r\n    private final UserPageService userPageService;\r\n    private final CartService cartService;\r\n\r\n    // 메인 페이지 html 하나로 통일\r\n    // 메인 페이지 (로그인 안 한 유저) /localhost:8080\r\n    @GetMapping(\"/\")\r\n    public String mainPageNoneLogin(Model model) {\r\n        // 로그인을 안 한 경우\r\n        List<Item> items = itemService.allItemView();\r\n        model.addAttribute(\"items\", items);\r\n\r\n        return \"main\";\r\n    }\r\n\r\n    // 메인 페이지 (로그인 유저) - 판매자, 구매자 로 로그인\r\n    @GetMapping(\"/main\")\r\n    public String mainPage(Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        if (principalDetails.getUser().getRole().equals(\"ROLE_SELLER\")) {\r\n            // 판매자\r\n            int sellerId = principalDetails.getUser().getId();\r\n            List<Item> items = itemService.allItemView();\r\n            model.addAttribute(\"items\", items);\r\n            model.addAttribute(\"user\", userPageService.findUser(sellerId));\r\n\r\n            return \"/main\";\r\n        } else {\r\n            // 구매자\r\n            int userId = principalDetails.getUser().getId();\r\n            List<Item> items = itemService.allItemView();\r\n            model.addAttribute(\"items\", items);\r\n            model.addAttribute(\"user\", userPageService.findUser(userId));\r\n\r\n            return \"/main\";\r\n        }\r\n    }\r\n\r\n    // 상품 등록 페이지 - 판매자만 가능\r\n    @GetMapping(\"/item/new\")\r\n    public String itemSaveForm(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {\r\n        if(principalDetails.getUser().getRole().equals(\"ROLE_SELLER\")) {\r\n            // 판매자\r\n            model.addAttribute(\"user\", principalDetails.getUser());\r\n\r\n            return \"/seller/itemForm\";\r\n        } else {\r\n            // 일반 회원이면 거절 -> main\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 상품 등록 (POST) - 판매자만 가능\r\n    @PostMapping(\"/item/new/pro\")\r\n    public String itemSave(Item item, @AuthenticationPrincipal PrincipalDetails principalDetails, MultipartFile imgFile) throws Exception {\r\n        if(principalDetails.getUser().getRole().equals(\"ROLE_SELLER\")) {\r\n            // 판매자\r\n            item.setSeller(principalDetails.getUser());\r\n            itemService.saveItem(item, imgFile);\r\n\r\n            return \"redirect:/main\";\r\n        } else {\r\n            // 일반 회원이면 거절 -> main\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 상품 수정 페이지 - 판매자만 가능\r\n    @GetMapping(\"/item/modify/{id}\")\r\n    public String itemModifyForm(@PathVariable(\"id\") Integer id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        if(principalDetails.getUser().getRole().equals(\"ROLE_SELLER\")) {\r\n            // 판매자\r\n            User user = itemService.itemView(id).getSeller();\r\n            // 상품을 올린 판매자 id와 현재 로그인 중인 판매자의 id가 같아야 수정 가능\r\n            if(user.getId() == principalDetails.getUser().getId()) {\r\n\r\n                model.addAttribute(\"item\", itemService.itemView(id));\r\n                model.addAttribute(\"user\", principalDetails.getUser());\r\n\r\n                return \"/seller/itemModify\";\r\n            } else {\r\n                return \"redirect:/main\";\r\n            }\r\n        } else {\r\n            // 일반 회원이면 거절 -> main\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 상품 수정 (POST) - 판매자만 가능\r\n    @PostMapping(\"/item/modify/pro/{id}\")\r\n    public String itemModify(Item item, @PathVariable(\"id\") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails, MultipartFile imgFile) throws Exception{\r\n        if(principalDetails.getUser().getRole().equals(\"ROLE_SELLER\")) {\r\n            // 판매자\r\n            User user = itemService.itemView(id).getSeller();\r\n\r\n            if(user.getId() == principalDetails.getUser().getId()) {\r\n                // 상품을 올린 판매자 id와 현재 로그인 중인 판매자의 id가 같아야 수정 가능\r\n                itemService.itemModify(item, id, imgFile);\r\n\r\n                return \"redirect:/main\";\r\n            } else {\r\n                return \"redirect:/main\";\r\n            }\r\n        } else {\r\n            // 일반 회원이면 거절 -> main\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 상품 상세 페이지 - 판매자, 구매자 가능\r\n    @GetMapping(\"/item/view/{itemId}\")\r\n    public String ItemView(Model model, @PathVariable(\"itemId\") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        if(principalDetails.getUser().getRole().equals(\"ROLE_SELLER\")) {\r\n            // 판매자\r\n            User user = principalDetails.getUser();\r\n\r\n            model.addAttribute(\"item\", itemService.itemView(id));\r\n            model.addAttribute(\"user\", user);\r\n\r\n            return \"itemView\";\r\n        } else {\r\n            // 구매자\r\n            User user = principalDetails.getUser();\r\n\r\n            // 페이지에 접속한 유저를 찾아야 함\r\n            User loginUser = userPageService.findUser(user.getId());\r\n\r\n            int cartCount = 0;\r\n            Cart userCart = cartService.findUserCart(loginUser.getId());\r\n            List<CartItem> cartItems = cartService.allUserCartView(userCart);\r\n\r\n            for(CartItem cartItem : cartItems) {\r\n                cartCount += cartItem.getCount();\r\n            }\r\n\r\n            model.addAttribute(\"cartCount\", cartCount);\r\n            model.addAttribute(\"item\", itemService.itemView(id));\r\n            model.addAttribute(\"user\", user);\r\n\r\n            return \"itemView\";\r\n        }\r\n    }\r\n\r\n    // 상품 상세 페이지 - 로그인 안 한 유저\r\n    @GetMapping(\"/item/view/nonlogin/{id}\")\r\n    public String nonLoginItemView(Model model, @PathVariable(\"id\") Integer id) {\r\n        // 로그인 안 한 유저\r\n        model.addAttribute(\"item\", itemService.itemView(id));\r\n        return \"itemView\";\r\n\r\n    }\r\n\r\n    // 상품 삭제 - 판매자만 가능\r\n    @GetMapping(\"/item/delete/{id}\")\r\n    public String itemDelete(@PathVariable(\"id\") Integer id, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n        if(principalDetails.getUser().getRole().equals(\"ROLE_SELLER\")) {\r\n            // 판매자\r\n            User user = itemService.itemView(id).getSeller();\r\n\r\n            if(user.getId() == principalDetails.getUser().getId()) {\r\n                // 상품을 올린 판매자 id와 현재 로그인 중인 판매자의 id가 같아야 삭제 가능\r\n                itemService.itemDelete(id);\r\n\r\n                return \"redirect:/main\";\r\n            } else {\r\n                return \"redirect:/main\";\r\n            }\r\n        } else {\r\n            // 일반 회원이면 거절 -> main\r\n            return \"redirect:/main\";\r\n        }\r\n    }\r\n\r\n    // 상품 리스트 페이지 - 로그인 유저\r\n    @GetMapping(\"/item/list\")\r\n    public String itemList(Model model, @PageableDefault(page = 0, size = 10, sort = \"id\", direction = Sort.Direction.ASC) Pageable pageable,\r\n                           String searchKeyword, @AuthenticationPrincipal PrincipalDetails principalDetails) {\r\n\r\n        User user = userPageService.findUser(principalDetails.getUser().getId());\r\n\r\n        Page<Item> items = null;\r\n\r\n        if (searchKeyword == null) {  // 검색이 들어왔을 때\r\n            items = itemService.allItemViewPage(pageable);\r\n        } else {  // 검색이 들어오지 않았을 때\r\n            items = itemService.itemSearchList(searchKeyword, pageable);\r\n        }\r\n\r\n        int nowPage = items.getPageable().getPageNumber() + 1;\r\n        int startPage = Math.max(nowPage - 4, 1);\r\n        int endPage = Math.min(nowPage + 5, items.getTotalPages());\r\n\r\n        model.addAttribute(\"items\", items);\r\n        model.addAttribute(\"nowPage\", nowPage);\r\n        model.addAttribute(\"startPage\", startPage);\r\n        model.addAttribute(\"endPage\", endPage);\r\n        model.addAttribute(\"user\", user);\r\n\r\n        return \"itemList\";\r\n    }\r\n\r\n    // 상품 리스트 페이지 - 로그인 안 한 유저\r\n    @GetMapping(\"/nonlogin/item/list\")\r\n    public String itemList(Model model, @PageableDefault(page = 0, size = 10, sort = \"id\", direction = Sort.Direction.ASC) Pageable pageable,\r\n                           String searchKeyword) {\r\n\r\n        Page<Item> items = null;\r\n\r\n        if (searchKeyword == null) {  // 검색이 들어왔을 때\r\n            items = itemService.allItemViewPage(pageable);\r\n        } else {  // 검색이 들어오지 않았을 때\r\n            items = itemService.itemSearchList(searchKeyword, pageable);\r\n        }\r\n\r\n        int nowPage = items.getPageable().getPageNumber() + 1;\r\n        int startPage = Math.max(nowPage - 4, 1);\r\n        int endPage = Math.min(nowPage + 5, items.getTotalPages());\r\n\r\n        model.addAttribute(\"items\", items);\r\n        model.addAttribute(\"nowPage\", nowPage);\r\n        model.addAttribute(\"startPage\", startPage);\r\n        model.addAttribute(\"endPage\", endPage);\r\n\r\n        return \"itemList\";\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/weblogin/controller/ItemController.java b/src/main/java/com/example/weblogin/controller/ItemController.java
+--- a/src/main/java/com/example/weblogin/controller/ItemController.java	(revision 5439f35fa51fa8fc631129e7ec5067fb288b9eb7)
++++ b/src/main/java/com/example/weblogin/controller/ItemController.java	(date 1643955974302)
+@@ -155,6 +155,7 @@
+             User loginUser = userPageService.findUser(user.getId());
+ 
+             int cartCount = 0;
++
+             Cart userCart = cartService.findUserCart(loginUser.getId());
+             List<CartItem> cartItems = cartService.allUserCartView(userCart);
+ 
+@@ -175,8 +176,8 @@
+     public String nonLoginItemView(Model model, @PathVariable("id") Integer id) {
+         // 로그인 안 한 유저
+         model.addAttribute("item", itemService.itemView(id));
++
+         return "itemView";
+-
+     }
+ 
+     // 상품 삭제 - 판매자만 가능
