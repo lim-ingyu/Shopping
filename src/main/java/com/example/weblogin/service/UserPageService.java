@@ -26,4 +26,11 @@ public class UserPageService {
         userRepository.save(update);
     }
 
+    public void chargePoint(int id,int amount){
+        User user = userRepository.findById(id);
+        user.setCoin(user.getCoin() + amount);
+
+        userRepository.save(user);
+    }
+
 }
