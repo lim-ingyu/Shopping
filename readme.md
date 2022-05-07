@@ -1,7 +1,7 @@
-# Spring-boot 쇼핑몰 만들기 (MJU 스터디)
-## 2022-01월 프로젝트
+### Spring-boot 쇼핑몰 만들기
+### 2022-01월 프로젝트
 
-### 📢 프로젝트 설명
+## 📢 프로젝트 설명
 - 스프링부트를 이용하여 만든 쇼핑몰 프로젝트입니다.
 - 유저 역할을 판매자와 구매자로 나누어 구현하였습니다.
 - 판매자
@@ -9,7 +9,7 @@
 - 구매자
   - 마이페이지, 장바구니, 주문/주문취소, 주문 내역 조회, 코인충전
 
-### ⚙ 개발 환경
+## ⚙ 개발 환경
 - 운영체제 : Windows 10
 -통합개발환경(IDE) : IntelliJ
 - JDK 버전 : JDK 17
@@ -18,7 +18,7 @@
 - 관리 툴 : GitHub
 
 
-### 🔌 Dependencies
+## 🔌 Dependencies
 - Spring Boot DevTools
 - Lombok
 - Spring Data JPA
@@ -29,7 +29,7 @@
 - Thymeleaf
 
 
-### 💻 기술 스택
+## 💻 기술 스택
 - 백엔드
   - SpringBoot, Spring Security, Spring Data JPA
 - 프론트엔드
@@ -38,7 +38,7 @@
   - MariaDB, MySQL Workbench
 
 
-### 🛠 DB 설계
+## 🛠 DB 설계
 - User
 - Item
 - Cart
@@ -49,7 +49,7 @@
 - SaleItem
 
 
-### 🕹 구현 기능
+## 🕹 구현 기능
 - Entity 설계 (User, Item, Cart, CartItem, Board) (2022-01-14)
 - 상품 기능 구현 (CRUD) (2022-01-15)
 - 상품 CRUD 관련 html (2022-01-17)
@@ -70,3 +70,7 @@
 - 기능 별 예외 처리 (2022-01-31)
 - 충전 API 추가 (2022-02-01)
 - 완성 (2022-02-05)
+
+## 🔗Link
+
+[프로젝트 완성 및 시연 영상](https://velog.io/@rladuswl/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%99%84%EC%84%B1-%EB%B0%8F-%EC%8B%9C%EC%97%B0-%EC%98%81%EC%83%81)
